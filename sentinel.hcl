@@ -88,3 +88,8 @@ policy "efs-encryption-at-rest-enabled" {
   source = "./policies/efs/efs-encryption-at-rest-enabled.sentinel"
   enforcement_level = "advisory"
 }
+
+policy "vpc-flow-logging-enabled" {
+  source = "./policies/vpc-flow-logging-enabled.sentinel"
+  enforcement_level = "advisory"
+}

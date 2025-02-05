@@ -1,0 +1,47 @@
+resources = {
+	"module.vpc.aws_flow_log.this": {
+		"address": "module.vpc.aws_flow_log.this",
+		"config": {
+			"traffic_type": {
+				"constant_value": "REJECT",
+			},
+			"vpc_id": {
+				"references": [
+					"aws_vpc.this.id",
+					"aws_vpc.this",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "this",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_flow_log",
+	},
+	"module.vpc.aws_vpc.this": {
+		"address": "module.vpc.aws_vpc.this",
+		"config": {
+			"cidr_block": {
+				"constant_value": "10.0.0.0/16",
+			},
+			"tags": {
+				"constant_value": {
+					"Name": "my-test-vpc",
+				},
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "this",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_vpc",
+	},
+}
