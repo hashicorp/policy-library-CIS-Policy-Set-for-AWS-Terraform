@@ -20,3 +20,8 @@ policy "rds-public-access-disabled" {
   source = "./policies/rds/rds-public-access-disabled.sentinel"
   enforcement_level = "advisory"
 }
+
+policy "kms-key-rotation-enabled" {
+  source = "./policies/kms-key-rotation-enabled.sentinel"
+  enforcement_level = "advisory"
+}
