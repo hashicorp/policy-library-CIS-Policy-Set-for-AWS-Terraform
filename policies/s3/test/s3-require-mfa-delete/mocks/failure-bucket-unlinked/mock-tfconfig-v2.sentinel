@@ -1,0 +1,54 @@
+import "strings"
+
+resources = {
+	"aws_s3_bucket.example": {
+		"address": "aws_s3_bucket.example",
+		"config": {
+			"bucket": {
+				"constant_value": "example-bucket",
+			},
+			"force_destroy": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_versioning.example": {
+		"address": "aws_s3_bucket_versioning.example",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.test.id",
+					"aws_s3_bucket.test",
+				],
+			},
+			"versioning_configuration": [
+				{
+					"mfa_delete": {
+						"constant_value": "Enabled",
+					},
+					"status": {
+						"constant_value": "Enabled",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_versioning",
+	},
+}

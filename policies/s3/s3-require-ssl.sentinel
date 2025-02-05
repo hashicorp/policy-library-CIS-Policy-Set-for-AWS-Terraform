@@ -1,0 +1,156 @@
+# This policy mandates all requests to 'aws_s3_bucket' resources to use ssl using 'aws_s3_bucket_policy' resource.
+
+# Imports
+
+import "tfconfig/v2" as tfconfig
+import "tfstate/v2" as tfstate
+import "tfresources" as tf
+import "report" as report
+import "strings"
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+const = {
+	"policy_name":                       "s3-require-ssl",
+	"resource_aws_s3_bucket":            "aws_s3_bucket",
+	"resource_aws_s3_bucket_policy":     "aws_s3_bucket_policy",
+	"references":                        "references",
+	"address":                           "address",
+	"module_address":                    "module_address",
+	"module_prefix":                     "module.",
+	"values":                            "values",
+	"variable":                          "variable",
+	"policy_document_violation_message": "S3 general purpose buckets should require requests to use SSL. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-5 for more details.",
+	"inline_policy_violation_message":   "All aws_s3_bucket_policy resources must get their policy from an instance of the aws_iam_policy_document data source.",
+}
+
+# Functions
+
+# Removes module address prefix from a resource
+# and returns back the localized address for a module.
+resource_address_without_module_address = func(res) {
+	resource_addr = res[const.address]
+
+	# Check for root module
+	if not strings.has_prefix(resource_addr, const.module_prefix) {
+		return resource_addr
+	}
+
+	module_addr_prefix = res[const.module_address] + "."
+	return strings.trim_prefix(resource_addr, module_addr_prefix)
+}
+
+get_referenced_policy_statements = func(res) {
+	policy = res.config.policy
+	if policy[const.references] is not defined or policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$" {
+		return []
+	}
+	reference = policy[const.references][1]
+
+	address = strings.trim_prefix(reference, "data.")
+	// Append the module address to the data source's local address
+	// in case of nested modules
+	if strings.has_prefix(res.module_address, const.module_prefix) {
+		address = res.module_address + "." + address
+	}
+
+	datasource = tf.state(tfstate.resources).mode("data").address(address).resources
+	return filter datasource[0].values.statement as _, statement {
+		statement.actions contains "*" or any statement.actions as _, action {
+			strings.has_prefix(action, "s3:")
+		}
+	}
+}
+
+verify_ssl_status = func(conditions, desired_condition) {
+	if conditions is not defined {
+		return false
+	}
+	return collection.find(conditions, func(condition) {
+		return condition["test"] is "Bool" and
+			condition[const.values] contains desired_condition and
+			condition[const.variable] is "aws:SecureTransport"
+	}) is defined
+}
+
+is_ssl_disabled = func(conditions) {
+	return verify_ssl_status(conditions, "false")
+}
+
+build_violation_object = func(resource_addr, module_addr, message) {
+	return {
+		"address":        resource_addr,
+		"module_address": module_addr,
+		"message":        message,
+	}
+}
+
+# Variables
+
+violations = []
+config_resources = tf.config(tfconfig.resources)
+s3_bucket_resources = config_resources.type(const.resource_aws_s3_bucket).resources
+s3_bucket_policy_resources = config_resources.type(const.resource_aws_s3_bucket_policy).resources
+valid_bucket_policies = filter s3_bucket_policy_resources as _, res {
+	any get_referenced_policy_statements(res) as _, stmt {
+		stmt["effect"] is "Deny" and is_ssl_disabled(stmt["condition"])
+	}
+}
+s3_bucket_addresses = map valid_bucket_policies as _, res {
+	res.config.bucket.references[1]
+}
+
+buckets_without_valid_policy = filter s3_bucket_resources as _, res {
+	resource_address_without_module_address(res) not in s3_bucket_addresses
+}
+
+bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, res {
+	res.config.policy[const.references] is not defined or res.config.policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$"
+}
+
+bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {
+	res.config.bucket.references[1]
+}
+
+buckets_with_inline_policy = filter s3_bucket_resources as _, res {
+	resource_address_without_module_address(res) in bucket_addresses_for_inline_policies
+}
+
+policy_document_violations_list = map buckets_without_valid_policy as _, v {
+	build_violation_object(v.address, v.module_address, const.policy_document_violation_message)
+}
+
+inline_policy_violations_list = map buckets_with_inline_policy as _, v {
+	build_violation_object(v.address, v.module_address, const.inline_policy_violation_message)
+}
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations":  policy_document_violations_list + inline_policy_violations_list,
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+# Checks if 'aws_s3_bucket' resources
+# have ssl enabled via 'aws_s3_bucket_policy'
+# using policy document specified by
+# 'aws_iam_policy_document' data source
+check_policy_documents = rule {
+	policy_document_violations_list is empty
+}
+
+# Checks if 'aws_s3_bucket_policy' resources reference
+# an instance of 'aws_iam_policy_document' data source
+# for the policy attribute.
+check_inline_policies = rule {
+	inline_policy_violations_list is empty
+}
+
+main = rule {
+	check_inline_policies and check_policy_documents
+}

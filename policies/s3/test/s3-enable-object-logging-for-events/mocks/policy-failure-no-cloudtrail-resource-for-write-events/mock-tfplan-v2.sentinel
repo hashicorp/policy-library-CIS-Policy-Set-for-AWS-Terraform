@@ -1,0 +1,23 @@
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_s3_bucket.this": {
+			"address":        "aws_s3_bucket.this",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_s3_bucket",
+			"values": {
+				"bucket":        "test-bucket",
+				"force_destroy": false,
+				"tags":          null,
+				"timeouts":      null,
+			},
+		},
+	},
+}

@@ -1,0 +1,29 @@
+##### Imports #####
+import "tfconfig/v2" as tfconfig
+import "strings"
+
+##### Functions #####
+
+##########################
+# is_variable_reference #
+##########################
+#
+# Checks if the passed reference is a variable
+#
+# Usage:
+#   is_var = is_variable_reference("var.enabled")
+is_variable_reference = func(reference) {
+	return strings.has_prefix(reference, "var.")
+}
+
+##########################
+# parse_variable_name_from_reference #
+##########################
+#
+# Returns the variable name from the passed reference
+#
+# Usage:
+#   enabled_var = parse_variable_name_from_reference("var.enabled")
+parse_variable_name_from_reference = func(reference) {
+	return strings.trim_prefix(reference, "var.")
+}

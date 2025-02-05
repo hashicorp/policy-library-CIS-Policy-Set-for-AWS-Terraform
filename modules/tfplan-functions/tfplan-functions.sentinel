@@ -1,0 +1,20 @@
+##### Imports #####
+import "tfplan/v2" as tfplan
+
+##### Functions #####
+
+##########################
+# get_variable_value #
+##########################
+#
+# Returns the value of the terraform variable or null if its not found
+# from the variables map of the tfplan/v2 import.
+#
+# Usage:
+#   is_enabled = get_variable_value("enabled")
+get_variable_value = func(name) {
+	if tfplan.variables[name] is not defined {
+		return null
+	}
+	return tfplan.variables[name].value
+}

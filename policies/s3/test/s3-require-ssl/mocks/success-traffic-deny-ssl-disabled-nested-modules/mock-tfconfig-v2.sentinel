@@ -1,0 +1,114 @@
+resources = {
+	"module.s3.aws_s3_bucket.this": {
+		"address": "module.s3.aws_s3_bucket.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"var.bucket_name",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.s3",
+		"name":                "this",
+		"provider_config_key": "module.s3:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"module.s3.aws_s3_bucket_policy.this": {
+		"address": "module.s3.aws_s3_bucket_policy.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.this.bucket",
+					"aws_s3_bucket.this",
+				],
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.this.json",
+					"data.aws_iam_policy_document.this",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.s3",
+		"name":                "this",
+		"provider_config_key": "module.s3:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_policy",
+	},
+	"module.s3.data.aws_iam_policy_document.this": {
+		"address": "module.s3.data.aws_iam_policy_document.this",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"s3:*",
+						],
+					},
+					"condition": [
+						{
+							"test": {
+								"constant_value": "Bool",
+							},
+							"values": {
+								"constant_value": [
+									"false",
+								],
+							},
+							"variable": {
+								"constant_value": "aws:SecureTransport",
+							},
+						},
+					],
+					"effect": {
+						"constant_value": "Deny",
+					},
+					"resources": {
+						"constant_value": [
+							"*",
+						],
+					},
+					"sid": {
+						"constant_value": "test-sid-1",
+					},
+				},
+				{
+					"actions": {
+						"constant_value": [
+							"ecs:*",
+						],
+					},
+					"effect": {
+						"constant_value": "Allow",
+					},
+					"resources": {
+						"constant_value": [
+							"*",
+						],
+					},
+					"sid": {
+						"constant_value": "test-sid-2",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "module.s3",
+		"name":                "this",
+		"provider_config_key": "module.s3:aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}

@@ -1,0 +1,57 @@
+# This policy verifies if the attributes of the 'aws_s3_account_public_access_block'
+# resource (if present) are in accordance to AWS CIS standards.
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+
+# Constants
+const = {
+	"policy_name":             "s3-block-public-access-account-level",
+	"message":                 "Account level Amazon S3 block public access settings are not compliant. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-1 for more details.",
+	"ignore_public_acls":      "ignore_public_acls",
+	"restrict_public_buckets": "restrict_public_buckets",
+	"block_public_acls":       "block_public_acls",
+	"block_public_policy":     "block_public_policy",
+}
+
+# Functions
+
+is_block_public_access_settings_compliant = func(res) {
+	return res.values[const.ignore_public_acls] is true and
+		res.values[const.restrict_public_buckets] is true and
+		res.values[const.block_public_acls] is true and
+		res.values[const.block_public_policy] is true
+}
+
+# Variables
+
+violations = []
+public_access_block_resources = tf.plan(tfplan.planned_values.resources).type("aws_s3_account_public_access_block").resources
+
+violations = filter public_access_block_resources as _, res {
+	is_block_public_access_settings_compliant(res) is false
+}
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

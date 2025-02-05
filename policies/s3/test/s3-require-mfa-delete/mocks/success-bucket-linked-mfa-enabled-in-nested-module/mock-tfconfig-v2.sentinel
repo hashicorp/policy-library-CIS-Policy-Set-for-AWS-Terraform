@@ -1,0 +1,51 @@
+resources = {
+	"module.s3.aws_s3_bucket.this": {
+		"address": "module.s3.aws_s3_bucket.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"var.bucket_name",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.s3",
+		"name":                "this",
+		"provider_config_key": "module.s3:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"module.s3.aws_s3_bucket_versioning.this": {
+		"address": "module.s3.aws_s3_bucket_versioning.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.this.bucket",
+					"aws_s3_bucket.this",
+				],
+			},
+			"versioning_configuration": [
+				{
+					"mfa_delete": {
+						"constant_value": "Enabled",
+					},
+					"status": {
+						"constant_value": "Enabled",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.s3",
+		"name":                "this",
+		"provider_config_key": "module.s3:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_versioning",
+	},
+}

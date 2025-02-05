@@ -1,0 +1,99 @@
+# This policy requires resources of type 'aws_s3_bucket' have object logging enabled for read/write events.
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "strings"
+import "collection" as collection
+import "collection/maps" as maps
+
+# Params
+# event_type corresponds the read_write_type for the cloudtrail's event selector.
+# Accepted values are 'WriteOnly' and 'ReadOnly'. The input is validated against
+# the cloudtrail resource's event selector.
+param event_type default "ReadOnly"
+
+# Constants
+
+const = {
+	"policy_name":               "s3-enable-object-logging-for-events",
+	"message":                   "Resources of type 'aws_s3_bucket' must have object logging enabled for read/write events through cloudtrail resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-22 for more details",
+	"resource_s3_bucket":        "aws_s3_bucket",
+	"resource_cloudtrail":       "aws_cloudtrail",
+	"bucket":                    "bucket",
+	"event_selector_block":      "event_selector",
+	"include_management_events": "include_management_events",
+	"read_write_type":           "read_write_type",
+	"data_resource":             "data_resource",
+	"type":                      "type",
+	"values":                    "values",
+	"aws_s3_object":             "AWS::S3::Object",
+	"catch_all_aws_s3_arn":      "arn:aws:s3",
+	"aws_s3_arn_prefix":         "arn:aws:s3:::",
+}
+
+# Variables
+
+planned_resources = tf.plan(tfplan.planned_values.resources)
+s3_buckets = planned_resources.type(const.resource_s3_bucket).resources
+cloudtrail_resources = planned_resources.type(const.resource_cloudtrail).resources
+
+referenced_s3_bucket_names = []
+references_all_s3_buckets = false
+for cloudtrail_resources as _, res {
+	event_selector_block = res[const.values][const.event_selector_block]
+	if event_selector_block is empty {
+		continue
+	}
+
+	for event_selector_block as _, es {
+		if es[const.include_management_events] is true and
+			es[const.read_write_type] is event_type {
+
+			for es[const.data_resource] as _, data_res {
+				if data_res[const.type] is not const.aws_s3_object {
+					continue
+				}
+
+				for data_res[const.values] as _, val {
+					if val is const.catch_all_aws_s3_arn {
+						references_all_s3_buckets = true
+						break
+					}
+
+					append(referenced_s3_bucket_names, strings.trim_prefix(val, const.aws_s3_arn_prefix))
+				}
+			}
+		}
+	}
+}
+
+violations = []
+if not references_all_s3_buckets {
+	violations = collection.reject(s3_buckets, func(bucket) {
+		return maps.get(bucket, "values.bucket", "") in referenced_s3_bucket_names
+	})
+}
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

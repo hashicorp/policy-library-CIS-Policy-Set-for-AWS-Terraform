@@ -1,0 +1,45 @@
+resources = {
+	"aws_s3_bucket.example": {
+		"address": "aws_s3_bucket.example",
+		"config": {
+			"bucket": {
+				"constant_value": "example-bucket",
+			},
+			"force_destroy": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_policy.example": {
+		"address": "aws_s3_bucket_policy.example",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.example.id",
+					"aws_s3_bucket.example",
+				],
+			},
+			"policy": {
+				"constant_value": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowSSLRequestsOnly\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"s3:* \",\n      \"Resource\": [\n        \"arn:aws:s3:::example-bucket/*\",\n        \"arn:aws:s3:::example-bucket\"\n      ],\n      \"Principal\": {\n        \"AWS\": \"*\"\n      },\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"false\"\n        }\n      }\n    }\n  ]\n}",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_policy",
+	},
+}

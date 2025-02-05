@@ -1,0 +1,110 @@
+resources = {
+	"aws_s3_bucket.example": {
+		"address": "aws_s3_bucket.example",
+		"config": {
+			"bucket": {
+				"constant_value": "example-bucket",
+			},
+			"force_destroy": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_policy.example": {
+		"address": "aws_s3_bucket_policy.example",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.example.id",
+					"aws_s3_bucket.example",
+				],
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.policy.json",
+					"data.aws_iam_policy_document.policy",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_policy",
+	},
+	"data.aws_iam_policy_document.policy": {
+		"address": "data.aws_iam_policy_document.policy",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"s3:* ",
+						],
+					},
+					"condition": [
+						{
+							"test": {
+								"constant_value": "Bool",
+							},
+							"values": {
+								"constant_value": [
+									"false",
+								],
+							},
+							"variable": {
+								"constant_value": "aws:SecureTransport",
+							},
+						},
+					],
+					"effect": {
+						"constant_value": "Allow",
+					},
+					"principals": [
+						{
+							"identifiers": {
+								"constant_value": [
+									"*",
+								],
+							},
+							"type": {
+								"constant_value": "AWS",
+							},
+						},
+					],
+					"resources": {
+						"constant_value": [
+							"arn:aws:s3:::example-bucket",
+							"arn:aws:s3:::example-bucket/*",
+						],
+					},
+					"sid": {
+						"constant_value": "AllowSSLRequestsOnly",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "policy",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}

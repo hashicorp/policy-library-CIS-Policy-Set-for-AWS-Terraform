@@ -1,0 +1,64 @@
+resources = {
+	"module.s3.aws_iam_policy_document.this": {
+		"address":        "module.s3.aws_iam_policy_document.this",
+		"depends_on":     [],
+		"deposed_key":    "",
+		"index":          null,
+		"mode":           "data",
+		"module_address": "module.s3",
+		"name":           "this",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"tainted":        false,
+		"type":           "aws_iam_policy_document",
+		"values": {
+			"id":                        "3366544329",
+			"json":                      "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"test-sid-1\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:*\",\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"true\"\n        }\n      }\n    },\n    {\n      \"Sid\": \"test-sid-2\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"ecs:*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+			"override_json":             null,
+			"override_policy_documents": null,
+			"policy_id":                 null,
+			"source_json":               null,
+			"source_policy_documents":   null,
+			"statement": [
+				{
+					"actions": [
+						"s3:*",
+					],
+					"condition": [
+						{
+							"test": "Bool",
+							"values": [
+								"false",
+							],
+							"variable": "aws:SecureTransport",
+						},
+					],
+					"effect":         "Deny",
+					"not_actions":    [],
+					"not_principals": [],
+					"not_resources":  [],
+					"principals":     [],
+					"resources": [
+						"*",
+					],
+					"sid": "test-sid-1",
+				},
+				{
+					"actions": [
+						"ecs:*",
+					],
+					"condition":      [],
+					"effect":         "Allow",
+					"not_actions":    [],
+					"not_principals": [],
+					"not_resources":  [],
+					"principals":     [],
+					"resources": [
+						"*",
+					],
+					"sid": "test-sid-2",
+				},
+			],
+			"version": "2012-10-17",
+		},
+	},
+}
