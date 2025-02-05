@@ -7,7 +7,7 @@ These pre-written policies help organizations maintain compliance by validating 
 The folder structure that is followed for Pre-written Sentinel Policies and their tests is as follows:
 
 ```
-/policies/
+/policies/AWS-Resource/
 │── test/
 │   │── example-policy/
 │       │── example-test-1.hcl
@@ -24,7 +24,8 @@ The folder structure that is followed for Pre-written Sentinel Policies and thei
 │── example-policy.sentinel
 ```
 
-- `policies/` - This directory contains Sentinel policy files for AWS Complaince Standards.
+- `policies/` - This directory contains different folders, each folder contains policies for specific AWS Resource.
+- `policies/AWS-Resource` - This directory contains Sentinel policy files for AWS Complaince Standards.
 - `test/` - This directory contains test case folder for each policy and the name of the test case folder is same as the policy name. and each test case will be associated with the `.hcl` file and mock files.
 - `mocks/` - The mocks folder contains the terraform configuration mocks for the perticular test case scenario, the sentinel policy will be tested out on these mocks.
 
@@ -39,7 +40,7 @@ To run Sentinel policy tests, follow these steps:
 2. **Navigate to the Policies Directory**
    
    ```sh
-   cd policies
+   cd policies/AWS-Resource
    ```
 
 3. **Run Tests Using Sentinel CLI**
