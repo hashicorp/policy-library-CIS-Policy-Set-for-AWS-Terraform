@@ -1,0 +1,55 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_efs_file_system.this": {
+		"address": "aws_efs_file_system.this",
+		"config": {
+			"creation_token": {
+				"constant_value": "my-fs",
+			},
+			"encrypted": {
+				"constant_value": false,
+			},
+			"kms_key_id": {
+				"references": [
+					"aws_kms_key.this.id",
+					"aws_kms_key.this",
+				],
+			},
+			"tags": {
+				"constant_value": {
+					"Name": "test-fs",
+				},
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "this",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_efs_file_system",
+	},
+	"aws_kms_key.this": {
+		"address": "aws_kms_key.this",
+		"config": {
+			"tags": {
+				"constant_value": {
+					"Name": "efs-kms-key",
+				},
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "this",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_kms_key",
+	},
+}

@@ -1,0 +1,62 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_efs_file_system.this": {
+			"address":        "aws_efs_file_system.this",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_efs_file_system",
+			"values": {
+				"creation_token":                  "my-fs",
+				"encrypted":                       true,
+				"lifecycle_policy":                [],
+				"provisioned_throughput_in_mibps": null,
+				"tags": {
+					"Name": "test-fs",
+				},
+				"tags_all": {
+					"Name": "test-fs",
+				},
+				"throughput_mode": "bursting",
+			},
+		},
+		"aws_kms_key.this": {
+			"address":        "aws_kms_key.this",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_kms_key",
+			"values": {
+				"bypass_policy_lockout_safety_check": false,
+				"custom_key_store_id":                null,
+				"customer_master_key_spec":           "SYMMETRIC_DEFAULT",
+				"deletion_window_in_days":            null,
+				"enable_key_rotation":                false,
+				"is_enabled":                         true,
+				"key_usage":                          "ENCRYPT_DECRYPT",
+				"tags": {
+					"Name": "efs-kms-key",
+				},
+				"tags_all": {
+					"Name": "efs-kms-key",
+				},
+				"timeouts":   null,
+				"xks_key_id": null,
+			},
+		},
+	},
+}
