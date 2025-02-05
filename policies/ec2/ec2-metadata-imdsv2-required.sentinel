@@ -1,0 +1,70 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# This policy requires resources of type 'aws_instance' or 'aws_ec2_instance_metadata_defaults' to have 'http_tokens' attribute set to 'required'.
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name": "ec2-metadata-imdsv2-required",
+	"message":     "Attribute 'http_tokens' must be set to 'required' for all 'aws_instance' resources if 'metadata_options' is used.Else 'aws_ec2_instance_metadata_defaults' resource should have 'http_tokens' set to 'required'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-8 for more details.",
+	"aws_ec2_instance_metadata_defaults": "aws_ec2_instance_metadata_defaults",
+	"aws_instance":                       "aws_instance",
+	"metadata_options":                   "metadata_options",
+	"http_tokens":                        "http_tokens",
+	"required":                           "required",
+}
+
+# Variables
+planned_resources = tf.plan(tfplan.planned_values.resources)
+ec2_instance_metadata_defaults_resources = planned_resources.type(const.aws_ec2_instance_metadata_defaults).resources
+all_http_tokens_default_value_is_required = true
+for ec2_instance_metadata_defaults_resources as _, res {
+	all_http_tokens_default_value_is_required = all_http_tokens_default_value_is_required and
+		maps.get(res, "values.http_tokens", "") is const.required
+}
+violations = []
+ec2_instance_resources = planned_resources.type(const.aws_instance).resources
+for ec2_instance_resources as _, res {
+	metadata_options_values = maps.get(res.values, const.metadata_options, [])
+	if metadata_options_values is empty {
+		if length(ec2_instance_metadata_defaults_resources) > 0 and all_http_tokens_default_value_is_required {
+			continue
+		}
+		append(violations, res)
+		continue
+	}
+	if maps.get(metadata_options_values[0], const.http_tokens, "") is const.required {
+		continue
+	}
+	append(violations, res)
+}
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

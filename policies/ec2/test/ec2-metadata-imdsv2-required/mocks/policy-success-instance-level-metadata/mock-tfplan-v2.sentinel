@@ -1,0 +1,58 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_ec2_instance_metadata_defaults.enforce-imdsv2": {
+			"address":        "aws_ec2_instance_metadata_defaults.enforce-imdsv2",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "enforce-imdsv2",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_ec2_instance_metadata_defaults",
+			"values": {
+				"http_endpoint":               "no-preference",
+				"http_put_response_hop_limit": 1,
+				"http_tokens":                 "optional",
+				"instance_metadata_tags":      "no-preference",
+			},
+		},
+		"aws_instance.example": {
+			"address":        "aws_instance.example",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "example",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_instance",
+			"values": {
+				"ami": "ami-xxxxxxxxxxxxxx",
+				"credit_specification": [],
+				"get_password_data":    false,
+				"hibernation":          null,
+				"instance_type":        "t2.micro",
+				"launch_template":      [],
+				"metadata_options": [
+					{
+						"http_endpoint":      "enabled",
+						"http_protocol_ipv6": "disabled",
+						"http_tokens":        "required",
+					},
+				],
+				"source_dest_check":           true,
+				"tags":                        null,
+				"timeouts":                    null,
+				"user_data_replace_on_change": false,
+				"volume_tags":                 null,
+			},
+		},
+	},
+}

@@ -1,0 +1,78 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_security_group.example": {
+			"address":        "aws_security_group.example",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "example",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_security_group",
+			"values": {
+				"description": "example",
+				"name":        "example",
+				"revoke_rules_on_delete": false,
+				"tags": {
+					"Name": "example",
+				},
+				"tags_all": {
+					"Name": "example",
+				},
+				"timeouts": null,
+			},
+		},
+		"aws_vpc.vpc": {
+			"address":        "aws_vpc.vpc",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "vpc",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_vpc",
+			"values": {
+				"assign_generated_ipv6_cidr_block": null,
+				"enable_dns_support":               true,
+				"instance_tenancy":                 "default",
+				"ipv4_ipam_pool_id":                null,
+				"ipv4_netmask_length":              null,
+				"ipv6_ipam_pool_id":                null,
+				"ipv6_netmask_length":              null,
+				"tags":                             null,
+			},
+		},
+		"aws_vpc_security_group_ingress_rule.example": {
+			"address":        "aws_vpc_security_group_ingress_rule.example",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "example",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_vpc_security_group_ingress_rule",
+			"values": {
+				"cidr_ipv4":                    "0.0.0.0/0",
+				"cidr_ipv6":                    "::/0",
+				"description":                  null,
+				"from_port":                    25,
+				"ip_protocol":                  "ssh",
+				"prefix_list_id":               null,
+				"referenced_security_group_id": null,
+				"tags":     null,
+				"tags_all": {},
+				"to_port":  125,
+			},
+		},
+	},
+}

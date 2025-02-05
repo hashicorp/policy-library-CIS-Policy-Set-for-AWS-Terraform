@@ -1,0 +1,80 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_default_security_group.default": {
+		"address": "aws_default_security_group.default",
+		"config": {
+			"vpc_id": {
+				"references": [
+					"aws_default_vpc.defaultvpc.id",
+					"aws_default_vpc.defaultvpc",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "default",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_default_security_group",
+	},
+	"aws_default_vpc.defaultvpc": {
+		"address":             "aws_default_vpc.defaultvpc",
+		"config":              {},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "defaultvpc",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_default_vpc",
+	},
+	"aws_security_group_rule.sgr1": {
+		"address": "aws_security_group_rule.sgr1",
+		"config": {
+			"cidr_blocks": {
+				"constant_value": [
+					"0.0.0.0/0",
+				],
+			},
+			"from_port": {
+				"constant_value": 22,
+			},
+			"ipv6_cidr_blocks": {
+				"constant_value": [
+					"::/0",
+				],
+			},
+			"protocol": {
+				"constant_value": "ssh",
+			},
+			"security_group_id": {
+				"references": [
+					"aws_default_vpc.defaultvpc.default_security_group_id",
+					"aws_default_vpc.defaultvpc",
+				],
+			},
+			"to_port": {
+				"constant_value": 22,
+			},
+			"type": {
+				"constant_value": "ingress",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "sgr1",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_security_group_rule",
+	},
+}

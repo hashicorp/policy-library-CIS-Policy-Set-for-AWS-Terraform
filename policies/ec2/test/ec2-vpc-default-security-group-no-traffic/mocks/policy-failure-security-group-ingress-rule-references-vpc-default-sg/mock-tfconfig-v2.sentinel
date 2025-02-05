@@ -1,0 +1,70 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_default_security_group.default": {
+		"address": "aws_default_security_group.default",
+		"config": {
+			"vpc_id": {
+				"references": [
+					"aws_vpc.mainvpc.id",
+					"aws_vpc.mainvpc",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "default",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_default_security_group",
+	},
+	"aws_vpc.mainvpc": {
+		"address":             "aws_vpc.mainvpc",
+		"config":              {},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "mainvpc",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_vpc",
+	},
+	"aws_vpc_security_group_ingress_rule.sgr1": {
+		"address": "aws_vpc_security_group_ingress_rule.sgr1",
+		"config": {
+			"cidr_ipv4": {
+				"constant_value": "10.0.0.0/8",
+			},
+			"from_port": {
+				"constant_value": 80,
+			},
+			"ip_protocol": {
+				"constant_value": "tcp",
+			},
+			"security_group_id": {
+				"references": [
+					"aws_vpc.mainvpc.default_security_group_id",
+					"aws_vpc.mainvpc",
+				],
+			},
+			"to_port": {
+				"constant_value": 80,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "sgr1",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_vpc_security_group_ingress_rule",
+	},
+}
