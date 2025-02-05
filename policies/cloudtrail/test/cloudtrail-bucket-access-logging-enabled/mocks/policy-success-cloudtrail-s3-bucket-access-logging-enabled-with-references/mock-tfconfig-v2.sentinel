@@ -1,0 +1,91 @@
+resources = {
+	"aws_cloudtrail.cloudtrail-example": {
+		"address": "aws_cloudtrail.cloudtrail-example",
+		"config": {
+			"name": {
+				"constant_value": "example-cloudtrail",
+			},
+			"s3_bucket_name": {
+				"references": [
+					"aws_s3_bucket.example.id",
+					"aws_s3_bucket.example",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "cloudtrail-example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_cloudtrail",
+	},
+	"aws_s3_bucket.example": {
+		"address": "aws_s3_bucket.example",
+		"config": {
+			"bucket": {
+				"constant_value": "example-bucket",
+			},
+			"force_destroy": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket.log_bucket": {
+		"address": "aws_s3_bucket.log_bucket",
+		"config": {
+			"bucket": {
+				"constant_value": "my-tf-log-bucket",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "log_bucket",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_logging.example": {
+		"address": "aws_s3_bucket_logging.example",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.example.id",
+					"aws_s3_bucket.example",
+				],
+			},
+			"target_bucket": {
+				"references": [
+					"aws_s3_bucket.log_bucket.id",
+					"aws_s3_bucket.log_bucket",
+				],
+			},
+			"target_prefix": {
+				"constant_value": "log/",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_logging",
+	},
+}

@@ -1,0 +1,46 @@
+# This policy requires resources of type `aws_cloudtrail` to have log file validation enabled.
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name":                "cloudtrail-log-file-validation-enabled",
+	"message":                    "Attribute 'enable_log_file_validation' must be true for 'aws_cloudtrail' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-4 for more details.",
+	"resource_aws_cloudtrail":    "aws_cloudtrail",
+	"enable_log_file_validation": "enable_log_file_validation",
+}
+
+# Variables
+
+resources = tf.plan(tfplan.planned_values.resources).type(const.resource_aws_cloudtrail).resources
+violations = collection.reject(resources, func(res) {
+	return maps.get(res, "values." + const.enable_log_file_validation, false)
+})
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

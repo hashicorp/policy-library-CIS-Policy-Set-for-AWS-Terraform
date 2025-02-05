@@ -1,0 +1,176 @@
+resources = {
+	"aws_cloudtrail.example": {
+		"address": "aws_cloudtrail.example",
+		"config": {
+			"enable_log_file_validation": {
+				"constant_value": true,
+			},
+			"include_global_service_events": {
+				"constant_value": true,
+			},
+			"is_multi_region_trail": {
+				"constant_value": false,
+			},
+			"name": {
+				"constant_value": "example-cloudtrail",
+			},
+			"s3_bucket_name": {
+				"references": [
+					"aws_s3_bucket.cloudtrail_logs.bucket",
+					"aws_s3_bucket.cloudtrail_logs",
+				],
+			},
+			"tags": {
+				"constant_value": {
+					"Name": "Example CloudTrail",
+				},
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_cloudtrail",
+	},
+	"aws_cloudwatch_log_group.cloudtrail_log_group": {
+		"address": "aws_cloudwatch_log_group.cloudtrail_log_group",
+		"config": {
+			"name": {
+				"constant_value": "/aws/cloudtrail/my_cloudtrail_logs",
+			},
+			"retention_in_days": {
+				"constant_value": 90,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "cloudtrail_log_group",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_cloudwatch_log_group",
+	},
+	"aws_iam_role.cloudtrail_role": {
+		"address": "aws_iam_role.cloudtrail_role",
+		"config": {
+			"assume_role_policy": {
+				"constant_value": null,
+			},
+			"name": {
+				"constant_value": "aws_cloudtrail_to_cloudwatch_logs_role",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "cloudtrail_role",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_role",
+	},
+	"aws_kms_key.a": {
+		"address": "aws_kms_key.a",
+		"config": {
+			"deletion_window_in_days": {
+				"constant_value": 10,
+			},
+			"description": {
+				"constant_value": "KMS key 1",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "a",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_kms_key",
+	},
+	"aws_kms_key.cloudtrail_key": {
+		"address": "aws_kms_key.cloudtrail_key",
+		"config": {
+			"description": {
+				"constant_value": "KMS key for encrypting CloudTrail logs",
+			},
+			"enable_key_rotation": {
+				"constant_value": true,
+			},
+			"policy": {
+				"constant_value": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Enable IAM User Permissions\",\n      \"Effect\": \"Allow\",\n      \"Principal\": {\n        \"AWS\": \"arn:aws:iam:::root\"\n      },\n      \"Action\": \"kms:*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}\n",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "cloudtrail_key",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_kms_key",
+	},
+	"aws_s3_bucket.cloudtrail_bucket": {
+		"address": "aws_s3_bucket.cloudtrail_bucket",
+		"config": {
+			"bucket": {
+				"constant_value": "my-cloudtrail-logs-bucket",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "cloudtrail_bucket",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket.cloudtrail_logs": {
+		"address": "aws_s3_bucket.cloudtrail_logs",
+		"config": {
+			"bucket": {
+				"references": [
+					"random_id.bucket_suffix.hex",
+					"random_id.bucket_suffix",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "cloudtrail_logs",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"random_id.bucket_suffix": {
+		"address": "random_id.bucket_suffix",
+		"config": {
+			"byte_length": {
+				"constant_value": 8,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "bucket_suffix",
+		"provider_config_key": "random",
+		"provisioners":        [],
+		"type":                "random_id",
+	},
+}

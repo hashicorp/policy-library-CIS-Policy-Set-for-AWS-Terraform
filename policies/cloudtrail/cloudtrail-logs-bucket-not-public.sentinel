@@ -1,0 +1,106 @@
+# This policy requires the S3 bucket associated with a cloud trail to be not publicly accessible.
+
+# Imports
+
+import "tfconfig/v2" as tfconfig
+import "tfresources" as tf
+import "report" as report
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name":                            "cloudtrail-logs-bucket-not-public",
+	"message":                                "S3 bucket used to store cloudtrail logs must not be publicly accessible. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-6 for more details.",
+	"resource_aws_cloudtrail":                "aws_cloudtrail",
+	"resource_s3_bucket_public_access_block": "aws_s3_bucket_public_access_block",
+	"constant_value":                         "constant_value",
+}
+
+# Functions
+
+# Resolve the bucket name from the bucket expression
+# Example bucket expression - bucket_exp = {"references": ["aws_s3_bucket.bucket.id", "aws_s3_bucket.bucket"]}
+# Example bucket expression - bucket_exp = {"constant_value": "my-bucket"}
+resolve_s3_bucket_name = func(bucket_exp, module_address) {
+	if bucket_exp is null {
+		return ""
+	}
+	if maps.get(bucket_exp, const.constant_value, "") is not empty {
+		return bucket_exp[const.constant_value]
+	} else if maps.get(bucket_exp, "references", []) is not empty {
+		# Example References - bucket_exp["references"] = ["aws_s3_bucket.bucket.id", "aws_s3_bucket.bucket"]
+		# We get the resource from the address which is the second element in the references array
+		if (length(bucket_exp["references"]) < 2) {
+			return ""
+		}
+		bucket_addr = bucket_exp["references"][1]
+
+		// We don't support variable/locals based references
+		if bucket_addr is not defined {
+			return ""
+		}
+
+		// Prefix the module address with the bucket address
+		// to make stuff work for nested modules
+		if module_address is not "" {
+			bucket_addr = module_address + "." + bucket_addr
+		}
+
+		bucket_res = tf.config(tfconfig.resources).address(bucket_addr).resources
+		if bucket_res is not empty {
+			return maps.get(bucket_res[0], "config.bucket.constant_value", "")
+		}
+	}
+	return ""
+}
+
+# Variables
+
+config_resources = tf.config(tfconfig.resources)
+
+s3_bucket_public_access_block_res = config_resources.type(const.resource_s3_bucket_public_access_block).resources
+
+compliant_s3_bucket_public_access_block_resources = collection.reject(s3_bucket_public_access_block_res, func(res) {
+	return not (maps.get(res, "config.ignore_public_acls.constant_value", false) and
+		maps.get(res, "config.block_public_acls.constant_value", false) and
+		maps.get(res, "config.restrict_public_buckets.constant_value", false) and
+		maps.get(res, "config.block_public_policy.constant_value", false))
+})
+
+private_bucket_names = []
+
+for compliant_s3_bucket_public_access_block_resources as _, res {
+	bucket_name = resolve_s3_bucket_name(maps.get(res, "config.bucket", {}), res.module_address)
+	if bucket_name is not empty {
+		append(private_bucket_names, bucket_name)
+	}
+}
+
+resources = config_resources.type(const.resource_aws_cloudtrail).resources
+violations = collection.reject(resources, func(res) {
+	bucket_name = resolve_s3_bucket_name(maps.get(res, "config.s3_bucket_name", {}), res.module_address)
+	return bucket_name is empty or bucket_name in private_bucket_names
+})
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

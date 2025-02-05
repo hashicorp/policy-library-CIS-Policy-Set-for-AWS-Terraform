@@ -1,0 +1,47 @@
+resources = {
+	"module.cloudtrail.aws_cloudtrail.this": {
+		"address": "module.cloudtrail.aws_cloudtrail.this",
+		"config": {
+			"name": {
+				"references": [
+					"var.cloudtrail_name",
+				],
+			},
+			"s3_bucket_name": {
+				"references": [
+					"aws_s3_bucket.this.bucket",
+					"aws_s3_bucket.this",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.cloudtrail",
+		"name":                "this",
+		"provider_config_key": "module.cloudtrail:aws",
+		"provisioners":        [],
+		"type":                "aws_cloudtrail",
+	},
+	"module.cloudtrail.aws_s3_bucket.this": {
+		"address": "module.cloudtrail.aws_s3_bucket.this",
+		"config": {
+			"bucket": {
+				"constant_value": "test-bucket",
+			},
+			"force_destroy": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.cloudtrail",
+		"name":                "this",
+		"provider_config_key": "module.cloudtrail:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+}
