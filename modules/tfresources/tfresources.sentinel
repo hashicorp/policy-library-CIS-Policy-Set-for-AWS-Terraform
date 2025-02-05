@@ -1,0 +1,70 @@
+func filter_by_property(resources, property, value) {
+	return filter resources as _, r {
+		r[property] is value
+	}
+}
+
+func by_type(resources, type) {
+	return {
+		"resources": filter_by_property(resources, "type", type),
+		"mode": func(mode) {
+			filtered_resources = filter_by_property(resources, "type", type)
+			return {
+				"resources": filter_by_property(filtered_resources, "mode", mode),
+			}
+		},
+	}
+}
+
+func by_address(resources, addr) {
+	return {"resources": filter_by_property(resources, "address", addr)}
+}
+
+func by_name(resources, name) {
+	return {"resources": filter_by_property(resources, "name", name)}
+}
+
+func by_mode(resources, mode) {
+	return {
+		"resources": filter_by_property(resources, "mode", mode),
+		"address": func(addr) {
+			filtered_resources = filter_by_property(resources, "mode", mode)
+			return {
+				"resources": filter_by_property(filtered_resources, "address", addr),
+			}
+		},
+	}
+}
+
+func get_values(m) {
+	return map m as _, val { val }
+}
+
+func get_filters(resources) {
+	resources = get_values(resources)
+	return {
+		"type": func(type) {
+			return by_type(resources, type)
+		},
+		"mode": func(mode) {
+			return by_mode(resources, mode)
+		},
+		"name": func(name) {
+			return by_name(resources, name)
+		},
+		"address": func(addr) {
+			return by_address(resources, addr)
+		},
+	}
+}
+func config(resources) {
+	return get_filters(resources)
+}
+
+func plan(resources) {
+	return get_filters(resources)
+}
+
+func state(resources) {
+	return get_filters(resources)
+}

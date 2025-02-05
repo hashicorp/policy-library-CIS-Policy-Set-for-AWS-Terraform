@@ -1,0 +1,46 @@
+# This policy requires resources of type 'aws_db_instance' have attribute 'publicly_accessible' set to false.
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name":              "rds-public-access-disabled",
+	"message":                  "Attribute 'publicly_accessible' must be set to false for 'aws_db_instance' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/rds-controls.html#rds-2 for more details.",
+	"resource_aws_db_instance": "aws_db_instance",
+	"publicly_accessible":      "publicly_accessible",
+}
+
+# Variables
+
+resources = tf.plan(tfplan.planned_values.resources).type(const.resource_aws_db_instance).resources
+violations = collection.reject(resources, func(res) {
+	return maps.get(res, "values.publicly_accessible", false) is false
+})
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

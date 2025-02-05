@@ -1,0 +1,10 @@
+# Terraform files
+.terraform
+terraform.tfstate
+terraform.tfvars
+*.tfstate*
+*.tfvars*
+.idea/
+
+# Sentinel cache
+**/.sentinel/*

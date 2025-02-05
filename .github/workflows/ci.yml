@@ -1,0 +1,13 @@
+name: CI
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  ci:
+    uses: hashicorp/policy-library-sentinel-workflows-common/.github/workflows/ci.yml@main
+    

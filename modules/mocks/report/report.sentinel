@@ -1,0 +1,5 @@
+// Mock function that returns an empty policy report.
+// Should only be used in tests.
+generate_policy_report = func(summary) {
+	return ""
+}
