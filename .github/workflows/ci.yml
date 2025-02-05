@@ -1,14 +1,12 @@
 name: CI
 
 on:
-  workflow_call:
-    inputs:
-      sentinel-version:
-        description: Sentinel version to be installed in the runner
-        required: false
-        type: string
-        default: "0.26.0"
-
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   sentinel-fmt-and-test:
     runs-on: ['self-hosted', 'ondemand', 'os=linux']
