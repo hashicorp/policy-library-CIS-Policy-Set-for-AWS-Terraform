@@ -83,3 +83,8 @@ policy "ec2-security-group-ingress-traffic-restriction-port-3389" {
     port = 3389
   }
 }
+
+policy "efs-encryption-at-rest-enabled" {
+  source = "./policies/efs/efs-encryption-at-rest-enabled.sentinel"
+  enforcement_level = "advisory"
+}
