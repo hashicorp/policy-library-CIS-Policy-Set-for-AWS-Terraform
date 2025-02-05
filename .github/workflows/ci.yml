@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.1.5
       - name: Install Sentinel
-        uses: bloominlabs/setup-hashicorp-releases@24ba535809adca0a710fd39db83eef75cc90af0e
+        uses: bloominlabs/setup-hashicorp-releases@47e70332de2225670dedad7833c0e19229f751b5
         with:
           package: sentinel
           version: ${{ inputs.sentinel-version }}
