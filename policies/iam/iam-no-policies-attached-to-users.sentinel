@@ -1,0 +1,40 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# IAM users should not be directly attached to IAM policies.
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+
+# Constants
+
+const = {
+	"policy_name": "iam-no-policies-attached-to-users",
+	"message":     "IAM policies should not be attached directly to IAM users. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-2 for more details.",
+	"resource_aws_iam_user_policy_attachment": "aws_iam_user_policy_attachment",
+	"resource_aws_iam_user_policy":            "aws_iam_user_policy",
+}
+
+planned_resources = tf.plan(tfplan.planned_values.resources)
+violations = planned_resources.type(const.resource_aws_iam_user_policy_attachment).resources
+violations += planned_resources.type(const.resource_aws_iam_user_policy).resources
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+print(report.generate_policy_report(summary))
+
+main = rule {
+	violations is empty
+}

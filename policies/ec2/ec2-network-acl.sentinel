@@ -1,0 +1,126 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# This policy requires resources of type `aws_network_acl` and `aws_network_acl_rule`
+# to block ingress traffic from unknown sources to the configured ports
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "strings"
+import "collection" as collection
+import "collection/maps" as maps
+
+# Params
+
+# blocked_ports specifies the port numbers to which ingress traffic should not be allowed from unknown sources.
+param blocked_ports default [22, 3389]
+
+# Constants
+
+const = {
+	"policy_name":                   "ec2-network-acl",
+	"cidr_block":                    "cidr_block",
+	"ipv6_cidr_block":               "ipv6_cidr_block",
+	"protocol":                      "protocol",
+	"from_port":                     "from_port",
+	"to_port":                       "to_port",
+	"ingress":                       "ingress",
+	"egress":                        "egress",
+	"resource_aws_network_acl_rule": "aws_network_acl_rule",
+	"resource_aws_network_acl":      "aws_network_acl",
+	"message":                       "Network Acl rules should not allow ingress from 0.0.0.0/0 or ::/0 to ports " + strings.join(blocked_ports, ",") + ".",
+}
+
+# Functions
+
+contains_catchall_ip_for_ipv4 = func(cidr_block) {
+	return cidr_block is defined and cidr_block is "0.0.0.0/0"
+}
+
+contains_catchall_ip_for_ipv6 = func(cidr_block) {
+	return cidr_block is defined and cidr_block is "::/0"
+}
+
+contains_catchall_ip = func(ipv4_cidr_blocks, ipv6_cidr_blocks) {
+	return contains_catchall_ip_for_ipv4(ipv4_cidr_blocks) or contains_catchall_ip_for_ipv6(ipv6_cidr_blocks)
+}
+
+is_catch_all_protocol = func(protocol) {
+	return protocol is "all" or protocol is "-1"
+}
+
+does_rule_reference_port = func(from_port, to_port) {
+	return collection.find(blocked_ports, func(port) {
+		return from_port is defined and from_port is not null and from_port <= port and
+			to_port is defined and
+			to_port is not null and
+			to_port >= port
+	}) is defined
+}
+
+is_ingress_rule_violation = func(ingress) {
+	return contains_catchall_ip(maps.get(ingress, const.cidr_block, ""), maps.get(ingress, const.ipv6_cidr_block, "")) and
+		(is_catch_all_protocol(maps.get(ingress, const.protocol, "")) or
+			does_rule_reference_port(maps.get(ingress, const.from_port, null), maps.get(ingress, const.to_port, null)))
+}
+
+# Variables
+
+planned_resources = tf.plan(tfplan.planned_values.resources)
+
+resources = planned_resources.type(const.resource_aws_network_acl_rule).resources
+aws_network_acl_rule_violations = filter resources as _, res {
+	maps.get(res.values, const.egress, []) is false and
+		is_ingress_rule_violation(res.values)
+}
+
+resources = planned_resources.type(const.resource_aws_network_acl).resources
+aws_network_acl_violations = collection.reject(resources, func(res) {
+	ingress_value = maps.get(res, "values.ingress", [])
+	return collection.find(ingress_value, func(ingress) {
+		return is_ingress_rule_violation(ingress)
+	}) is not defined
+})
+
+violations = aws_network_acl_rule_violations + aws_network_acl_violations
+
+message = const.message
+if blocked_ports contains 22 or blocked_ports contains 3389 {
+	message += " Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-21 for more details."
+}
+summary = {
+	"policy_name": "ec2-network-acl",
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+# Checks if 'aws_network_acl_rule' resources block ingress traffic
+# from unknown sources to the configured ports
+is_aws_network_acl_rule_compliant = rule {
+	aws_network_acl_rule_violations is empty
+}
+
+# Checks if 'aws_network_acl' resources block ingress traffic
+# from unknown sources to the configured ports
+is_aws_network_acl_compliant = rule {
+	aws_network_acl_violations is empty
+}
+
+main = rule {
+	is_aws_network_acl_rule_compliant and
+	is_aws_network_acl_compliant
+}

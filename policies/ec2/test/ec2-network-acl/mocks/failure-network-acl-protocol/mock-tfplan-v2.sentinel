@@ -1,0 +1,76 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_network_acl.main": {
+			"address":        "aws_network_acl.main",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "main",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_network_acl",
+			"values": {
+				"egress": [
+					{
+						"action":          "allow",
+						"cidr_block":      "10.3.0.0/18",
+						"from_port":       443,
+						"icmp_code":       null,
+						"icmp_type":       null,
+						"ipv6_cidr_block": "",
+						"protocol":        "tcp",
+						"rule_no":         200,
+						"to_port":         443,
+					},
+				],
+				"ingress": [
+					{
+						"action":          "allow",
+						"cidr_block":      "0.0.0.0/0",
+						"from_port":       22,
+						"icmp_code":       null,
+						"icmp_type":       null,
+						"ipv6_cidr_block": "",
+						"protocol":        "-1",
+						"rule_no":         100,
+						"to_port":         22,
+					},
+				],
+				"tags": {
+					"Name": "main",
+				},
+				"tags_all": {
+					"Name": "main",
+				},
+			},
+		},
+		"aws_vpc.main": {
+			"address":        "aws_vpc.main",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "main",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_vpc",
+			"values": {
+				"assign_generated_ipv6_cidr_block": null,
+				"enable_dns_support":               true,
+				"instance_tenancy":                 "default",
+				"ipv4_ipam_pool_id":                null,
+				"ipv4_netmask_length":              null,
+				"ipv6_ipam_pool_id":                null,
+				"ipv6_netmask_length":              null,
+				"tags":                             null,
+			},
+		},
+	},
+}

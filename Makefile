@@ -47,22 +47,3 @@ go-private:
 modules:
 	go mod download && go mod verify
 .PHONY: modules
-
-test-linux-amd64:
-	make replace_plugin_paths os=linux arch=amd64
-	make tests
-.PHONY: test-linux-amd64
-
-replace_plugin_paths:
-ifeq ($(strip $(os)),)
-	@echo "Error: OS is not specified."
-	@exit 1
-endif
-
-ifeq ($(strip $(arch)),)
-    @echo "Error: Architecture is not specified."
-	@exit 1
-endif
-
-	find './policies/test' -type f -name '*.hcl' -exec sed -i 's|plugins/darwin/arm64|plugins/$(os)/$(arch)|g' {} +
-.PHONY: replace_plugin_paths

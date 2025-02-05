@@ -1,0 +1,109 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# This policy requires resources of type `aws_vpc` and `aws_default_vpc` to have flow logs enabled.
+
+# Imports
+
+import "tfconfig/v2" as tfconfig
+import "tfresources" as tf
+import "report" as report
+import "strings"
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name":              "ec2-vpc-flow-logging-enabled",
+	"message":                  "VPC resources `aws_vpc` and `aws_default_vpc` must have flow logging. https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-6 for more details.",
+	"address":                  "address",
+	"resource_aws_flow_log":    "aws_flow_log",
+	"resource_aws_vpc":         "aws_vpc",
+	"resource_aws_default_vpc": "aws_default_vpc",
+	"config":                   "config",
+	"constant_value":           "constant_value",
+	"traffic_type":             "traffic_type",
+	"traffic_type_all":         "ALL",
+	"traffic_type_reject":      "REJECT",
+	"references":               "references",
+	"vpc_id":                   "vpc_id",
+	"module_prefix":            "module.",
+	"module_address":           "module_address",
+}
+
+# Functions
+
+# Removes module address prefix from a resource
+# and returns back the localized address for a module.
+resource_address_without_module_address = func(res) {
+	resource_addr = maps.get(res, const.address, "")
+
+	# Check for root module
+	if not strings.has_prefix(resource_addr, const.module_prefix) {
+		return resource_addr
+	}
+
+	module_addr_prefix = maps.get(res, const.module_address, "") + "."
+	return strings.trim_prefix(resource_addr, module_addr_prefix)
+}
+
+get_vpc_violations = func(vpc_resources, vpc_addresses_with_valid_flow_logs) {
+	return collection.reject(vpc_resources, func(vpc) {
+		return resource_address_without_module_address(vpc) in vpc_addresses_with_valid_flow_logs
+	})
+}
+
+# Variables
+
+config_resources = tf.config(tfconfig.resources)
+
+# Contains addresses of VPCs that contain a backing 'aws_flow_log' resource
+# with the 'traffic_type' attribute set to either 'ALL' or 'REJECT'
+
+vpc_addresses_with_valid_flow_logs = []
+flow_log_resources = config_resources.type(const.resource_aws_flow_log).resources
+for flow_log_resources as _, flow_log {
+
+	traffic_type_attr_value = maps.get(flow_log, "config.traffic_type", "")
+	if (traffic_type_attr_value is empty or
+		not (maps.get(traffic_type_attr_value, const.constant_value, "") is const.traffic_type_all or
+			maps.get(traffic_type_attr_value, const.constant_value, "") is const.traffic_type_reject)) {
+		continue
+	}
+
+	flow_log_config = flow_log[const.config]
+	if flow_log_config is defined and
+		flow_log_config[const.vpc_id] is defined and
+		flow_log_config[const.vpc_id][const.references] is defined and
+		(flow_log_config[const.vpc_id][const.references][0] matches "^aws_vpc.(.*)" or
+			flow_log_config[const.vpc_id][const.references][0] matches "^aws_default_vpc.(.*)") {
+		append(vpc_addresses_with_valid_flow_logs, flow_log_config[const.vpc_id][const.references][1])
+	}
+
+}
+
+vpc_resources = config_resources.type(const.resource_aws_vpc).resources
+default_vpc_resources = config_resources.type(const.resource_aws_default_vpc).resources
+violations = get_vpc_violations(vpc_resources, vpc_addresses_with_valid_flow_logs) + get_vpc_violations(default_vpc_resources, vpc_addresses_with_valid_flow_logs)
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

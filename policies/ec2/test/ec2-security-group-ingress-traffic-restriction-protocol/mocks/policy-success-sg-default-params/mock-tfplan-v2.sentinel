@@ -1,0 +1,65 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_security_group.sg": {
+			"address":        "aws_security_group.sg",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "sg",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_security_group",
+			"values": {
+				"description": "Managed by Terraform",
+				"ingress": [
+					{
+						"cidr_blocks": [
+							"0.0.0.0/0",
+						],
+						"description": "",
+						"from_port":   22,
+						"ipv6_cidr_blocks": [
+							"::/0",
+						],
+						"prefix_list_ids": [],
+						"protocol":        "ssh",
+						"security_groups": [],
+						"self":            false,
+						"to_port":         22,
+					},
+				],
+				"revoke_rules_on_delete": false,
+				"tags":     null,
+				"timeouts": null,
+			},
+		},
+		"aws_vpc.vpc": {
+			"address":        "aws_vpc.vpc",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "vpc",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_vpc",
+			"values": {
+				"assign_generated_ipv6_cidr_block": null,
+				"enable_dns_support":               true,
+				"instance_tenancy":                 "default",
+				"ipv4_ipam_pool_id":                null,
+				"ipv4_netmask_length":              null,
+				"ipv6_ipam_pool_id":                null,
+				"ipv6_netmask_length":              null,
+				"tags":                             null,
+			},
+		},
+	},
+}

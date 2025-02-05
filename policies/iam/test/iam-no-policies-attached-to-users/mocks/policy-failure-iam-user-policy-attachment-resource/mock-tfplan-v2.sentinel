@@ -1,0 +1,78 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_iam_access_key.lb": {
+			"address":        "aws_iam_access_key.lb",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_access_key",
+			"values": {
+				"pgp_key": null,
+				"status":  "Active",
+				"user":    "loadbalancer",
+			},
+		},
+		"aws_iam_policy.lb_ro": {
+			"address":        "aws_iam_policy.lb_ro",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb_ro",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_policy",
+			"values": {
+				"description": null,
+				"name":        "test",
+				"path":        "/",
+				"policy":      "{\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}",
+				"tags":        null,
+			},
+		},
+		"aws_iam_user.lb": {
+			"address":        "aws_iam_user.lb",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_user",
+			"values": {
+				"force_destroy":        false,
+				"name":                 "loadbalancer",
+				"path":                 "/system/",
+				"permissions_boundary": null,
+				"tags":                 null,
+			},
+		},
+		"aws_iam_user_policy_attachment.policy_attachment": {
+			"address":        "aws_iam_user_policy_attachment.policy_attachment",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "policy_attachment",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_user_policy_attachment",
+			"values": {
+				"user": "loadbalancer",
+			},
+		},
+	},
+}

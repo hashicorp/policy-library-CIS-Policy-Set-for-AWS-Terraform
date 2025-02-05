@@ -1,0 +1,33 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_instance.example": {
+			"address":        "aws_instance.example",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "example",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_instance",
+			"values": {
+				"ami": "ami-xxxxxxxxxxxxxx",
+				"credit_specification":        [],
+				"get_password_data":           false,
+				"hibernation":                 null,
+				"instance_type":               "t2.micro",
+				"launch_template":             [],
+				"source_dest_check":           true,
+				"tags":                        null,
+				"timeouts":                    null,
+				"user_data_replace_on_change": false,
+				"volume_tags":                 null,
+			},
+		},
+	},
+}

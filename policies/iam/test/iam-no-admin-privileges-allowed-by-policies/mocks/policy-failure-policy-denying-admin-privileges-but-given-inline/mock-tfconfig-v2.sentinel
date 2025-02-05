@@ -1,0 +1,31 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"module.iam.aws_iam_policy.policy": {
+		"address": "module.iam.aws_iam_policy.policy",
+		"config": {
+			"description": {
+				"constant_value": "My test policy",
+			},
+			"name": {
+				"constant_value": "test_policy",
+			},
+			"path": {
+				"constant_value": "/",
+			},
+			"policy": {
+				"constant_value": null,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.iam",
+		"name":                "policy",
+		"provider_config_key": "module.iam:aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy",
+	},
+}

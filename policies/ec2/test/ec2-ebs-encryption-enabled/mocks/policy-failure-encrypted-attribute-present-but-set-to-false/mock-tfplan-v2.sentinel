@@ -1,0 +1,30 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_ebs_volume.ebs": {
+			"address":        "aws_ebs_volume.ebs",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "ebs",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_ebs_volume",
+			"values": {
+				"availability_zone":    "us-west-2a",
+				"encrypted":            false,
+				"final_snapshot":       false,
+				"multi_attach_enabled": null,
+				"outpost_arn":          null,
+				"size":                 40,
+				"tags":                 null,
+				"timeouts":             null,
+			},
+		},
+	},
+}

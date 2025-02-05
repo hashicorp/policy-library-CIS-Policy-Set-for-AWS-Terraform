@@ -1,0 +1,128 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# IAM policies should not allow administrator privileges to users/roles/groups.
+
+# Imports
+
+import "tfstate/v2" as tfstate
+import "tfconfig/v2" as tfconfig
+import "tfresources" as tf
+import "report" as report
+import "strings"
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name":                      "iam-no-admin-privileges-allowed-by-policies",
+	"resource_aws_iam_policy":          "aws_iam_policy",
+	"resource_aws_iam_policy_document": "aws_iam_policy_document",
+	"statement":                        "statement",
+	"allow":                            "allow",
+	"references":                       "references",
+	"policy":                           "policy",
+	"data":                             "data",
+	"effect":                           "effect",
+}
+
+# Functions
+
+# Iterates through IAM policy document resources from
+# tfstate/v2 and checks if the statements allow admin
+# privileges for users/groups/roles.
+fetch_policies_allowing_admin_privileges = func() {
+	policies_allowing_admin_privileges = []
+
+	policy_documents = tf.state(tfstate.resources).type(const.resource_aws_iam_policy_document).mode(const.data).resources
+
+	for policy_documents as _, iam_policy_document {
+		if iam_policy_document.values is not defined or
+			iam_policy_document.values[const.statement] is not defined {
+			continue
+		}
+
+		forbidden_statements = filter iam_policy_document.values[const.statement] as _, statement {
+			strings.to_lower(maps.get(statement, const.effect, "")) is const.allow and
+				statement.resources contains "*" and
+				statement.actions contains "*"
+		}
+
+		if forbidden_statements is not empty {
+			append(policies_allowing_admin_privileges, iam_policy_document)
+		}
+	}
+
+	return policies_allowing_admin_privileges
+}
+
+# Iterates over the 'aws_iam_policy' resources in tfconfig/v2
+# and filters those that don't reference an IAM policy document
+# in their 'policy' attribute.
+verify_iam_policy_resources_with_inline_policies = func() {
+	all_iam_policy_resources = tf.config(tfconfig.resources).type(const.resource_aws_iam_policy).resources
+
+	references_iam_policy_document = func(references) {
+		policy_document_references = filter references as _, ref {
+			ref matches "^data.aws_iam_policy_document.(.*)$"
+		}
+
+		return policy_document_references is not empty
+	}
+
+	return collection.reject(all_iam_policy_resources, func(res) {
+		references = maps.get(res, "config.policy.references", undefined)
+		return references is defined and
+			references_iam_policy_document(references)
+	})
+}
+
+build_violation_object = func(resource_addr, module_addr, message) {
+	return {
+		"address":        resource_addr,
+		"module_address": module_addr,
+		"message":        message,
+	}
+}
+
+# Variables
+
+policy_document_violations = fetch_policies_allowing_admin_privileges()
+policy_document_violations_list = map policy_document_violations as _, v {
+	build_violation_object(v.address, v.module_address, "IAM policies should not be allow full '*' administrative privileges. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-1 for more details.")
+}
+
+inline_policy_violations = verify_iam_policy_resources_with_inline_policies()
+inline_policy_violations_list = map inline_policy_violations as _, v {
+	build_violation_object(v.address, v.module_address, "All aws_iam_policy resources must get their policy from an instance of the data_iam_policy_document data source.")
+}
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations":  policy_document_violations_list + inline_policy_violations_list,
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+# Checks if IAM policy documents don't allow admin privileges
+# for users/roles/groups.
+check_policy_documents = rule {
+	policy_document_violations is empty
+}
+
+# Checks if 'aws_iam_policy' resources reference
+# an instance of 'aws_iam_policy_document' data source
+# for the policy attribute.
+check_inline_policies = rule {
+	inline_policy_violations is empty
+}
+
+main = rule {
+	check_policy_documents and
+	check_inline_policies
+}

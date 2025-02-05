@@ -1,0 +1,57 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# Key rotation must be enabled for resources of type 'aws_kms_key'
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+
+const = {
+	"policy_name":          "kms-key-rotation-enabled",
+	"resource_aws_kms_key": "aws_kms_key",
+	"enable_key_rotation":  "enable_key_rotation",
+	"is_enabled":           "is_enabled",
+	"message":              "Attribute 'enable_key_rotation' must be enabled for 'aws_kms_key' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/kms-controls.html#kms-4 for more details.",
+}
+
+# Variables
+
+all_kms_keys = tf.plan(tfplan.planned_values.resources).type(const.resource_aws_kms_key).resources
+
+# Iterates through the list of `aws_kms_key` resources and returns the ones
+# which are enabled and don't have the `enable_key_rotation`
+# attribute set to `true`.
+violations = collection.reject(all_kms_keys, func(res) {
+	is_enabled_key = "values.is_enabled"
+	enable_rotation_key = "values.enable_key_rotation"
+	return (maps.get(res, is_enabled_key, false) is false or
+		(maps.get(res, enable_rotation_key, false) is true))
+})
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}

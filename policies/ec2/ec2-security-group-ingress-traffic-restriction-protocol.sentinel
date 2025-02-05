@@ -1,0 +1,150 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+# This policy requires resources of type `aws_security_group`, `aws_security_group_rule` and `aws_vpc_security_group_ingress_rule`
+# to block ingress traffic from unknown sources to ports 22 and 3389
+
+# Imports
+
+import "tfplan/v2" as tfplan
+import "tfresources" as tf
+import "report" as report
+import "collection" as collection
+import "collection/maps" as maps
+
+# Params
+
+# prevent_unknown_ipv4_ingress when set to true restricts ingress traffic from "0.0.0.0/0" to port 22 and 3389
+param prevent_unknown_ipv4_ingress default false
+
+# prevent_unknown_ipv6_ingress when set to true restricts ingress traffic from "::/0" to port 22 and 3389
+param prevent_unknown_ipv6_ingress default false
+
+# Constants
+
+const = {
+	"policy_name":                              "ec2-security-group-ingress-traffic-restriction",
+	"message":                                  "Security group rules should not allow ingress to port 22 and 3389 from",
+	"resource_security_group_rule":             "aws_security_group_rule",
+	"resource_security_group":                  "aws_security_group",
+	"resource_vpc_security_group_ingress_rule": "aws_vpc_security_group_ingress_rule",
+	"ingress":          "ingress",
+	"cidr_blocks":      "cidr_blocks",
+	"cidr_ipv4":        "cidr_ipv4",
+	"cidr_ipv6":        "cidr_ipv6",
+	"ipv6_cidr_blocks": "ipv6_cidr_blocks",
+	"protocol":         "protocol",
+	"ip_protocol":      "ip_protocol",
+	"from_port":        "from_port",
+	"to_port":          "to_port",
+}
+
+# Functions
+
+is_ingress_rule = func(rule_type) {
+	return rule_type is const.ingress
+}
+
+contains_catchall_ip_for_ipv4 = func(cidr_blocks) {
+	return prevent_unknown_ipv4_ingress and cidr_blocks is defined and cidr_blocks is not null and cidr_blocks contains "0.0.0.0/0"
+}
+
+contains_catchall_ip_for_ipv6 = func(cidr_blocks) {
+	return prevent_unknown_ipv6_ingress and cidr_blocks is defined and cidr_blocks is not null and cidr_blocks contains "::/0"
+}
+
+contains_catchall_ip = func(ipv4_cidr_blocks, ipv6_cidr_blocks) {
+	return contains_catchall_ip_for_ipv4(ipv4_cidr_blocks) or contains_catchall_ip_for_ipv6(ipv6_cidr_blocks)
+}
+
+is_catch_all_protocol = func(protocol) {
+	return protocol is "all" or protocol is "-1"
+}
+
+does_rule_reference_port = func(from_port, to_port, port) {
+	return from_port is defined and from_port is not null and from_port <= port and
+		to_port is defined and
+		to_port is not null and
+		to_port >= port
+}
+
+is_ingress_rule_violation = func(ingress, ipv4_cidr, ipv6_cidr, protocol) {
+	return contains_catchall_ip(maps.get(ingress, ipv4_cidr, ""), maps.get(ingress, ipv6_cidr, "")) and
+		(is_catch_all_protocol(maps.get(ingress, protocol, "")) or
+			does_rule_reference_port(maps.get(ingress, const.from_port, null), maps.get(ingress, const.to_port, null), 22) or
+			does_rule_reference_port(maps.get(ingress, const.from_port, null), maps.get(ingress, const.to_port, null), 3389))
+}
+
+# Variables
+
+plan_resources = tf.plan(tfplan.planned_values.resources)
+
+resources = plan_resources.type(const.resource_security_group_rule).resources
+aws_security_group_rule_violations = collection.reject(resources, func(res) {
+	return not (is_ingress_rule(maps.get(res.values, "type", "")) and
+		is_ingress_rule_violation(res.values, const.cidr_blocks, const.ipv6_cidr_blocks, const.protocol))
+})
+
+resources = plan_resources.type(const.resource_security_group).resources
+aws_security_group_violations = collection.reject(resources, func(res) {
+	ingress_data = maps.get(res.values, "ingress", [])
+	return collection.find(ingress_data, func(ingress) {
+		return is_ingress_rule_violation(ingress, const.cidr_blocks, const.ipv6_cidr_blocks, const.protocol)
+	}) is not defined
+})
+
+resources = plan_resources.type(const.resource_vpc_security_group_ingress_rule).resources
+aws_vpc_security_group_ingress_rule_violations = collection.reject(resources, func(res) {
+	return not is_ingress_rule_violation(res.values, const.cidr_ipv4, const.cidr_ipv6, const.ip_protocol)
+})
+
+violations = aws_security_group_rule_violations + aws_security_group_violations + aws_vpc_security_group_ingress_rule_violations
+
+message = const.message
+if prevent_unknown_ipv4_ingress and prevent_unknown_ipv6_ingress {
+	message += " from '0.0.0.0/0' or '::/0'"
+} else if prevent_unknown_ipv4_ingress {
+	message += " from '0.0.0.0/0'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-53 for more details."
+} else {
+	message += " from '::/0'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-54 for more details."
+}
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+# Checks if 'aws_security_group_rule' resources block ingress traffic
+# from unknown sources to ports 22 and 3389
+is_aws_security_group_rule_compliant = rule {
+	aws_security_group_rule_violations is empty
+}
+
+# Checks if 'aws_security_group' resources block ingress traffic
+# from unknown sources to ports 22 and 3389
+is_aws_security_group_compliant = rule {
+	aws_security_group_violations is empty
+}
+
+# Checks if 'aws_vpc_security_group_ingress_rule' resources block ingress traffic
+# from unknown sources to ports 22 and 3389
+is_aws_vpc_security_group_ingress_rule_compliant = rule {
+	aws_vpc_security_group_ingress_rule_violations is empty
+}
+
+main = rule {
+	is_aws_security_group_rule_compliant and
+	is_aws_security_group_compliant and
+	is_aws_vpc_security_group_ingress_rule_compliant
+}

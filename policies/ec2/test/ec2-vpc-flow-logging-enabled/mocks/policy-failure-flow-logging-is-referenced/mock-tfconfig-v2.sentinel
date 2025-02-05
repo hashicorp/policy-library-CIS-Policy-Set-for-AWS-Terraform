@@ -1,0 +1,2043 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"data.aws_availability_zones.current": {
+		"address":             "data.aws_availability_zones.current",
+		"config":              {},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "current",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_availability_zones",
+	},
+	"module.vpc.aws_ec2_transit_gateway_vpc_attachment.tgw": {
+		"address": "module.vpc.aws_ec2_transit_gateway_vpc_attachment.tgw",
+		"config": {
+			"appliance_mode_support": {
+				"references": [
+					"var.subnets.transit_gateway.transit_gateway_appliance_mode_support",
+					"var.subnets.transit_gateway",
+					"var.subnets",
+				],
+			},
+			"dns_support": {
+				"references": [
+					"var.subnets.transit_gateway.transit_gateway_dns_support",
+					"var.subnets.transit_gateway",
+					"var.subnets",
+				],
+			},
+			"ipv6_support": {
+				"references": [
+					"local.tgw_dualstack",
+				],
+			},
+			"subnet_ids": {
+				"references": [
+					"aws_subnet.tgw",
+				],
+			},
+			"tags": {
+				"references": [
+					"var.name",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"transit_gateway\"].tags_aws",
+					"module.subnet_tags[\"transit_gateway\"]",
+				],
+			},
+			"transit_gateway_default_route_table_association": {
+				"references": [
+					"var.subnets.transit_gateway.transit_gateway_default_route_table_association",
+					"var.subnets.transit_gateway",
+					"var.subnets",
+				],
+			},
+			"transit_gateway_default_route_table_propagation": {
+				"references": [
+					"var.subnets.transit_gateway.transit_gateway_default_route_table_propagation",
+					"var.subnets.transit_gateway",
+					"var.subnets",
+				],
+			},
+			"transit_gateway_id": {
+				"references": [
+					"var.transit_gateway_id",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.subnet_keys",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_ec2_transit_gateway_vpc_attachment",
+	},
+	"module.vpc.aws_egress_only_internet_gateway.eigw": {
+		"address": "module.vpc.aws_egress_only_internet_gateway.eigw",
+		"config": {
+			"tags": {
+				"references": [
+					"var.name",
+					"module.tags.tags_aws",
+					"module.tags",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"var.vpc_egress_only_internet_gateway",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "eigw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_egress_only_internet_gateway",
+	},
+	"module.vpc.aws_eip.nat": {
+		"address": "module.vpc.aws_eip.nat",
+		"config": {
+			"domain": {
+				"constant_value": "vpc",
+			},
+			"tags": {
+				"references": [
+					"local.subnet_names[\"public\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"public\"].tags_aws",
+					"module.subnet_tags[\"public\"]",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.nat_configuration",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "nat",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_eip",
+	},
+	"module.vpc.aws_internet_gateway.main": {
+		"address": "module.vpc.aws_internet_gateway.main",
+		"config": {
+			"tags": {
+				"references": [
+					"var.name",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"public\"].tags_aws",
+					"module.subnet_tags[\"public\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.subnet_keys",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "main",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_internet_gateway",
+	},
+	"module.vpc.aws_nat_gateway.main": {
+		"address": "module.vpc.aws_nat_gateway.main",
+		"config": {
+			"allocation_id": {
+				"references": [
+					"aws_eip.nat",
+					"each.key",
+				],
+			},
+			"subnet_id": {
+				"references": [
+					"aws_subnet.public",
+					"each.key",
+				],
+			},
+			"tags": {
+				"references": [
+					"local.subnet_names[\"public\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"public\"].tags_aws",
+					"module.subnet_tags[\"public\"]",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_internet_gateway.main",
+		],
+		"for_each": {
+			"references": [
+				"local.nat_configuration",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "main",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_nat_gateway",
+	},
+	"module.vpc.aws_networkmanager_attachment_accepter.cwan": {
+		"address": "module.vpc.aws_networkmanager_attachment_accepter.cwan",
+		"config": {
+			"attachment_id": {
+				"references": [
+					"aws_networkmanager_vpc_attachment.cwan[0].id",
+					"aws_networkmanager_vpc_attachment.cwan[0]",
+					"aws_networkmanager_vpc_attachment.cwan",
+				],
+			},
+			"attachment_type": {
+				"constant_value": "VPC",
+			},
+		},
+		"count": {
+			"references": [
+				"local.subnet_keys",
+				"local.create_acceptance",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_networkmanager_attachment_accepter",
+	},
+	"module.vpc.aws_networkmanager_vpc_attachment.cwan": {
+		"address": "module.vpc.aws_networkmanager_vpc_attachment.cwan",
+		"config": {
+			"core_network_id": {
+				"references": [
+					"var.core_network.id",
+					"var.core_network",
+				],
+			},
+			"options": [
+				{
+					"appliance_mode_support": {
+						"references": [
+							"var.subnets.core_network.appliance_mode_support",
+							"var.subnets.core_network",
+							"var.subnets",
+						],
+					},
+					"ipv6_support": {
+						"references": [
+							"local.cwan_dualstack",
+						],
+					},
+				},
+			],
+			"subnet_arns": {
+				"references": [
+					"aws_subnet.cwan",
+				],
+			},
+			"tags": {
+				"references": [
+					"var.name",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"core_network\"].tags_aws",
+					"module.subnet_tags[\"core_network\"]",
+				],
+			},
+			"vpc_arn": {
+				"references": [
+					"local.vpc.arn",
+					"local.vpc",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.subnet_keys",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_networkmanager_vpc_attachment",
+	},
+	"module.vpc.aws_route.cwan_to_nat": {
+		"address": "module.vpc.aws_route.cwan_to_nat",
+		"config": {
+			"destination_cidr_block": {
+				"constant_value": "0.0.0.0/0",
+			},
+			"nat_gateway_id": {
+				"references": [
+					"local.nat_per_az",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.cwan",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"var.subnets.core_network.connect_to_public_natgw",
+				"var.subnets.core_network",
+				"var.subnets",
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "cwan_to_nat",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.ipv6_private_to_cwan": {
+		"address": "module.vpc.aws_route.ipv6_private_to_cwan",
+		"config": {
+			"core_network_arn": {
+				"references": [
+					"var.core_network.arn",
+					"var.core_network",
+				],
+			},
+			"destination_ipv6_cidr_block": {
+				"references": [
+					"var.core_network_ipv6_routes",
+					"each.key",
+					"var.core_network_ipv6_routes",
+					"each.key",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.core_network_ipv6_routes",
+					"each.key",
+					"var.core_network_ipv6_routes",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_networkmanager_vpc_attachment.cwan",
+			"aws_networkmanager_attachment_accepter.cwan",
+		],
+		"for_each": {
+			"references": [
+				"local.ipv6_private_subnet_keys_names_cwan_routes",
+				"local.create_cwan_routes",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "ipv6_private_to_cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.ipv6_private_to_tgw": {
+		"address": "module.vpc.aws_route.ipv6_private_to_tgw",
+		"config": {
+			"destination_ipv6_cidr_block": {
+				"references": [
+					"var.transit_gateway_ipv6_routes",
+					"each.key",
+					"var.transit_gateway_ipv6_routes",
+					"each.key",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.transit_gateway_ipv6_routes",
+					"each.key",
+					"var.transit_gateway_ipv6_routes",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+			"transit_gateway_id": {
+				"references": [
+					"var.transit_gateway_id",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_ec2_transit_gateway_vpc_attachment.tgw",
+		],
+		"for_each": {
+			"references": [
+				"local.ipv6_private_subnet_key_names_tgw_routed",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "ipv6_private_to_tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.ipv6_public_to_cwan": {
+		"address": "module.vpc.aws_route.ipv6_public_to_cwan",
+		"config": {
+			"core_network_arn": {
+				"references": [
+					"var.core_network.arn",
+					"var.core_network",
+				],
+			},
+			"destination_ipv6_cidr_block": {
+				"references": [
+					"var.core_network_ipv6_routes[\"public\"]",
+					"var.core_network_ipv6_routes",
+					"var.core_network_ipv6_routes[\"public\"]",
+					"var.core_network_ipv6_routes",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.core_network_ipv6_routes[\"public\"]",
+					"var.core_network_ipv6_routes",
+					"var.core_network_ipv6_routes[\"public\"]",
+					"var.core_network_ipv6_routes",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_networkmanager_vpc_attachment.cwan",
+			"aws_networkmanager_attachment_accepter.cwan",
+		],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.ipv6_subnets_cwan_routed",
+				"local.create_cwan_routes",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "ipv6_public_to_cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.ipv6_public_to_tgw": {
+		"address": "module.vpc.aws_route.ipv6_public_to_tgw",
+		"config": {
+			"destination_ipv6_cidr_block": {
+				"references": [
+					"var.transit_gateway_ipv6_routes[\"public\"]",
+					"var.transit_gateway_ipv6_routes",
+					"var.transit_gateway_ipv6_routes[\"public\"]",
+					"var.transit_gateway_ipv6_routes",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.transit_gateway_ipv6_routes[\"public\"]",
+					"var.transit_gateway_ipv6_routes",
+					"var.transit_gateway_ipv6_routes[\"public\"]",
+					"var.transit_gateway_ipv6_routes",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+			"transit_gateway_id": {
+				"references": [
+					"var.transit_gateway_id",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_ec2_transit_gateway_vpc_attachment.tgw",
+		],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.ipv6_subnets_tgw_routed",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "ipv6_public_to_tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.private_to_cwan": {
+		"address": "module.vpc.aws_route.private_to_cwan",
+		"config": {
+			"core_network_arn": {
+				"references": [
+					"var.core_network.arn",
+					"var.core_network",
+				],
+			},
+			"destination_cidr_block": {
+				"references": [
+					"var.core_network_routes",
+					"each.key",
+					"var.core_network_routes",
+					"each.key",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.core_network_routes",
+					"each.key",
+					"var.core_network_routes",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_networkmanager_vpc_attachment.cwan",
+			"aws_networkmanager_attachment_accepter.cwan",
+		],
+		"for_each": {
+			"references": [
+				"local.private_subnet_key_names_cwan_routes",
+				"local.create_cwan_routes",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private_to_cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.private_to_egress_only": {
+		"address": "module.vpc.aws_route.private_to_egress_only",
+		"config": {
+			"destination_ipv6_cidr_block": {
+				"constant_value": "::/0",
+			},
+			"egress_only_gateway_id": {
+				"references": [
+					"aws_egress_only_internet_gateway.eigw[0].id",
+					"aws_egress_only_internet_gateway.eigw[0]",
+					"aws_egress_only_internet_gateway.eigw",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.private_subnet_names_egress_routed",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private_to_egress_only",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.private_to_nat": {
+		"address": "module.vpc.aws_route.private_to_nat",
+		"config": {
+			"destination_cidr_block": {
+				"constant_value": "0.0.0.0/0",
+			},
+			"nat_gateway_id": {
+				"references": [
+					"local.nat_per_az",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.private_subnet_names_nat_routed",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private_to_nat",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.private_to_tgw": {
+		"address": "module.vpc.aws_route.private_to_tgw",
+		"config": {
+			"destination_cidr_block": {
+				"references": [
+					"var.transit_gateway_routes",
+					"each.key",
+					"var.transit_gateway_routes",
+					"each.key",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.transit_gateway_routes",
+					"each.key",
+					"var.transit_gateway_routes",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+			"transit_gateway_id": {
+				"references": [
+					"var.transit_gateway_id",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_ec2_transit_gateway_vpc_attachment.tgw",
+		],
+		"for_each": {
+			"references": [
+				"local.private_subnet_key_names_tgw_routed",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private_to_tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.public_ipv6_to_igw": {
+		"address": "module.vpc.aws_route.public_ipv6_to_igw",
+		"config": {
+			"destination_ipv6_cidr_block": {
+				"constant_value": "::/0",
+			},
+			"gateway_id": {
+				"references": [
+					"aws_internet_gateway.main[0].id",
+					"aws_internet_gateway.main[0]",
+					"aws_internet_gateway.main",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.public_ipv6only",
+				"local.public_dualstack",
+				"local.connect_to_igw",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public_ipv6_to_igw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.public_to_cwan": {
+		"address": "module.vpc.aws_route.public_to_cwan",
+		"config": {
+			"core_network_arn": {
+				"references": [
+					"var.core_network.arn",
+					"var.core_network",
+				],
+			},
+			"destination_cidr_block": {
+				"references": [
+					"var.core_network_routes[\"public\"]",
+					"var.core_network_routes",
+					"var.core_network_routes[\"public\"]",
+					"var.core_network_routes",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.core_network_routes[\"public\"]",
+					"var.core_network_routes",
+					"var.core_network_routes[\"public\"]",
+					"var.core_network_routes",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_networkmanager_vpc_attachment.cwan",
+			"aws_networkmanager_attachment_accepter.cwan",
+		],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.subnets_cwan_routed",
+				"local.create_cwan_routes",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public_to_cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.public_to_igw": {
+		"address": "module.vpc.aws_route.public_to_igw",
+		"config": {
+			"destination_cidr_block": {
+				"constant_value": "0.0.0.0/0",
+			},
+			"gateway_id": {
+				"references": [
+					"aws_internet_gateway.main[0].id",
+					"aws_internet_gateway.main[0]",
+					"aws_internet_gateway.main",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.public_ipv6only",
+				"local.connect_to_igw",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public_to_igw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.public_to_tgw": {
+		"address": "module.vpc.aws_route.public_to_tgw",
+		"config": {
+			"destination_cidr_block": {
+				"references": [
+					"var.transit_gateway_routes[\"public\"]",
+					"var.transit_gateway_routes",
+					"var.transit_gateway_routes[\"public\"]",
+					"var.transit_gateway_routes",
+				],
+			},
+			"destination_prefix_list_id": {
+				"references": [
+					"var.transit_gateway_routes[\"public\"]",
+					"var.transit_gateway_routes",
+					"var.transit_gateway_routes[\"public\"]",
+					"var.transit_gateway_routes",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+			"transit_gateway_id": {
+				"references": [
+					"var.transit_gateway_id",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_ec2_transit_gateway_vpc_attachment.tgw",
+		],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.subnets_tgw_routed",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public_to_tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route.tgw_to_nat": {
+		"address": "module.vpc.aws_route.tgw_to_nat",
+		"config": {
+			"destination_cidr_block": {
+				"constant_value": "0.0.0.0/0",
+			},
+			"nat_gateway_id": {
+				"references": [
+					"local.nat_per_az",
+					"each.key",
+				],
+			},
+			"route_table_id": {
+				"references": [
+					"aws_route_table.tgw",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"var.subnets.transit_gateway.connect_to_public_natgw",
+				"var.subnets.transit_gateway",
+				"var.subnets",
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "tgw_to_nat",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route",
+	},
+	"module.vpc.aws_route_table.cwan": {
+		"address": "module.vpc.aws_route_table.cwan",
+		"config": {
+			"tags": {
+				"references": [
+					"local.subnet_names[\"core_network\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"core_network\"].tags_aws",
+					"module.subnet_tags[\"core_network\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table",
+	},
+	"module.vpc.aws_route_table.private": {
+		"address": "module.vpc.aws_route_table.private",
+		"config": {
+			"tags": {
+				"references": [
+					"local.subnet_names",
+					"each.key",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags",
+					"each.key",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.private_per_az",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table",
+	},
+	"module.vpc.aws_route_table.public": {
+		"address": "module.vpc.aws_route_table.public",
+		"config": {
+			"tags": {
+				"references": [
+					"local.subnet_names[\"public\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"public\"].tags_aws",
+					"module.subnet_tags[\"public\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table",
+	},
+	"module.vpc.aws_route_table.tgw": {
+		"address": "module.vpc.aws_route_table.tgw",
+		"config": {
+			"tags": {
+				"references": [
+					"local.subnet_names[\"transit_gateway\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"transit_gateway\"].tags_aws",
+					"module.subnet_tags[\"transit_gateway\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table",
+	},
+	"module.vpc.aws_route_table_association.cwan": {
+		"address": "module.vpc.aws_route_table_association.cwan",
+		"config": {
+			"route_table_id": {
+				"references": [
+					"aws_route_table.cwan",
+					"each.key",
+				],
+			},
+			"subnet_id": {
+				"references": [
+					"aws_subnet.cwan",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table_association",
+	},
+	"module.vpc.aws_route_table_association.private": {
+		"address": "module.vpc.aws_route_table_association.private",
+		"config": {
+			"route_table_id": {
+				"references": [
+					"aws_route_table.private",
+					"each.key",
+				],
+			},
+			"subnet_id": {
+				"references": [
+					"aws_subnet.private",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.private_per_az",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table_association",
+	},
+	"module.vpc.aws_route_table_association.public": {
+		"address": "module.vpc.aws_route_table_association.public",
+		"config": {
+			"route_table_id": {
+				"references": [
+					"aws_route_table.public",
+					"each.key",
+				],
+			},
+			"subnet_id": {
+				"references": [
+					"aws_subnet.public",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table_association",
+	},
+	"module.vpc.aws_route_table_association.tgw": {
+		"address": "module.vpc.aws_route_table_association.tgw",
+		"config": {
+			"route_table_id": {
+				"references": [
+					"aws_route_table.tgw",
+					"each.key",
+				],
+			},
+			"subnet_id": {
+				"references": [
+					"aws_subnet.tgw",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_route_table_association",
+	},
+	"module.vpc.aws_subnet.cwan": {
+		"address": "module.vpc.aws_subnet.cwan",
+		"config": {
+			"availability_zone": {
+				"references": [
+					"each.key",
+				],
+			},
+			"cidr_block": {
+				"references": [
+					"local.calculated_subnets[\"core_network\"]",
+					"local.calculated_subnets",
+					"each.key",
+				],
+			},
+			"ipv6_cidr_block": {
+				"references": [
+					"local.calculated_subnets_ipv6[\"core_network\"]",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+					"local.calculated_subnets_ipv6[\"core_network\"]",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+				],
+			},
+			"tags": {
+				"references": [
+					"local.subnet_names[\"core_network\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"core_network\"].tags_aws",
+					"module.subnet_tags[\"core_network\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "cwan",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_subnet",
+	},
+	"module.vpc.aws_subnet.private": {
+		"address": "module.vpc.aws_subnet.private",
+		"config": {
+			"assign_ipv6_address_on_creation": {
+				"references": [
+					"local.subnets_with_ipv6_native",
+					"each.key",
+					"var.subnets",
+					"each.key",
+				],
+			},
+			"availability_zone": {
+				"references": [
+					"each.key",
+				],
+			},
+			"cidr_block": {
+				"references": [
+					"local.calculated_subnets",
+					"each.key",
+					"each.key",
+					"local.calculated_subnets",
+					"each.key",
+					"each.key",
+				],
+			},
+			"enable_resource_name_dns_aaaa_record_on_launch": {
+				"references": [
+					"local.subnets_with_ipv6_native",
+					"each.key",
+					"var.subnets",
+					"each.key",
+				],
+			},
+			"ipv6_cidr_block": {
+				"references": [
+					"local.calculated_subnets_ipv6",
+					"each.key",
+					"each.key",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+					"each.key",
+				],
+			},
+			"ipv6_native": {
+				"references": [
+					"local.subnets_with_ipv6_native",
+					"each.key",
+				],
+			},
+			"map_public_ip_on_launch": {
+				"references": [
+					"local.subnets_with_ipv6_native",
+					"each.key",
+				],
+			},
+			"tags": {
+				"references": [
+					"local.subnet_names",
+					"each.key",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags",
+					"each.key",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count": {},
+		"depends_on": [
+			"aws_vpc_ipv4_cidr_block_association.secondary",
+		],
+		"for_each": {
+			"references": [
+				"local.private_per_az",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "private",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_subnet",
+	},
+	"module.vpc.aws_subnet.public": {
+		"address": "module.vpc.aws_subnet.public",
+		"config": {
+			"assign_ipv6_address_on_creation": {
+				"references": [
+					"local.public_ipv6only",
+					"local.public_dualstack",
+				],
+			},
+			"availability_zone": {
+				"references": [
+					"each.key",
+				],
+			},
+			"cidr_block": {
+				"references": [
+					"local.calculated_subnets[\"public\"]",
+					"local.calculated_subnets",
+					"each.key",
+					"local.calculated_subnets[\"public\"]",
+					"local.calculated_subnets",
+					"each.key",
+				],
+			},
+			"enable_resource_name_dns_aaaa_record_on_launch": {
+				"references": [
+					"local.public_ipv6only",
+					"local.public_dualstack",
+				],
+			},
+			"ipv6_cidr_block": {
+				"references": [
+					"local.calculated_subnets_ipv6[\"public\"]",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+					"local.calculated_subnets_ipv6[\"public\"]",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+				],
+			},
+			"ipv6_native": {
+				"references": [
+					"local.subnets_with_ipv6_native",
+				],
+			},
+			"map_public_ip_on_launch": {
+				"references": [
+					"var.subnets.public.map_public_ip_on_launch",
+					"var.subnets.public",
+					"var.subnets",
+					"local.public_ipv6only",
+				],
+			},
+			"tags": {
+				"references": [
+					"local.subnet_names[\"public\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"public\"].tags_aws",
+					"module.subnet_tags[\"public\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "public",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_subnet",
+	},
+	"module.vpc.aws_subnet.tgw": {
+		"address": "module.vpc.aws_subnet.tgw",
+		"config": {
+			"availability_zone": {
+				"references": [
+					"each.key",
+				],
+			},
+			"cidr_block": {
+				"references": [
+					"local.calculated_subnets[\"transit_gateway\"]",
+					"local.calculated_subnets",
+					"each.key",
+				],
+			},
+			"ipv6_cidr_block": {
+				"references": [
+					"local.calculated_subnets_ipv6[\"transit_gateway\"]",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+					"local.calculated_subnets_ipv6[\"transit_gateway\"]",
+					"local.calculated_subnets_ipv6",
+					"each.key",
+				],
+			},
+			"tags": {
+				"references": [
+					"local.subnet_names[\"transit_gateway\"]",
+					"local.subnet_names",
+					"each.key",
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.subnet_tags[\"transit_gateway\"].tags_aws",
+					"module.subnet_tags[\"transit_gateway\"]",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"local.vpc.id",
+					"local.vpc",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.subnet_keys",
+				"local.azs",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "tgw",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_subnet",
+	},
+	"module.vpc.aws_vpc.main": {
+		"address": "module.vpc.aws_vpc.main",
+		"config": {
+			"assign_generated_ipv6_cidr_block": {
+				"references": [
+					"var.vpc_assign_generated_ipv6_cidr_block",
+				],
+			},
+			"cidr_block": {
+				"references": [
+					"var.cidr_block",
+				],
+			},
+			"enable_dns_hostnames": {
+				"references": [
+					"var.vpc_enable_dns_hostnames",
+				],
+			},
+			"enable_dns_support": {
+				"references": [
+					"var.vpc_enable_dns_support",
+				],
+			},
+			"instance_tenancy": {
+				"references": [
+					"var.vpc_instance_tenancy",
+				],
+			},
+			"ipv4_ipam_pool_id": {
+				"references": [
+					"var.vpc_ipv4_ipam_pool_id",
+				],
+			},
+			"ipv4_netmask_length": {
+				"references": [
+					"var.vpc_ipv4_netmask_length",
+				],
+			},
+			"ipv6_cidr_block": {
+				"references": [
+					"var.vpc_ipv6_cidr_block",
+				],
+			},
+			"ipv6_ipam_pool_id": {
+				"references": [
+					"var.vpc_ipv6_ipam_pool_id",
+				],
+			},
+			"ipv6_netmask_length": {
+				"references": [
+					"var.vpc_ipv6_netmask_length",
+				],
+			},
+			"tags": {
+				"references": [
+					"var.name",
+					"module.tags.tags_aws",
+					"module.tags",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.create_vpc",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "main",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_vpc",
+	},
+	"module.vpc.aws_vpc_ipv4_cidr_block_association.secondary": {
+		"address": "module.vpc.aws_vpc_ipv4_cidr_block_association.secondary",
+		"config": {
+			"cidr_block": {
+				"references": [
+					"local.cidr_block",
+				],
+			},
+			"ipv4_ipam_pool_id": {
+				"references": [
+					"var.vpc_ipv4_ipam_pool_id",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"var.vpc_id",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"var.vpc_secondary_cidr",
+				"local.create_vpc",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "secondary",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_vpc_ipv4_cidr_block_association",
+	},
+	"module.vpc.aws_vpclattice_service_network_vpc_association.vpc_lattice_service_network_association": {
+		"address": "module.vpc.aws_vpclattice_service_network_vpc_association.vpc_lattice_service_network_association",
+		"config": {
+			"security_group_ids": {
+				"references": [
+					"var.vpc_lattice.security_group_ids",
+					"var.vpc_lattice",
+				],
+			},
+			"service_network_identifier": {
+				"references": [
+					"var.vpc_lattice.service_network_identifier",
+					"var.vpc_lattice",
+				],
+			},
+			"tags": {
+				"references": [
+					"module.tags.tags_aws",
+					"module.tags",
+					"module.vpc_lattice_tags.tags_aws",
+					"module.vpc_lattice_tags",
+				],
+			},
+			"vpc_identifier": {
+				"references": [
+					"aws_vpc.main[0].id",
+					"aws_vpc.main[0]",
+					"aws_vpc.main",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.lattice_association",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc",
+		"name":                "vpc_lattice_service_network_association",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_vpclattice_service_network_vpc_association",
+	},
+	"module.vpc.data.aws_availability_zones.current": {
+		"address": "module.vpc.data.aws_availability_zones.current",
+		"config": {
+			"filter": [
+				{
+					"name": {
+						"constant_value": "opt-in-status",
+					},
+					"values": {
+						"constant_value": [
+							"opt-in-not-required",
+						],
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "module.vpc",
+		"name":                "current",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_availability_zones",
+	},
+	"module.vpc.data.aws_vpc.main": {
+		"address": "module.vpc.data.aws_vpc.main",
+		"config": {
+			"id": {
+				"references": [
+					"var.vpc_id",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.create_vpc",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "module.vpc",
+		"name":                "main",
+		"provider_config_key": "module.vpc:aws",
+		"provisioners":        [],
+		"type":                "aws_vpc",
+	},
+	"module.vpc.module.flow_logs.aws_flow_log.main": {
+		"address": "module.vpc.module.flow_logs.aws_flow_log.main",
+		"config": {
+			"iam_role_arn": {
+				"references": [
+					"local.iam_role_arn",
+				],
+			},
+			"log_destination": {
+				"references": [
+					"local.log_destination",
+				],
+			},
+			"log_destination_type": {
+				"references": [
+					"var.flow_log_definition.log_destination_type",
+					"var.flow_log_definition",
+				],
+			},
+			"tags": {
+				"references": [
+					"var.name",
+					"var.tags",
+				],
+			},
+			"traffic_type": {
+				"references": [
+					"var.flow_log_definition.traffic_type",
+					"var.flow_log_definition",
+				],
+			},
+			"vpc_id": {
+				"references": [
+					"var.vpc_id",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs",
+		"name":                "main",
+		"provider_config_key": "module.vpc.module.flow_logs:aws",
+		"provisioners":        [],
+		"type":                "aws_flow_log",
+	},
+	"module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_cloudwatch_log_group.main": {
+		"address": "module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_cloudwatch_log_group.main",
+		"config": {
+			"kms_key_id": {
+				"references": [
+					"var.kms_key_id",
+				],
+			},
+			"name_prefix": {
+				"references": [
+					"var.name",
+					"local.service_id",
+				],
+			},
+			"retention_in_days": {
+				"references": [
+					"var.retention_in_days",
+				],
+			},
+			"tags": {
+				"references": [
+					"var.tags",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.cloudwatch_log_group",
+		"name":                "main",
+		"provider_config_key": "module.vpc.module.flow_logs.module.cloudwatch_log_group:aws",
+		"provisioners":        [],
+		"type":                "aws_cloudwatch_log_group",
+	},
+	"module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_iam_policy.main": {
+		"address": "module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_iam_policy.main",
+		"config": {
+			"description": {
+				"references": [
+					"var.name",
+					"local.service_id",
+				],
+			},
+			"name_prefix": {
+				"references": [
+					"var.name",
+				],
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.main.json",
+					"data.aws_iam_policy_document.main",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.cloudwatch_log_group",
+		"name":                "main",
+		"provider_config_key": "module.vpc.module.flow_logs.module.cloudwatch_log_group:aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy",
+	},
+	"module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_iam_role.main": {
+		"address": "module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_iam_role.main",
+		"config": {
+			"assume_role_policy": {
+				"references": [
+					"local.sid_name",
+					"local.sid_service_id",
+					"var.aws_service_principal",
+				],
+			},
+			"description": {
+				"references": [
+					"var.name",
+					"local.service_id",
+				],
+			},
+			"name_prefix": {
+				"references": [
+					"var.name",
+				],
+			},
+			"tags": {
+				"references": [
+					"var.tags",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.cloudwatch_log_group",
+		"name":                "main",
+		"provider_config_key": "module.vpc.module.flow_logs.module.cloudwatch_log_group:aws",
+		"provisioners":        [],
+		"type":                "aws_iam_role",
+	},
+	"module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_iam_role_policy_attachment.main": {
+		"address": "module.vpc.module.flow_logs.module.cloudwatch_log_group.aws_iam_role_policy_attachment.main",
+		"config": {
+			"policy_arn": {
+				"references": [
+					"aws_iam_policy.main.arn",
+					"aws_iam_policy.main",
+				],
+			},
+			"role": {
+				"references": [
+					"aws_iam_role.main.name",
+					"aws_iam_role.main",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.cloudwatch_log_group",
+		"name":                "main",
+		"provider_config_key": "module.vpc.module.flow_logs.module.cloudwatch_log_group:aws",
+		"provisioners":        [],
+		"type":                "aws_iam_role_policy_attachment",
+	},
+	"module.vpc.module.flow_logs.module.cloudwatch_log_group.data.aws_iam_policy_document.main": {
+		"address": "module.vpc.module.flow_logs.module.cloudwatch_log_group.data.aws_iam_policy_document.main",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"logs:CreateLogGroup",
+							"logs:CreateLogStream",
+							"logs:DescribeLogGroups",
+							"logs:DescribeLogStreams",
+							"logs:PutLogEvents",
+						],
+					},
+					"effect": {
+						"constant_value": "Allow",
+					},
+					"resources": {
+						"constant_value": [
+							"*",
+						],
+					},
+					"sid": {
+						"references": [
+							"local.sid_name",
+						],
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "module.vpc.module.flow_logs.module.cloudwatch_log_group",
+		"name":                "main",
+		"provider_config_key": "module.vpc.module.flow_logs.module.cloudwatch_log_group:aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+	"module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket.flow_logs": {
+		"address": "module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket.flow_logs",
+		"config": {
+			"bucket_prefix": {
+				"references": [
+					"var.name",
+				],
+			},
+			"force_destroy": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.s3_log_bucket",
+		"name":                "flow_logs",
+		"provider_config_key": "module.vpc.module.flow_logs.module.s3_log_bucket:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket_lifecycle_configuration.flow_logs": {
+		"address": "module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket_lifecycle_configuration.flow_logs",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.flow_logs.bucket",
+					"aws_s3_bucket.flow_logs",
+				],
+			},
+			"rule": [
+				{
+					"expiration": [
+						{
+							"days": {
+								"constant_value": 60,
+							},
+						},
+					],
+					"id": {
+						"constant_value": "transition",
+					},
+					"status": {
+						"constant_value": "Enabled",
+					},
+					"transition": [
+						{
+							"days": {
+								"constant_value": 30,
+							},
+							"storage_class": {
+								"constant_value": "STANDARD_IA",
+							},
+						},
+					],
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.s3_log_bucket",
+		"name":                "flow_logs",
+		"provider_config_key": "module.vpc.module.flow_logs.module.s3_log_bucket:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_lifecycle_configuration",
+	},
+	"module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket_public_access_block.flow_logs": {
+		"address": "module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket_public_access_block.flow_logs",
+		"config": {
+			"block_public_acls": {
+				"constant_value": true,
+			},
+			"block_public_policy": {
+				"constant_value": true,
+			},
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.flow_logs.bucket",
+					"aws_s3_bucket.flow_logs",
+				],
+			},
+			"ignore_public_acls": {
+				"constant_value": true,
+			},
+			"restrict_public_buckets": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.s3_log_bucket",
+		"name":                "flow_logs",
+		"provider_config_key": "module.vpc.module.flow_logs.module.s3_log_bucket:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_public_access_block",
+	},
+	"module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket_server_side_encryption_configuration.flow_logs": {
+		"address": "module.vpc.module.flow_logs.module.s3_log_bucket.aws_s3_bucket_server_side_encryption_configuration.flow_logs",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.flow_logs.bucket",
+					"aws_s3_bucket.flow_logs",
+				],
+			},
+			"rule": [
+				{
+					"apply_server_side_encryption_by_default": [
+						{
+							"sse_algorithm": {
+								"constant_value": "AES256",
+							},
+						},
+					],
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.vpc.module.flow_logs.module.s3_log_bucket",
+		"name":                "flow_logs",
+		"provider_config_key": "module.vpc.module.flow_logs.module.s3_log_bucket:aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_server_side_encryption_configuration",
+	},
+}

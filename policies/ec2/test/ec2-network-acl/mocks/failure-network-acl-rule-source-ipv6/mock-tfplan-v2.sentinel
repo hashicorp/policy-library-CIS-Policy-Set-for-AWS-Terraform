@@ -1,0 +1,68 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_network_acl.acl": {
+			"address":        "aws_network_acl.acl",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "acl",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_network_acl",
+			"values": {
+				"tags": null,
+			},
+		},
+		"aws_network_acl_rule.rule1": {
+			"address":        "aws_network_acl_rule.rule1",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "rule1",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_network_acl_rule",
+			"values": {
+				"egress":          false,
+				"from_port":       22,
+				"icmp_code":       null,
+				"icmp_type":       null,
+				"ipv6_cidr_block": "::/0",
+				"protocol":        "tcp",
+				"rule_action":     "allow",
+				"rule_number":     100,
+				"to_port":         22,
+			},
+		},
+		"aws_vpc.vpc": {
+			"address":        "aws_vpc.vpc",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "vpc",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_vpc",
+			"values": {
+				"assign_generated_ipv6_cidr_block": null,
+				"enable_dns_support":               true,
+				"instance_tenancy":                 "default",
+				"ipv4_ipam_pool_id":                null,
+				"ipv4_netmask_length":              null,
+				"ipv6_ipam_pool_id":                null,
+				"ipv6_netmask_length":              null,
+				"tags":                             null,
+			},
+		},
+	},
+}

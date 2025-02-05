@@ -1,0 +1,95 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_security_group.allow_tls": {
+		"address": "aws_security_group.allow_tls",
+		"config": {
+			"description": {
+				"constant_value": "Allow TLS inbound traffic and all outbound traffic",
+			},
+			"name": {
+				"constant_value": "allow_tls",
+			},
+			"tags": {
+				"constant_value": {
+					"Name": "allow_tls",
+				},
+			},
+			"vpc_id": {
+				"references": [
+					"aws_vpc.main.id",
+					"aws_vpc.main",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "allow_tls",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_security_group",
+	},
+	"aws_security_group_rule.sgr1": {
+		"address": "aws_security_group_rule.sgr1",
+		"config": {
+			"cidr_blocks": {
+				"constant_value": [
+					"0.0.0.0/0",
+				],
+			},
+			"from_port": {
+				"constant_value": 22,
+			},
+			"ipv6_cidr_blocks": {
+				"constant_value": [
+					"::/0",
+				],
+			},
+			"protocol": {
+				"constant_value": "ssh",
+			},
+			"security_group_id": {
+				"references": [
+					"aws_security_group.allow_tls.id",
+					"aws_security_group.allow_tls",
+				],
+			},
+			"to_port": {
+				"constant_value": 22,
+			},
+			"type": {
+				"constant_value": "ingress",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "sgr1",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_security_group_rule",
+	},
+	"aws_vpc.main": {
+		"address": "aws_vpc.main",
+		"config": {
+			"cidr_block": {
+				"constant_value": "10.1.0.0/16",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "main",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_vpc",
+	},
+}
