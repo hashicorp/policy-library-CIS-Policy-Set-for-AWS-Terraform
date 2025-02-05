@@ -1,0 +1,66 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+terraform_version = "1.7.4"
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_kms_key.key": {
+			"address":        "aws_kms_key.key",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "key",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_kms_key",
+			"values": {
+				"bypass_policy_lockout_safety_check": false,
+				"custom_key_store_id":                null,
+				"customer_master_key_spec":           "SYMMETRIC_DEFAULT",
+				"deletion_window_in_days":            null,
+				"enable_key_rotation":                true,
+				"is_enabled":                         true,
+				"key_usage":                          "ENCRYPT_DECRYPT",
+				"tags":                               null,
+				"timeouts":                           null,
+				"xks_key_id":                         null,
+			},
+		},
+		"module.kms.aws_kms_key.key": {
+			"address":        "module.kms.aws_kms_key.key",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "module.kms",
+			"name":           "key",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_kms_key",
+			"values": {
+				"bypass_policy_lockout_safety_check": false,
+				"custom_key_store_id":                null,
+				"customer_master_key_spec":           "SYMMETRIC_DEFAULT",
+				"deletion_window_in_days":            null,
+				"enable_key_rotation":                true,
+				"is_enabled":                         true,
+				"key_usage":                          "ENCRYPT_DECRYPT",
+				"tags":                               null,
+				"timeouts":                           null,
+				"xks_key_id":                         null,
+			},
+		},
+	},
+}
+
+variables = {}
+
+resource_changes = {}
+
+output_changes = {}
+
+raw = {}
