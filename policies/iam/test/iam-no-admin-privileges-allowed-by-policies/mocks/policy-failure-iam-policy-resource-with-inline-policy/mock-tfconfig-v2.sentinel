@@ -1,0 +1,94 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_iam_policy.policy_one": {
+		"address": "aws_iam_policy.policy_one",
+		"config": {
+			"description": {
+				"constant_value": "My test policy",
+			},
+			"name": {
+				"constant_value": "test_policy_one",
+			},
+			"path": {
+				"constant_value": "/",
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.policy_one.json",
+					"data.aws_iam_policy_document.policy_one",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "policy_one",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy",
+	},
+	"aws_iam_policy.policy_two": {
+		"address": "aws_iam_policy.policy_two",
+		"config": {
+			"description": {
+				"constant_value": "My test policy",
+			},
+			"name": {
+				"constant_value": "test_policy_two",
+			},
+			"path": {
+				"constant_value": "/",
+			},
+			"policy": {
+				"constant_value": "{}",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "policy_two",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy",
+	},
+	"data.aws_iam_policy_document.policy_one": {
+		"address": "data.aws_iam_policy_document.policy_one",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"*",
+						],
+					},
+					"effect": {
+						"constant_value": "Deny",
+					},
+					"resources": {
+						"constant_value": [
+							"*",
+						],
+					},
+					"sid": {
+						"constant_value": "TestPolicy1",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "policy_one",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}

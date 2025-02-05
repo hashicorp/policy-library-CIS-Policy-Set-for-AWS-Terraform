@@ -1,0 +1,57 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_iam_policy_document.name": {
+		"address":        "aws_iam_policy_document.name",
+		"depends_on":     [],
+		"deposed_key":    "",
+		"index":          null,
+		"mode":           "data",
+		"module_address": "",
+		"name":           "name",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"tainted":        false,
+		"type":           "aws_iam_policy_document",
+		"values": {
+			"id":   "3473393781",
+			"json": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:GetObject\",\n      \"Resource\": \"*\"\n    },\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+			"override_policy_documents": null,
+			"policy_id":                 null,
+			"source_policy_documents":   null,
+			"statement": [
+				{
+					"actions": [
+						"s3:GetObject",
+					],
+					"condition":      [],
+					"effect":         "Allow",
+					"not_actions":    [],
+					"not_principals": [],
+					"not_resources":  [],
+					"principals":     [],
+					"resources": [
+						"*",
+					],
+					"sid": "",
+				},
+				{
+					"actions": [
+						"*",
+					],
+					"condition":      [],
+					"effect":         "Allow",
+					"not_actions":    [],
+					"not_principals": [],
+					"not_resources":  [],
+					"principals":     [],
+					"resources": [
+						"*",
+					],
+					"sid": "",
+				},
+			],
+			"version": "2012-10-17",
+		},
+	},
+}

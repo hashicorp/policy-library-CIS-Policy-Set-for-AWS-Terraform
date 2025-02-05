@@ -1,0 +1,65 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_iam_policy.policy": {
+		"address": "aws_iam_policy.policy",
+		"config": {
+			"description": {
+				"constant_value": "My test policy",
+			},
+			"name": {
+				"constant_value": "test_policy",
+			},
+			"path": {
+				"constant_value": "/",
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.name.json",
+					"data.aws_iam_policy_document.name",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "policy",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy",
+	},
+	"data.aws_iam_policy_document.name": {
+		"address": "data.aws_iam_policy_document.name",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"s3:GetObject",
+						],
+					},
+					"effect": {
+						"constant_value": "Allow",
+					},
+					"resources": {
+						"constant_value": [
+							"*",
+						],
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "name",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}
