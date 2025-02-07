@@ -90,32 +90,32 @@ policy "efs-encryption-at-rest-enabled" {
 }
 
 policy "vpc-flow-logging-enabled" {
-  source = "./policies/vpc-flow-logging-enabled.sentinel"
+  source = "./policies/vpc/vpc-flow-logging-enabled.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "s3-block-public-access-account-level" {
-  source = "./policies/s3-block-public-access-account-level.sentinel"
+  source = "./policies/s3/s3-block-public-access-account-level.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "s3-block-public-access-bucket-level" {
-  source = "./policies/s3-block-public-access-bucket-level.sentinel"
+  source = "./policies/s3/s3-block-public-access-bucket-level.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "s3-require-mfa-delete" {
-  source = "./policies/s3-require-mfa-delete.sentinel"
+  source = "./policies/s3/s3-require-mfa-delete.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "s3-require-ssl" {
-  source = "./policies/s3-require-ssl.sentinel"
+  source = "./policies/s3/s3-require-ssl.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "s3-enable-object-logging-for-write-events" {
-  source = "./policies/s3-enable-object-logging-for-events.sentinel"
+  source = "./policies/s3/s3-enable-object-logging-for-events.sentinel"
   enforcement_level = "advisory"
   params = {
     event_type = "WriteOnly"
@@ -123,7 +123,7 @@ policy "s3-enable-object-logging-for-write-events" {
 }
 
 policy "s3-enable-object-logging-for-read-events" {
-  source = "./policies/s3-enable-object-logging-for-events.sentinel"
+  source = "./policies/s3/s3-enable-object-logging-for-events.sentinel"
   enforcement_level = "advisory"
   params = {
     event_type = "ReadOnly"
@@ -132,26 +132,80 @@ policy "s3-enable-object-logging-for-read-events" {
 
 
 policy "cloudtrail-server-side-encryption-enabled" {
-  source = "./policies/cloudtrail-server-side-encryption-enabled.sentinel"
+  source = "./policies/cloudtrail/cloudtrail-server-side-encryption-enabled.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "cloudtrail-log-file-validation-enabled" {
-  source = "./policies/cloudtrail-log-file-validation-enabled.sentinel"
+  source = "./policies/cloudtrail/cloudtrail-log-file-validation-enabled.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "cloudtrail-cloudwatch-logs-group-arn-present" {
-  source = "./policies/cloudtrail-cloudwatch-logs-group-arn-present.sentinel"
+  source = "./policies/cloudtrail/cloudtrail-cloudwatch-logs-group-arn-present.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "cloudtrail-logs-bucket-not-public" {
-  source = "./policies/cloudtrail-logs-bucket-not-public.sentinel"
+  source = "./policies/cloudtrail/cloudtrail-logs-bucket-not-public.sentinel"
   enforcement_level = "advisory"
 }
 
 policy "cloudtrail-bucket-access-logging-enabled" {
-  source = "./policies/cloudtrail-bucket-access-logging-enabled.sentinel"
+  source = "./policies/cloudtrail/cloudtrail-bucket-access-logging-enabled.sentinel"
+  enforcement_level = "advisory"
+}
+
+policy "iam-no-admin-privileges-allowed-by-policies" {
+  source = "./policies/iam/iam-no-admin-privileges-allowed-by-policies.sentinel"
+  enforcement_level = "advisory"
+}
+
+policy "iam-no-policies-attached-to-users" {
+  source = "./policies/iam/iam-no-policies-attached-to-users.sentinel"
+  enforcement_level = "advisory"
+}
+
+policy "iam-password-expiry" {
+  source = "./policies/iam/iam-password-expiry.sentinel"
+  enforcement_level = "advisory"
+  params = {
+    password_expiry_days = 90
+  }
+}
+
+policy "iam-password-length" {
+  source = "./policies/iam/iam-password-length.sentinel"
+  enforcement_level = "advisory"
+  params = {
+    password_length = 14
+  }
+}
+
+policy "iam-password-lowercase" {
+  source = "./policies/iam/iam-password-lowercase.sentinel"
+  enforcement_level = "advisory"
+}
+
+policy "iam-password-numbers" {
+  source = "./policies/iam/iam-password-numbers.sentinel"
+  enforcement_level = "advisory"
+}
+
+policy "iam-password-reuse" {
+  source = "./policies/iam/iam-password-reuse.sentinel"
+  enforcement_level = "advisory"
+  params = {
+    allowed_password_reuse_limit = 24
+  }
+}
+
+policy "iam-password-symbols" {
+  source = "./policies/iam/iam-password-symbols.sentinel"
+  enforcement_level = "advisory"
+}
+
+policy "iam-password-uppercase" {
+  source = "./policies/iam/iam-password-uppercase.sentinel"
   enforcement_level = "advisory"
 }

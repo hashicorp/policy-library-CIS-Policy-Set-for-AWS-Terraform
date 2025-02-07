@@ -4,7 +4,7 @@
 
 This document provides guidance on contribution recommended practices. It covers what we're looking for in order to help set some expectations and help you get the most out of participation in this project.
 
-To record a bug report, enhancement proposal, or give any other product feedback, please [open a GitHub issue](https://github.com/hashicorp/policy-library-cis-aws-rds-terraform/issues/new/choose) using the most appropriate issue template.
+To record a bug report, enhancement proposal, or give any other product feedback, please [open a GitHub issue](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/issues/new/choose) using the most appropriate issue template.
 Please do fill in all of the information the issue templates request, because know from experience that this will maximize the chance that we'll be able to act on your feedback.
 
 ---
@@ -29,7 +29,7 @@ for larger changes, how best to approach the work such that the Policy team can 
 
 If the bug you wish to fix or enhancement you wish to implement isn't already covered by a GitHub issue that
 contains feedback from the Policy team, please do start a discussion
-(either in [a new GitHub issue](https://github.com/hashicorp/policy-library-cis-aws-rds-terraform/issues/new/choose) or an existing one, as appropriate)
+(either in [a new GitHub issue](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/issues/new/choose) or an existing one, as appropriate)
 before you invest significant development time. If you mention your intent to implement the change described in your issue, the Policy team can, as best as possible,
 prioritize including implementation-related feedback in the subsequent discussion.
 
@@ -83,7 +83,7 @@ Use Git to clone this repository into a location of your choice.
 Switch into the root directory of the cloned repository and ensure that the Sentinel CLI is working as expected:
 
 ```
-cd policy-library-cis-aws-rds-terraform
+cd policy-library-CIS-Policy-Set-for-AWS-Terraform 
 sentinel version
 ```
 
