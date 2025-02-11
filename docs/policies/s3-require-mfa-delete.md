@@ -20,7 +20,7 @@ This control checks whether multi-factor authentication (MFA) delete is enabled 
 
 When working with S3 Versioning in Amazon S3 buckets, you can optionally add another layer of security by configuring a bucket to enable MFA delete. When you do this, the bucket owner must include two forms of authentication in any request to delete a version or change the versioning state of the bucket. MFA delete provides added security if your security credentials are compromised. MFA delete can also help prevent accidental bucket deletions by requiring the user who initiates the delete action to prove physical possession of an MFA device with an MFA code and adding an extra layer of friction and security to the delete action.
 
-This rule is covered by the [s3-require-mfa-delete](../../policies/s3-require-mfa-delete.sentinel) policy.
+This rule is covered by the [s3-require-mfa-delete](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/s3/s3-require-mfa-delete.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

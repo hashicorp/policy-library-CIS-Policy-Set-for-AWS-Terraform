@@ -19,7 +19,7 @@ CIS recommends that every Cloudtrail has KmsKeyId set.
 This policy verifies whether the `aws_cloudtrail` is configured to use the server-side encryption (SSE) AWS KMS key encryption. 
 The policy fails if the `kms_key_id` attribute isn't defined for the resource.
 
-This rule is covered by the [cloudtrail-server-side-encryption-enabled](../../policies/cloudtrail-server-side-encryption-enabled.sentinel) policy.
+This rule is covered by the [cloudtrail-server-side-encryption-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/cloudtrail/cloudtrail-server-side-encryption-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

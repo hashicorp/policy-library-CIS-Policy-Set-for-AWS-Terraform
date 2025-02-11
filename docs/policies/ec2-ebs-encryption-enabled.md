@@ -16,7 +16,7 @@
 
 This control checks whether encryption is enabled for Amazon Elastic Block Store(Amazon EBS).
 
-This rule is covered by the [ec2-ebs-encryption-enabled](https://github.com/hashicorp/policy-library-cis-aws-ec2-terraform/tree/main/policies/ec2-ebs-encryption-enabled.sentinel) policy.
+This rule is covered by the [ec2-ebs-encryption-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/ec2/ec2-ebs-encryption-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

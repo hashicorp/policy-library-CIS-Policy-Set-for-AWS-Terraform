@@ -16,7 +16,7 @@
 
 This control ensures and verifies that RDS database instances provisioned in your AWS account do restrict unauthorized access in order to minimize security risks. To restrict access to any publicly accessible RDS database instance, you must disable the database Publicly Accessible flag and update the VPC security group associated with the instance.
 
-This rule is covered by the [rds-public-access-disabled](../../policies/rds-public-access-disabled.sentinel) policy.
+This rule is covered by the [rds-public-access-disabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/rds/rds-public-access-disabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

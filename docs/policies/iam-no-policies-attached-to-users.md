@@ -18,7 +18,7 @@ This policy checks whether your IAM users have policies attached. The policy fai
 
 By default, IAM users, groups, and roles have no access to AWS resources. IAM policies grant privileges to users, groups, or roles. AWS CIS foundation framework recommends that you apply IAM policies directly to groups and roles but not to users. Assigning privileges at the group or role level reduces the complexity of access management as the number of users grows. Reducing access management complexity might in turn reduce the opportunity for a principal to inadvertently receive or retain excessive privileges.
 
-This rule is covered by the [iam-no-policies-attached-to-users](https://github.com/hashicorp/policy-library-cis-aws-iam-terraform/blob/main/policies/iam-no-policies-attached-to-users.sentinel) policy.
+This rule is covered by the [iam-no-policies-attached-to-users](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/iam/iam-no-policies-attached-to-users.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

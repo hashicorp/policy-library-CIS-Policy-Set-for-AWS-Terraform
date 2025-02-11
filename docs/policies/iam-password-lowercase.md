@@ -18,7 +18,7 @@ Password policies, in part, enforce password complexity requirements. Use IAM pa
 
 CIS recommends that the password policy require at least one lowercase letter. Setting a password complexity policy increases account resiliency against brute force login attempts.
 
-This rule is covered by the [iam-password-lowercase](https://github.com/hashicorp/policy-library-cis-aws-iam-terraform/blob/main/policies/iam-password-lowercase.sentinel) policy.
+This rule is covered by the [iam-password-lowercase](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/iam/iam-password-lowercase.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash
