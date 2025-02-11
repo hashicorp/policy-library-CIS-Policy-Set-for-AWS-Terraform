@@ -25,7 +25,7 @@ and the time and date the request was processed.
 CIS recommends that you enable bucket access logging on the CloudTrail S3 bucket.
 
 
-This rule is covered by the [cloudtrail-bucket-access-logging-enabled](../../policies/cloudtrail-bucket-access-logging-enabled.sentinel) policy.
+This rule is covered by the [cloudtrail-bucket-access-logging-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/cloudtrail/cloudtrail-bucket-access-logging-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

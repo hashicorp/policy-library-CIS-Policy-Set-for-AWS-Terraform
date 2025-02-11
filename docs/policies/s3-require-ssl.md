@@ -20,7 +20,7 @@ This control checks whether an Amazon S3 general purpose bucket has a policy tha
 
 S3 buckets should have policies that require all requests (Action: S3:*) to only accept transmission of data over HTTPS in the S3 resource policy, indicated by the condition key aws:SecureTransport.
 
-This rule is covered by the [s3-require-ssl](../../policies/s3-require-ssl.sentinel) policy.
+This rule is covered by the [s3-require-ssl](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/s3/s3-require-ssl.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

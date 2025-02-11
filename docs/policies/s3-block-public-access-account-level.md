@@ -18,7 +18,7 @@ This policy whether the Amazon S3 block public access settings are configured at
 
 The control fails if any of the settings are set to false, or if any of the settings are not configured.
 
-This rule is covered by the [s3-block-public-access-account-level](../../policies/s3-block-public-access-account-level.sentinel) policy.
+This rule is covered by the [s3-block-public-access-account-level](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/s3/s3-block-public-access-account-level.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

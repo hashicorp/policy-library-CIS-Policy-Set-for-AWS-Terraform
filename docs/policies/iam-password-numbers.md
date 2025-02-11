@@ -18,7 +18,7 @@ Password policies, in part, enforce password complexity requirements. Use IAM pa
 
 CIS recommends that the password policy require at least one number. Setting a password complexity policy increases account resiliency against brute force login attempts.
 
-This rule is covered by the [iam-ensure-password-numbers-policy](https://github.com/hashicorp/policy-library-cis-aws-iam-terraform/blob/main/policies/iam-ensure-password-numbers-policy.sentinel) policy.
+This rule is covered by the [iam-ensure-password-numbers-policy](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/iam/iam-password-numbers.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

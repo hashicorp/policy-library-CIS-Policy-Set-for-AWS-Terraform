@@ -18,7 +18,7 @@ DISCLAIMER - This policy works when all resources are present in root module
 
 This policy whether the Amazon S3 block public access settings are configured at the bucket level for an S3 general purpose bucket. The control fails if one or more of the block public access settings of the `aws_s3_bucket_public_access_block` are set to false or not configured.
 
-This rule is covered by the [s3-block-public-access-bucket-level](../../policies/s3-block-public-access-bucket-level.sentinel) policy.
+This rule is covered by the [s3-block-public-access-bucket-level](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/s3/s3-block-public-access-bucket-level.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

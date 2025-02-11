@@ -16,7 +16,7 @@
 
 VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC. After you've created a flow log, you can view and retrieve its data in Amazon CloudWatch Logs. It is recommended that VPC Flow Logs be enabled for packet "Rejects" for VPCs.
 
-This rule is covered by the [vpc-flow-logging-enabled](../../policies/vpc-flow-logging-enabled.sentinel) policy.
+This rule is covered by the [vpc-flow-logging-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/vpc/vpc-flow-logging-enabled.sentinel) policy.
 
 
 ## Policy Results (Pass)

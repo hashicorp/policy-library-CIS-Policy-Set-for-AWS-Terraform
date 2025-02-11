@@ -21,7 +21,7 @@ This control checks whether a network access control list (NACL) allows unrestri
 
 Access to remote server administration ports, such as port 22 (SSH) and port 3389 (RDP), should not be publicly accessible, as this may allow unintended access to resources within your VPC
 
-This rule is covered by the [ec2-network-acl](https://github.com/hashicorp/policy-library-cis-aws-ec2-terraform/tree/main/policies/ec2-network-acl.sentinel) policy.
+This rule is covered by the [ec2-network-acl](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/ec2/ec2-network-acl.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

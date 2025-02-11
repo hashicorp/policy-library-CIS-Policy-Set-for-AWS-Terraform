@@ -18,7 +18,7 @@ AWS KMS enables customers to rotate the backing key, which is key material store
 
 CIS recommends that you enable KMS key rotation. Rotating encryption keys helps reduce the potential impact of a compromised key because data encrypted with a new key can't be accessed with a previous key that might have been exposed.
 
-This rule is covered by the [kms-key-rotation-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-KMS-Terraform/blob/main/policies/kms-key-rotation-enabled.sentinel) policy.
+This rule is covered by the [kms-key-rotation-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/kms/kms-key-rotation-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

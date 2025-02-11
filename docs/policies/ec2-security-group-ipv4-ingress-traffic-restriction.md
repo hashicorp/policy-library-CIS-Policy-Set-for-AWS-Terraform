@@ -21,7 +21,7 @@ This control checks whether an Amazon EC2 security group allows ingress from 0.0
 
 Security groups provide stateful filtering of ingress and egress network traffic to AWS resources. We recommend that no security group allow unrestricted ingress access to port 22 and 3389. Removing unfettered connectivity to remote console services, such as SSH, reduces a server's exposure to risk.
 
-This rule is covered by the [ec2-security-group-ingress-traffic-restriction](https://github.com/hashicorp/policy-library-cis-aws-ec2-terraform/tree/main/policies/ec2-security-group-ingress-traffic-restriction-protocol.sentinel) policy when the `prevent_unknown_ipv4_ingress` parameter is passed as `true`.
+This rule is covered by the [ec2-security-group-ingress-traffic-restriction](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/ec2/ec2-security-group-ingress-traffic-restriction-protocol.sentinel) policy when the `prevent_unknown_ipv4_ingress` parameter is passed as `true`.
 
 ## Policy Results (Pass)
 ```bash

@@ -16,7 +16,7 @@
 
 Amazon RDS encrypted DB instances use the industry standard AES-256 encryption algorithm to encrypt your data on the server that hosts your Amazon RDS DB instances. After your data is encrypted, Amazon RDS handles authentication of access and decryption of your data transparently with a minimal impact on performance.
 
-This rule is covered by the [rds-encryption-at-rest-enabled](../../policies/rds-encryption-at-rest-enabled.sentinel) policy.
+This rule is covered by the [rds-encryption-at-rest-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/rds/rds-encryption-at-rest-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

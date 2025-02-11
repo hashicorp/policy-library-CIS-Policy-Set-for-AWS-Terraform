@@ -16,7 +16,7 @@
 
 This control ensures that RDS database instances have the Auto Minor Version Upgrade flag enabled in order to receive automatically minor engine upgrades during the specified maintenance window. So, RDS instances can get the new features, bug fixes, and security patches for their database engines.
 
-This rule is covered by the [rds-minor-version-upgrade-enabled](../../policies/rds-minor-version-upgrade-enabled.sentinel) policy.
+This rule is covered by the [rds-minor-version-upgrade-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/rds/rds-minor-version-upgrade-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash

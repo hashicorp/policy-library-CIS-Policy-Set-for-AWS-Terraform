@@ -16,7 +16,7 @@
 
 This controls ensures that EFS data should be encrypted at rest using AWS KMS.
 
-This rule is covered by the [efs-encryption-at-rest-enabled](https://github.com/hashicorp/policy-library-cis-aws-efs-terraform/blob/main/policies/efs-encryption-at-rest-enabled.sentinel) policy.
+This rule is covered by the [efs-encryption-at-rest-enabled](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/efs/efs-encryption-at-rest-enabled.sentinel) policy.
 
 ## Policy Results (Pass)
 ```bash
