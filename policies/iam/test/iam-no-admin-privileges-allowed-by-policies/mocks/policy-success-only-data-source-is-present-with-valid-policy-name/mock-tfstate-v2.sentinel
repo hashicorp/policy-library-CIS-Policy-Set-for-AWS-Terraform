@@ -1,0 +1,30 @@
+terraform_version = "1.10.2"
+
+outputs = {}
+
+resources = {
+	"aws_iam_policy.example": {
+		"address":        "aws_iam_policy.example",
+		"depends_on":     [],
+		"deposed_key":    "",
+		"index":          null,
+		"mode":           "data",
+		"module_address": "",
+		"name":           "example",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"tainted":        false,
+		"type":           "aws_iam_policy",
+		"values": {
+			"arn":              "arn:aws:iam::aws:policy/aws-service-role/AccessAnalyzerServiceRolePolicy",
+			"attachment_count": 0,
+			"description":      "Allow Access Analyzer to analyze resource metadata",
+			"id":               "arn:aws:iam::aws:policy/aws-service-role/AccessAnalyzerServiceRolePolicy",
+			"name":             "AccessAnalyzerServiceRolePolicy",
+			"path":             "/aws-service-role/",
+			"path_prefix":      null,
+			"policy":           "{\n\t\"Version\": \"2012-10-17\",\n\t\"Statement\": [\n\t\t{\n\t\t\t\"Sid\": \"AccessAnalyzerServiceRolePolicy\",\n\t\t\t\"Effect\": \"Allow\",\n\t\t\t\"Action\": [\n\t\t\t\t\"dynamodb:GetResourcePolicy\",\n\t\t\t\t\"dynamodb:ListStreams\",\n\t\t\t\t\"dynamodb:ListTables\",\n\t\t\t\t\"ec2:DescribeAddresses\",\n\t\t\t\t\"ec2:DescribeByoipCidrs\",\n\t\t\t\t\"ec2:DescribeSnapshotAttribute\",\n\t\t\t\t\"ec2:DescribeSnapshots\",\n\t\t\t\t\"ec2:DescribeVpcEndpoints\",\n\t\t\t\t\"ec2:DescribeVpcs\",\n\t\t\t\t\"ec2:GetSnapshotBlockPublicAccessState\",\n\t\t\t\t\"ecr:DescribeRepositories\",\n\t\t\t\t\"ecr:GetAccountSetting\",\n\t\t\t\t\"ecr:GetRegistryPolicy\",\n\t\t\t\t\"ecr:GetRepositoryPolicy\",\n\t\t\t\t\"elasticfilesystem:DescribeFileSystemPolicy\",\n\t\t\t\t\"elasticfilesystem:DescribeFileSystems\",\n\t\t\t\t\"iam:GetRole\",\n\t\t\t\t\"iam:ListEntitiesForPolicy\",\n\t\t\t\t\"iam:ListRoles\",\n\t\t\t\t\"iam:ListUsers\",\n\t\t\t\t\"iam:ListRoleTags\",\n\t\t\t\t\"iam:ListUserTags\",\n\t\t\t\t\"iam:GetUser\",\n\t\t\t\t\"iam:GetGroup\",\n\t\t\t\t\"iam:GenerateServiceLastAccessedDetails\",\n\t\t\t\t\"iam:GetServiceLastAccessedDetails\",\n\t\t\t\t\"iam:ListAccessKeys\",\n\t\t\t\t\"iam:GetLoginProfile\",\n\t\t\t\t\"iam:GetAccessKeyLastUsed\",\n\t\t\t\t\"iam:ListRolePolicies\",\n\t\t\t\t\"iam:GetRolePolicy\",\n\t\t\t\t\"iam:ListAttachedRolePolicies\",\n\t\t\t\t\"iam:ListUserPolicies\",\n\t\t\t\t\"iam:GetUserPolicy\",\n\t\t\t\t\"iam:ListAttachedUserPolicies\",\n\t\t\t\t\"iam:GetPolicy\",\n\t\t\t\t\"iam:GetPolicyVersion\",\n\t\t\t\t\"iam:ListGroupsForUser\",\n\t\t\t\t\"kms:DescribeKey\",\n\t\t\t\t\"kms:GetKeyPolicy\",\n\t\t\t\t\"kms:ListGrants\",\n\t\t\t\t\"kms:ListKeyPolicies\",\n\t\t\t\t\"kms:ListKeys\",\n\t\t\t\t\"lambda:GetFunctionUrlConfig\",\n\t\t\t\t\"lambda:GetLayerVersionPolicy\",\n\t\t\t\t\"lambda:GetPolicy\",\n\t\t\t\t\"lambda:ListAliases\",\n\t\t\t\t\"lambda:ListFunctions\",\n\t\t\t\t\"lambda:ListLayers\",\n\t\t\t\t\"lambda:ListLayerVersions\",\n\t\t\t\t\"lambda:ListVersionsByFunction\",\n\t\t\t\t\"organizations:DescribeAccount\",\n\t\t\t\t\"organizations:DescribeOrganization\",\n\t\t\t\t\"organizations:DescribeOrganizationalUnit\",\n\t\t\t\t\"organizations:ListAccounts\",\n\t\t\t\t\"organizations:ListAccountsForParent\",\n\t\t\t\t\"organizations:ListAWSServiceAccessForOrganization\",\n\t\t\t\t\"organizations:ListChildren\",\n\t\t\t\t\"organizations:ListDelegatedAdministrators\",\n\t\t\t\t\"organizations:ListOrganizationalUnitsForParent\",\n\t\t\t\t\"organizations:ListParents\",\n\t\t\t\t\"organizations:ListRoots\",\n\t\t\t\t\"rds:DescribeDBClusterSnapshotAttributes\",\n\t\t\t\t\"rds:DescribeDBClusterSnapshots\",\n\t\t\t\t\"rds:DescribeDBSnapshotAttributes\",\n\t\t\t\t\"rds:DescribeDBSnapshots\",\n\t\t\t\t\"s3:DescribeMultiRegionAccessPointOperation\",\n\t\t\t\t\"s3:GetAccessPoint\",\n\t\t\t\t\"s3:GetAccessPointPolicy\",\n\t\t\t\t\"s3:GetAccessPointPolicyStatus\",\n\t\t\t\t\"s3:GetAccountPublicAccessBlock\",\n\t\t\t\t\"s3:GetBucketAcl\",\n\t\t\t\t\"s3:GetBucketLocation\",\n\t\t\t\t\"s3:GetBucketPolicyStatus\",\n\t\t\t\t\"s3:GetBucketPolicy\",\n\t\t\t\t\"s3:GetBucketPublicAccessBlock\",\n\t\t\t\t\"s3:GetMultiRegionAccessPoint\",\n\t\t\t\t\"s3:GetMultiRegionAccessPointPolicy\",\n\t\t\t\t\"s3:GetMultiRegionAccessPointPolicyStatus\",\n\t\t\t\t\"s3:ListAccessPoints\",\n\t\t\t\t\"s3:ListAllMyBuckets\",\n\t\t\t\t\"s3:ListMultiRegionAccessPoints\",\n\t\t\t\t\"s3express:GetBucketPolicy\",\n\t\t\t\t\"s3express:ListAllMyDirectoryBuckets\",\n\t\t\t\t\"sns:GetTopicAttributes\",\n\t\t\t\t\"sns:ListTopics\",\n\t\t\t\t\"secretsmanager:DescribeSecret\",\n\t\t\t\t\"secretsmanager:GetResourcePolicy\",\n\t\t\t\t\"secretsmanager:ListSecrets\",\n\t\t\t\t\"sqs:GetQueueAttributes\",\n\t\t\t\t\"sqs:ListQueues\"\n\t\t\t],\n\t\t\t\"Resource\": \"*\"\n\t\t}\n\t]\n}",
+			"policy_id":        "ANPAZKAPJZG4CAIXDDRI2",
+			"tags":             {},
+		},
+	},
+}
