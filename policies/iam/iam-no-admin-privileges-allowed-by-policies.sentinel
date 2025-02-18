@@ -25,6 +25,7 @@ const = {
 	"policy":                           "policy",
 	"data":                             "data",
 	"effect":                           "effect",
+	"managed":                          "managed",
 }
 
 # Functions
@@ -61,7 +62,7 @@ fetch_policies_allowing_admin_privileges = func() {
 # and filters those that don't reference an IAM policy document
 # in their 'policy' attribute.
 verify_iam_policy_resources_with_inline_policies = func() {
-	all_iam_policy_resources = tf.config(tfconfig.resources).type(const.resource_aws_iam_policy).resources
+	all_iam_policy_resources = tf.config(tfconfig.resources).type(const.resource_aws_iam_policy).mode(const.managed).resources
 
 	references_iam_policy_document = func(references) {
 		policy_document_references = filter references as _, ref {
