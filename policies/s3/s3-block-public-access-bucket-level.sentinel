@@ -1,6 +1,9 @@
 # This policy verifies if the attributes of the 'aws_s3_bucket_public_access_block'
 # resource (if present) block public access of an S3 general purpose bucket.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as plan

@@ -1,5 +1,8 @@
 # This policy requires resources of type `aws_cloudtrail` to have log file validation enabled.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as tfplan

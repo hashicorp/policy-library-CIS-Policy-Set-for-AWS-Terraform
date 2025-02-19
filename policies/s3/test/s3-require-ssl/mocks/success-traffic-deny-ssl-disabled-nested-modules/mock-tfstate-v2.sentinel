@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 resources = {
 	"module.s3.aws_iam_policy_document.this": {
 		"address":        "module.s3.aws_iam_policy_document.this",

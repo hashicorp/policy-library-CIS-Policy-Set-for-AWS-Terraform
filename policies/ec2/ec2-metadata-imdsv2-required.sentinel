@@ -1,5 +1,8 @@
 # This policy requires resources of type 'aws_instance' or 'aws_ec2_instance_metadata_defaults' to have 'http_tokens' attribute set to 'required'.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as tfplan

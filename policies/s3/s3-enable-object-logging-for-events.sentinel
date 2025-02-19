@@ -1,5 +1,8 @@
 # This policy requires resources of type 'aws_s3_bucket' have object logging enabled for read/write events.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as tfplan

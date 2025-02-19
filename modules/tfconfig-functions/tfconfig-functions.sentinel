@@ -1,4 +1,7 @@
 ##### Imports #####
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 import "tfconfig/v2" as tfconfig
 import "strings"
 

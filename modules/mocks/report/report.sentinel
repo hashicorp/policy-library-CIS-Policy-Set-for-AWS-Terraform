@@ -1,5 +1,8 @@
 // Mock function that returns an empty policy report.
 // Should only be used in tests.
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 generate_policy_report = func(summary) {
 	return ""
 }

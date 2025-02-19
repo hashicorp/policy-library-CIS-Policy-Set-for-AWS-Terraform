@@ -1,5 +1,8 @@
 # IAM users should not be directly attached to IAM policies.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as tfplan

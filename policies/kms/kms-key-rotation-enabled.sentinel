@@ -1,5 +1,8 @@
 # Key rotation must be enabled for resources of type 'aws_kms_key'
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as tfplan

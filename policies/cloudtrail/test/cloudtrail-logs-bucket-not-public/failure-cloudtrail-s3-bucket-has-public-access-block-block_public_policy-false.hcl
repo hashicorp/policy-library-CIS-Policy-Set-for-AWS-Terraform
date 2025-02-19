@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 mock "tfconfig/v2" {
   module {
     source = "./mocks/policy-failure-cloudtrail-s3-bucket-has-public-access-block-block-public-policy-false/mock-tfconfig-v2.sentinel"

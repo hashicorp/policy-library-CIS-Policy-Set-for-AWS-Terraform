@@ -1,5 +1,8 @@
 # This policy requires that resources of type `aws_cloudtrail` have server-side encryption enabled.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfconfig/v2" as tfconfig

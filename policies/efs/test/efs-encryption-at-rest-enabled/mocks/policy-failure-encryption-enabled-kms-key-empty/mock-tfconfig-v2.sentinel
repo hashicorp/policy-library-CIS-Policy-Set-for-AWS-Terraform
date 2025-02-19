@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 resources = {
 	"aws_efs_file_system.this": {
 		"address": "aws_efs_file_system.this",

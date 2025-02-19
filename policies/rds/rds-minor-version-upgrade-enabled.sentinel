@@ -1,5 +1,8 @@
 # This policy requires resources of type 'aws_db_instance' have attribute 'auto_minor_version_upgrade' set to true.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfplan/v2" as tfplan

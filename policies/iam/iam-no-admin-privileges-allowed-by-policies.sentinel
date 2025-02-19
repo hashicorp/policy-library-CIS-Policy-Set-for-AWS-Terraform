@@ -1,5 +1,8 @@
 # IAM policies should not allow administrator privileges to users/roles/groups.
 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
 # Imports
 
 import "tfstate/v2" as tfstate
