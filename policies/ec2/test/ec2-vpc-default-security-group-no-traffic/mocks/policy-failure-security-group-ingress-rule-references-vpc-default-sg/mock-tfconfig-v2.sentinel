@@ -1,6 +1,3 @@
-// Copyright (c) HashiCorp, Inc.
-// SPDX-License-Identifier: BUSL-1.1
-
 resources = {
 	"aws_default_security_group.default": {
 		"address": "aws_default_security_group.default",

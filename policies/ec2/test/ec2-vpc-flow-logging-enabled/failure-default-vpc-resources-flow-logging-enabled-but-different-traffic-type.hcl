@@ -1,6 +1,3 @@
-// Copyright (c) HashiCorp, Inc.
-// SPDX-License-Identifier: BUSL-1.1
-
 mock "tfconfig/v2" {
   module {
     source = "./mocks/policy-failure-default-vpc-resources-flow-logging-enabled-but-different-traffic-type/mock-tfconfig-v2.sentinel"
