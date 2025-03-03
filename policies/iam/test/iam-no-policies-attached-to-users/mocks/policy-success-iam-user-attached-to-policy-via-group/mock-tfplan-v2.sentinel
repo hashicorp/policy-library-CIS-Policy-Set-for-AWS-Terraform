@@ -1,0 +1,731 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
+terraform_version = "1.9.4"
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_iam_access_key.lb": {
+			"address":        "aws_iam_access_key.lb",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_access_key",
+			"values": {
+				"pgp_key": null,
+				"status":  "Active",
+				"user":    "elb-user",
+			},
+		},
+		"aws_iam_group.lb-user-group": {
+			"address":        "aws_iam_group.lb-user-group",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb-user-group",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_group",
+			"values": {
+				"name": "elb-user-group",
+				"path": "/",
+			},
+		},
+		"aws_iam_group_membership.membership": {
+			"address":        "aws_iam_group_membership.membership",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "membership",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_group_membership",
+			"values": {
+				"name": "elb-user-group",
+				"users": [
+					"ec2-user",
+					"elb-user",
+				],
+			},
+		},
+		"aws_iam_group_policy.lb_ro": {
+			"address":        "aws_iam_group_policy.lb_ro",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb_ro",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_group_policy",
+			"values": {
+				"group":  "elb-user-group",
+				"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+			},
+		},
+		"aws_iam_user.ec2": {
+			"address":        "aws_iam_user.ec2",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "ec2",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_user",
+			"values": {
+				"force_destroy":        false,
+				"name":                 "ec2-user",
+				"path":                 "/system/",
+				"permissions_boundary": null,
+				"tags":                 null,
+			},
+		},
+		"aws_iam_user.lb": {
+			"address":        "aws_iam_user.lb",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "lb",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_user",
+			"values": {
+				"force_destroy":        false,
+				"name":                 "elb-user",
+				"path":                 "/system/",
+				"permissions_boundary": null,
+				"tags":                 null,
+			},
+		},
+	},
+}
+
+variables = {}
+
+resource_changes = {
+	"aws_iam_access_key.lb": {
+		"address": "aws_iam_access_key.lb",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"pgp_key": null,
+				"status":  "Active",
+				"user":    "elb-user",
+			},
+			"after_unknown": {
+				"create_date":                    true,
+				"encrypted_secret":               true,
+				"encrypted_ses_smtp_password_v4": true,
+				"id":                   true,
+				"key_fingerprint":      true,
+				"secret":               true,
+				"ses_smtp_password_v4": true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "lb",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_access_key",
+	},
+	"aws_iam_group.lb-user-group": {
+		"address": "aws_iam_group.lb-user-group",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"name": "elb-user-group",
+				"path": "/",
+			},
+			"after_unknown": {
+				"arn":       true,
+				"id":        true,
+				"unique_id": true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "lb-user-group",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_group",
+	},
+	"aws_iam_group_membership.membership": {
+		"address": "aws_iam_group_membership.membership",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"name": "elb-user-group",
+				"users": [
+					"ec2-user",
+					"elb-user",
+				],
+			},
+			"after_unknown": {
+				"group": true,
+				"id":    true,
+				"users": [
+					false,
+					false,
+				],
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "membership",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_group_membership",
+	},
+	"aws_iam_group_policy.lb_ro": {
+		"address": "aws_iam_group_policy.lb_ro",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"group":  "elb-user-group",
+				"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+			},
+			"after_unknown": {
+				"id":          true,
+				"name":        true,
+				"name_prefix": true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "lb_ro",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_group_policy",
+	},
+	"aws_iam_user.ec2": {
+		"address": "aws_iam_user.ec2",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"force_destroy":        false,
+				"name":                 "ec2-user",
+				"path":                 "/system/",
+				"permissions_boundary": null,
+				"tags":                 null,
+			},
+			"after_unknown": {
+				"arn":       true,
+				"id":        true,
+				"tags_all":  true,
+				"unique_id": true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "ec2",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_user",
+	},
+	"aws_iam_user.lb": {
+		"address": "aws_iam_user.lb",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"force_destroy":        false,
+				"name":                 "elb-user",
+				"path":                 "/system/",
+				"permissions_boundary": null,
+				"tags":                 null,
+			},
+			"after_unknown": {
+				"arn":       true,
+				"id":        true,
+				"tags_all":  true,
+				"unique_id": true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "lb",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_user",
+	},
+}
+
+output_changes = {}
+
+raw = {
+	"configuration": {
+		"provider_config": {
+			"aws": {
+				"expressions": {
+					"region": {
+						"constant_value": "us-west-2",
+					},
+				},
+				"full_name": "registry.terraform.io/hashicorp/aws",
+				"name":      "aws",
+			},
+		},
+		"root_module": {
+			"resources": [
+				{
+					"address": "aws_iam_access_key.lb",
+					"expressions": {
+						"user": {
+							"references": [
+								"aws_iam_user.lb.name",
+								"aws_iam_user.lb",
+							],
+						},
+					},
+					"mode":                "managed",
+					"name":                "lb",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_access_key",
+				},
+				{
+					"address": "aws_iam_group.lb-user-group",
+					"expressions": {
+						"name": {
+							"constant_value": "elb-user-group",
+						},
+					},
+					"mode":                "managed",
+					"name":                "lb-user-group",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_group",
+				},
+				{
+					"address": "aws_iam_group_membership.membership",
+					"expressions": {
+						"group": {
+							"references": [
+								"aws_iam_group.lb-user-group.id",
+								"aws_iam_group.lb-user-group",
+							],
+						},
+						"name": {
+							"references": [
+								"aws_iam_group.lb-user-group.name",
+								"aws_iam_group.lb-user-group",
+							],
+						},
+						"users": {
+							"references": [
+								"aws_iam_user.lb.name",
+								"aws_iam_user.lb",
+								"aws_iam_user.ec2.name",
+								"aws_iam_user.ec2",
+							],
+						},
+					},
+					"mode":                "managed",
+					"name":                "membership",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_group_membership",
+				},
+				{
+					"address": "aws_iam_group_policy.lb_ro",
+					"expressions": {
+						"group": {
+							"references": [
+								"aws_iam_group.lb-user-group.name",
+								"aws_iam_group.lb-user-group",
+							],
+						},
+						"policy": {},
+					},
+					"mode":                "managed",
+					"name":                "lb_ro",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_group_policy",
+				},
+				{
+					"address": "aws_iam_user.ec2",
+					"expressions": {
+						"name": {
+							"constant_value": "ec2-user",
+						},
+						"path": {
+							"constant_value": "/system/",
+						},
+					},
+					"mode":                "managed",
+					"name":                "ec2",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_user",
+				},
+				{
+					"address": "aws_iam_user.lb",
+					"expressions": {
+						"name": {
+							"constant_value": "elb-user",
+						},
+						"path": {
+							"constant_value": "/system/",
+						},
+					},
+					"mode":                "managed",
+					"name":                "lb",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_user",
+				},
+			],
+		},
+	},
+	"format_version": "1.2",
+	"planned_values": {
+		"root_module": {
+			"resources": [
+				{
+					"address":        "aws_iam_access_key.lb",
+					"mode":           "managed",
+					"name":           "lb",
+					"provider_name":  "registry.terraform.io/hashicorp/aws",
+					"schema_version": 0,
+					"sensitive_values": {
+						"secret":               true,
+						"ses_smtp_password_v4": true,
+					},
+					"type": "aws_iam_access_key",
+					"values": {
+						"pgp_key": null,
+						"status":  "Active",
+						"user":    "elb-user",
+					},
+				},
+				{
+					"address":          "aws_iam_group.lb-user-group",
+					"mode":             "managed",
+					"name":             "lb-user-group",
+					"provider_name":    "registry.terraform.io/hashicorp/aws",
+					"schema_version":   0,
+					"sensitive_values": {},
+					"type":             "aws_iam_group",
+					"values": {
+						"name": "elb-user-group",
+						"path": "/",
+					},
+				},
+				{
+					"address":        "aws_iam_group_membership.membership",
+					"mode":           "managed",
+					"name":           "membership",
+					"provider_name":  "registry.terraform.io/hashicorp/aws",
+					"schema_version": 0,
+					"sensitive_values": {
+						"users": [
+							false,
+							false,
+						],
+					},
+					"type": "aws_iam_group_membership",
+					"values": {
+						"name": "elb-user-group",
+						"users": [
+							"ec2-user",
+							"elb-user",
+						],
+					},
+				},
+				{
+					"address":          "aws_iam_group_policy.lb_ro",
+					"mode":             "managed",
+					"name":             "lb_ro",
+					"provider_name":    "registry.terraform.io/hashicorp/aws",
+					"schema_version":   0,
+					"sensitive_values": {},
+					"type":             "aws_iam_group_policy",
+					"values": {
+						"group":  "elb-user-group",
+						"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+					},
+				},
+				{
+					"address":        "aws_iam_user.ec2",
+					"mode":           "managed",
+					"name":           "ec2",
+					"provider_name":  "registry.terraform.io/hashicorp/aws",
+					"schema_version": 0,
+					"sensitive_values": {
+						"tags_all": {},
+					},
+					"type": "aws_iam_user",
+					"values": {
+						"force_destroy":        false,
+						"name":                 "ec2-user",
+						"path":                 "/system/",
+						"permissions_boundary": null,
+						"tags":                 null,
+					},
+				},
+				{
+					"address":        "aws_iam_user.lb",
+					"mode":           "managed",
+					"name":           "lb",
+					"provider_name":  "registry.terraform.io/hashicorp/aws",
+					"schema_version": 0,
+					"sensitive_values": {
+						"tags_all": {},
+					},
+					"type": "aws_iam_user",
+					"values": {
+						"force_destroy":        false,
+						"name":                 "elb-user",
+						"path":                 "/system/",
+						"permissions_boundary": null,
+						"tags":                 null,
+					},
+				},
+			],
+		},
+	},
+	"relevant_attributes": [
+		{
+			"attribute": [
+				"name",
+			],
+			"resource": "aws_iam_user.lb",
+		},
+		{
+			"attribute": [
+				"name",
+			],
+			"resource": "aws_iam_group.lb-user-group",
+		},
+		{
+			"attribute": [
+				"name",
+			],
+			"resource": "aws_iam_user.ec2",
+		},
+		{
+			"attribute": [
+				"id",
+			],
+			"resource": "aws_iam_group.lb-user-group",
+		},
+	],
+	"resource_changes": [
+		{
+			"address": "aws_iam_access_key.lb",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"pgp_key": null,
+					"status":  "Active",
+					"user":    "elb-user",
+				},
+				"after_sensitive": {
+					"secret":               true,
+					"ses_smtp_password_v4": true,
+				},
+				"after_unknown": {
+					"create_date":                    true,
+					"encrypted_secret":               true,
+					"encrypted_ses_smtp_password_v4": true,
+					"id":                   true,
+					"key_fingerprint":      true,
+					"secret":               true,
+					"ses_smtp_password_v4": true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "lb",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_access_key",
+		},
+		{
+			"address": "aws_iam_group.lb-user-group",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"name": "elb-user-group",
+					"path": "/",
+				},
+				"after_sensitive": {},
+				"after_unknown": {
+					"arn":       true,
+					"id":        true,
+					"unique_id": true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "lb-user-group",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_group",
+		},
+		{
+			"address": "aws_iam_group_membership.membership",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"name": "elb-user-group",
+					"users": [
+						"ec2-user",
+						"elb-user",
+					],
+				},
+				"after_sensitive": {
+					"users": [
+						false,
+						false,
+					],
+				},
+				"after_unknown": {
+					"group": true,
+					"id":    true,
+					"users": [
+						false,
+						false,
+					],
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "membership",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_group_membership",
+		},
+		{
+			"address": "aws_iam_group_policy.lb_ro",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"group":  "elb-user-group",
+					"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+				},
+				"after_sensitive": {},
+				"after_unknown": {
+					"id":          true,
+					"name":        true,
+					"name_prefix": true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "lb_ro",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_group_policy",
+		},
+		{
+			"address": "aws_iam_user.ec2",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"force_destroy":        false,
+					"name":                 "ec2-user",
+					"path":                 "/system/",
+					"permissions_boundary": null,
+					"tags":                 null,
+				},
+				"after_sensitive": {
+					"tags_all": {},
+				},
+				"after_unknown": {
+					"arn":       true,
+					"id":        true,
+					"tags_all":  true,
+					"unique_id": true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "ec2",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_user",
+		},
+		{
+			"address": "aws_iam_user.lb",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"force_destroy":        false,
+					"name":                 "elb-user",
+					"path":                 "/system/",
+					"permissions_boundary": null,
+					"tags":                 null,
+				},
+				"after_sensitive": {
+					"tags_all": {},
+				},
+				"after_unknown": {
+					"arn":       true,
+					"id":        true,
+					"tags_all":  true,
+					"unique_id": true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "lb",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_user",
+		},
+	],
+	"terraform_version": "1.9.4",
+}

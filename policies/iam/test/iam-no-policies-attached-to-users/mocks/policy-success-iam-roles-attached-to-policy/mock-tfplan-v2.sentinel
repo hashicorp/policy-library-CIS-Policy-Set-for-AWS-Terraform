@@ -1,0 +1,287 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
+terraform_version = "1.9.4"
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_iam_role.test_role": {
+			"address":        "aws_iam_role.test_role",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "test_role",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_role",
+			"values": {
+				"assume_role_policy":    "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}",
+				"description":           null,
+				"force_detach_policies": false,
+				"max_session_duration":  3600,
+				"name":                  "test_role",
+				"path":                  "/",
+				"permissions_boundary":  null,
+				"tags":                  null,
+			},
+		},
+		"aws_iam_role_policy.test_policy": {
+			"address":        "aws_iam_role_policy.test_policy",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "test_policy",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_iam_role_policy",
+			"values": {
+				"name":   "test_policy",
+				"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+			},
+		},
+	},
+}
+
+variables = {}
+
+resource_changes = {
+	"aws_iam_role.test_role": {
+		"address": "aws_iam_role.test_role",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"assume_role_policy":    "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}",
+				"description":           null,
+				"force_detach_policies": false,
+				"max_session_duration":  3600,
+				"name":                  "test_role",
+				"path":                  "/",
+				"permissions_boundary":  null,
+				"tags":                  null,
+			},
+			"after_unknown": {
+				"arn":                 true,
+				"create_date":         true,
+				"id":                  true,
+				"inline_policy":       true,
+				"managed_policy_arns": true,
+				"name_prefix":         true,
+				"tags_all":            true,
+				"unique_id":           true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "test_role",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_role",
+	},
+	"aws_iam_role_policy.test_policy": {
+		"address": "aws_iam_role_policy.test_policy",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"name":   "test_policy",
+				"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+			},
+			"after_unknown": {
+				"id":          true,
+				"name_prefix": true,
+				"role":        true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "",
+		"name":           "test_policy",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_iam_role_policy",
+	},
+}
+
+output_changes = {}
+
+raw = {
+	"configuration": {
+		"provider_config": {
+			"aws": {
+				"expressions": {
+					"region": {
+						"constant_value": "us-west-2",
+					},
+				},
+				"full_name": "registry.terraform.io/hashicorp/aws",
+				"name":      "aws",
+			},
+		},
+		"root_module": {
+			"resources": [
+				{
+					"address": "aws_iam_role.test_role",
+					"expressions": {
+						"assume_role_policy": {},
+						"name": {
+							"constant_value": "test_role",
+						},
+					},
+					"mode":                "managed",
+					"name":                "test_role",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_role",
+				},
+				{
+					"address": "aws_iam_role_policy.test_policy",
+					"expressions": {
+						"name": {
+							"constant_value": "test_policy",
+						},
+						"policy": {},
+						"role": {
+							"references": [
+								"aws_iam_role.test_role.id",
+								"aws_iam_role.test_role",
+							],
+						},
+					},
+					"mode":                "managed",
+					"name":                "test_policy",
+					"provider_config_key": "aws",
+					"schema_version":      0,
+					"type":                "aws_iam_role_policy",
+				},
+			],
+		},
+	},
+	"format_version": "1.2",
+	"planned_values": {
+		"root_module": {
+			"resources": [
+				{
+					"address":        "aws_iam_role.test_role",
+					"mode":           "managed",
+					"name":           "test_role",
+					"provider_name":  "registry.terraform.io/hashicorp/aws",
+					"schema_version": 0,
+					"sensitive_values": {
+						"inline_policy":       [],
+						"managed_policy_arns": [],
+						"tags_all":            {},
+					},
+					"type": "aws_iam_role",
+					"values": {
+						"assume_role_policy":    "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}",
+						"description":           null,
+						"force_detach_policies": false,
+						"max_session_duration":  3600,
+						"name":                  "test_role",
+						"path":                  "/",
+						"permissions_boundary":  null,
+						"tags":                  null,
+					},
+				},
+				{
+					"address":          "aws_iam_role_policy.test_policy",
+					"mode":             "managed",
+					"name":             "test_policy",
+					"provider_name":    "registry.terraform.io/hashicorp/aws",
+					"schema_version":   0,
+					"sensitive_values": {},
+					"type":             "aws_iam_role_policy",
+					"values": {
+						"name":   "test_policy",
+						"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+					},
+				},
+			],
+		},
+	},
+	"relevant_attributes": [
+		{
+			"attribute": [
+				"id",
+			],
+			"resource": "aws_iam_role.test_role",
+		},
+	],
+	"resource_changes": [
+		{
+			"address": "aws_iam_role.test_role",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"assume_role_policy":    "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Sid\":\"\"}],\"Version\":\"2012-10-17\"}",
+					"description":           null,
+					"force_detach_policies": false,
+					"max_session_duration":  3600,
+					"name":                  "test_role",
+					"path":                  "/",
+					"permissions_boundary":  null,
+					"tags":                  null,
+				},
+				"after_sensitive": {
+					"inline_policy":       [],
+					"managed_policy_arns": [],
+					"tags_all":            {},
+				},
+				"after_unknown": {
+					"arn":                 true,
+					"create_date":         true,
+					"id":                  true,
+					"inline_policy":       true,
+					"managed_policy_arns": true,
+					"name_prefix":         true,
+					"tags_all":            true,
+					"unique_id":           true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "test_role",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_role",
+		},
+		{
+			"address": "aws_iam_role_policy.test_policy",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"name":   "test_policy",
+					"policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+				},
+				"after_sensitive": {},
+				"after_unknown": {
+					"id":          true,
+					"name_prefix": true,
+					"role":        true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":          "managed",
+			"name":          "test_policy",
+			"provider_name": "registry.terraform.io/hashicorp/aws",
+			"type":          "aws_iam_role_policy",
+		},
+	],
+	"terraform_version": "1.9.4",
+}
