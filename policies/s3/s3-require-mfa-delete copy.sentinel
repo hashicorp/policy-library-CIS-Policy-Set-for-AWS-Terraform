@@ -1,0 +1,100 @@
+# This policy verifies that all general purpose s3 buckets should have MFA delete enabled in their versioning configuration
+
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
+# Imports
+
+import "tfconfig-functions" as tfconfig
+import "report" as report
+import "tfplan-functions" as tfplan
+import "tfconfig/v2" as config
+import "tfresources" as tf
+import "strings"
+import "collection" as collection
+import "collection/maps" as maps
+
+# Constants
+const = {
+	"policy_name":                       "s3-require-mfa-delete",
+	"address":                           "address",
+	"module_address":                    "module_address",
+	"module_prefix":                     "module.",
+	"resource_aws_s3_bucket":            "aws_s3_bucket",
+	"resource_aws_s3_bucket_versioning": "aws_s3_bucket_versioning",
+	"status":     "status",
+	"mfa_delete": "mfa_delete",
+	"Enabled":    "Enabled",
+	"message":    "All 'aws_s3_bucket' resources should be linked to 'aws_s3_bucket_versioning' resources with 'mfa_delete' set to 'Enabled'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-20 for more details.",
+}
+
+# Functions
+
+check_mfa_from_refrence_var = func(config) {
+	return config.mfa_delete["references"] is defined and
+		tfconfig.is_variable_reference(config.mfa_delete.references[0]) and
+		tfplan.get_variable_value(tfconfig.parse_variable_name_from_reference(config.mfa_delete.references[0])) is const.Enabled
+}
+
+check_mfa_from_const = func(config) {
+	return config.mfa_delete["constant_value"] is defined and config.mfa_delete.constant_value is const.Enabled
+}
+
+is_mfa_enabled = func(res) {
+	return collection.find(res.config.versioning_configuration, func(config) {
+		return config.status.constant_value is const.Enabled and
+			config[const.mfa_delete] is defined and
+			(check_mfa_from_const(config) or check_mfa_from_refrence_var(config))
+	}) is defined
+}
+
+# Removes module address prefix from a resource
+# and returns back the localized address for a module.
+resource_address_without_module_address = func(res) {
+	resource_addr = res[const.address]
+
+	# Check for root module
+	if not strings.has_prefix(resource_addr, const.module_prefix) {
+		return resource_addr
+	}
+
+	module_addr_prefix = res[const.module_address] + "."
+	return strings.trim_prefix(resource_addr, module_addr_prefix)
+}
+
+# Variables
+
+config_resources = tf.config(config.resources)
+
+mfa_enabled_resources = filter config_resources.type(const.resource_aws_s3_bucket_versioning).resources as _, res {
+	is_mfa_enabled(res)
+}
+
+s3_bucket_addresses = map mfa_enabled_resources as _, res {
+	res.config.bucket.references[1]
+}
+
+violations = filter config_resources.type(const.resource_aws_s3_bucket).resources as _, res {
+	resource_address_without_module_address(res) not in s3_bucket_addresses
+}
+
+summary = {
+	"policy_name": const.policy_name,
+	"violations": map violations as _, v {
+		{
+			"address":        v.address,
+			"module_address": v.module_address,
+			"message":        const.message,
+		}
+	},
+}
+
+# Outputs
+
+print(report.generate_policy_report(summary))
+
+# Rules
+
+main = rule {
+	violations is empty
+}
