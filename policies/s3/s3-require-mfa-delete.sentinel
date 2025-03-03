@@ -22,9 +22,10 @@ const = {
 	"module_prefix":                     "module.",
 	"resource_aws_s3_bucket":            "aws_s3_bucket",
 	"resource_aws_s3_bucket_versioning": "aws_s3_bucket_versioning",
-	"mfa_delete":                        "mfa_delete",
-	"Enabled":                           "Enabled",
-	"message":                           "All 'aws_s3_bucket' resources should be linked to 'aws_s3_bucket_versioning' resources with 'mfa_delete' set to 'Enabled'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-20 for more details.",
+	"status":     "status",
+	"mfa_delete": "mfa_delete",
+	"Enabled":    "Enabled",
+	"message":    "All 'aws_s3_bucket' resources should be linked to 'aws_s3_bucket_versioning' resources with 'mfa_delete' set to 'Enabled'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-20 for more details.",
 }
 
 # Functions
@@ -41,7 +42,8 @@ check_mfa_from_const = func(config) {
 
 is_mfa_enabled = func(res) {
 	return collection.find(res.config.versioning_configuration, func(config) {
-		return config[const.mfa_delete] is defined and
+		return config.status.constant_value is const.Enabled and
+			config[const.mfa_delete] is defined and
 			(check_mfa_from_const(config) or check_mfa_from_refrence_var(config))
 	}) is defined
 }
