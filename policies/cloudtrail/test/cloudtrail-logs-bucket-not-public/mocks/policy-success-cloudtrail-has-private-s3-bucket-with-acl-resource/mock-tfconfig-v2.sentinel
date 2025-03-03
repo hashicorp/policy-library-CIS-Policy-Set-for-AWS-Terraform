@@ -1,0 +1,118 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: BUSL-1.1
+
+import "strings"
+
+providers = {
+	"aws": {
+		"alias": "",
+		"config": {
+			"region": {
+				"constant_value": "us-west-2",
+			},
+		},
+		"full_name":           "registry.terraform.io/hashicorp/aws",
+		"module_address":      "",
+		"name":                "aws",
+		"provider_config_key": "aws",
+		"version_constraint":  "",
+	},
+}
+
+resources = {
+	"aws_cloudtrail.example": {
+		"address": "aws_cloudtrail.example",
+		"config": {
+			"enable_log_file_validation": {
+				"constant_value": true,
+			},
+			"enable_logging": {
+				"constant_value": true,
+			},
+			"include_global_service_events": {
+				"constant_value": true,
+			},
+			"is_multi_region_trail": {
+				"constant_value": true,
+			},
+			"name": {
+				"constant_value": "example",
+			},
+			"s3_bucket_name": {
+				"references": [
+					"aws_s3_bucket.bucket.bucket",
+					"aws_s3_bucket.bucket",
+				],
+			},
+			"s3_key_prefix": {
+				"constant_value": "cloudtrail",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "example",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_cloudtrail",
+	},
+	"aws_s3_bucket.bucket": {
+		"address": "aws_s3_bucket.bucket",
+		"config": {
+			"bucket": {
+				"constant_value": "my-tf-test-bucket",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "bucket",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_acl.bucket_acl": {
+		"address": "aws_s3_bucket_acl.bucket_acl",
+		"config": {
+			"acl": {
+				"constant_value": "private",
+			},
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.bucket.bucket",
+					"aws_s3_bucket.bucket",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "bucket_acl",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_acl",
+	},
+}
+
+provisioners = {}
+
+variables = {}
+
+outputs = {}
+
+module_calls = {}
+
+strip_index = func(addr) {
+	s = strings.split(addr, ".")
+	for s as i, v {
+		s[i] = strings.split(v, "[")[0]
+	}
+
+	return strings.join(s, ".")
+}

@@ -17,7 +17,9 @@ const = {
 	"policy_name":                            "cloudtrail-logs-bucket-not-public",
 	"message":                                "S3 bucket used to store cloudtrail logs must not be publicly accessible. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-6 for more details.",
 	"resource_aws_cloudtrail":                "aws_cloudtrail",
+	"resource_aws_s3_bucket":                 "aws_s3_bucket",
 	"resource_s3_bucket_public_access_block": "aws_s3_bucket_public_access_block",
+	"resource_aws_s3_bucket_acl":             "aws_s3_bucket_acl",
 	"constant_value":                         "constant_value",
 }
 
@@ -64,6 +66,8 @@ resolve_s3_bucket_name = func(bucket_exp, module_address) {
 config_resources = tf.config(tfconfig.resources)
 
 s3_bucket_public_access_block_res = config_resources.type(const.resource_s3_bucket_public_access_block).resources
+s3_bucket_acl_res = config_resources.type(const.resource_aws_s3_bucket_acl).resources
+s3_bucket_inline_acl_res = config_resources.type(const.resource_aws_s3_bucket).resources
 
 compliant_s3_bucket_public_access_block_resources = collection.reject(s3_bucket_public_access_block_res, func(res) {
 	return not (maps.get(res, "config.ignore_public_acls.constant_value", false) and
@@ -72,9 +76,27 @@ compliant_s3_bucket_public_access_block_resources = collection.reject(s3_bucket_
 		maps.get(res, "config.block_public_policy.constant_value", false))
 })
 
+compliant_s3_bucket_acl_block_resources = collection.reject(s3_bucket_acl_res, func(res) {
+	acl_value = maps.get(res, "config.acl", "")
+	if acl_value == "" {
+		return true
+	}
+	return not (maps.get(acl_value, "constant_value", "") == "private")
+})
+
+compliant_s3_bucket_inline_acl_block_resources = collection.reject(s3_bucket_inline_acl_res, func(res) {
+	acl_value = maps.get(res, "config.acl", "")
+	if acl_value == "" {
+		return true
+	}
+	return not (maps.get(acl_value, "constant_value", "") == "private")
+})
+
+compliant_s3_bucket_resources = compliant_s3_bucket_public_access_block_resources + compliant_s3_bucket_acl_block_resources + compliant_s3_bucket_inline_acl_block_resources
+
 private_bucket_names = []
 
-for compliant_s3_bucket_public_access_block_resources as _, res {
+for compliant_s3_bucket_resources as _, res {
 	bucket_name = resolve_s3_bucket_name(maps.get(res, "config.bucket", {}), res.module_address)
 	if bucket_name is not empty {
 		append(private_bucket_names, bucket_name)
