@@ -24,7 +24,7 @@ const = {
 	"resource_aws_s3_bucket_versioning": "aws_s3_bucket_versioning",
 	"status":     "status",
 	"mfa_delete": "mfa_delete",
-	"Enabled":    "Enabled",
+	"enabled":    "Enabled",
 	"message":    "All 'aws_s3_bucket' resources should be linked to 'aws_s3_bucket_versioning' resources with 'mfa_delete' set to 'Enabled'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-20 for more details.",
 }
 
@@ -33,16 +33,16 @@ const = {
 check_mfa_from_refrence_var = func(config) {
 	return config.mfa_delete["references"] is defined and
 		tfconfig.is_variable_reference(config.mfa_delete.references[0]) and
-		tfplan.get_variable_value(tfconfig.parse_variable_name_from_reference(config.mfa_delete.references[0])) is const.Enabled
+		tfplan.get_variable_value(tfconfig.parse_variable_name_from_reference(config.mfa_delete.references[0])) is const.enabled
 }
 
 check_mfa_from_const = func(config) {
-	return config.mfa_delete["constant_value"] is defined and config.mfa_delete.constant_value is const.Enabled
+	return config.mfa_delete["constant_value"] is defined and config.mfa_delete.constant_value is const.enabled
 }
 
 is_mfa_enabled = func(res) {
 	return collection.find(res.config.versioning_configuration, func(config) {
-		return config.status.constant_value is const.Enabled and
+		return config.status.constant_value is const.enabled and
 			config[const.mfa_delete] is defined and
 			(check_mfa_from_const(config) or check_mfa_from_refrence_var(config))
 	}) is defined
