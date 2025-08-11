@@ -1,0 +1,144 @@
+import "strings"
+
+providers = {
+	"aws": {
+		"alias": "",
+		"config": {
+			"region": {
+				"constant_value": "us-west-2",
+			},
+		},
+		"full_name":           "registry.terraform.io/hashicorp/aws",
+		"module_address":      "",
+		"name":                "aws",
+		"provider_config_key": "aws",
+		"version_constraint":  "",
+	},
+}
+
+resources = {
+	"aws_s3_bucket.bucket": {
+		"address": "aws_s3_bucket.bucket",
+		"config": {
+			"bucket": {
+				"constant_value": "my-new-bucket-1234567890",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "bucket",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_policy.bucket_policy": {
+		"address": "aws_s3_bucket_policy.bucket_policy",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.bucket.id",
+					"aws_s3_bucket.bucket",
+				],
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.bucket_policy_document.json",
+					"data.aws_iam_policy_document.bucket_policy_document",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "bucket_policy",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_policy",
+	},
+	"data.aws_iam_policy_document.bucket_policy_document": {
+		"address": "data.aws_iam_policy_document.bucket_policy_document",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"s3:*",
+						],
+					},
+					"condition": [
+						{
+							"test": {
+								"constant_value": "Bool",
+							},
+							"values": {
+								"constant_value": [
+									"false",
+								],
+							},
+							"variable": {
+								"constant_value": "aws:SecureTransport",
+							},
+						},
+					],
+					"effect": {
+						"constant_value": "Deny",
+					},
+					"principals": [
+						{
+							"identifiers": {
+								"constant_value": [
+									"*",
+								],
+							},
+							"type": {
+								"constant_value": "*",
+							},
+						},
+					],
+					"resources": {
+						"references": [
+							"aws_s3_bucket.bucket.arn",
+							"aws_s3_bucket.bucket",
+							"aws_s3_bucket.bucket.arn",
+							"aws_s3_bucket.bucket",
+						],
+					},
+					"sid": {
+						"constant_value": "AllowTLSonly",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "bucket_policy_document",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}
+
+provisioners = {}
+
+variables = {}
+
+outputs = {}
+
+module_calls = {}
+
+strip_index = func(addr) {
+	s = strings.split(addr, ".")
+	for s as i, v {
+		s[i] = strings.split(v, "[")[0]
+	}
+
+	return strings.join(s, ".")
+}

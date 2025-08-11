@@ -10,6 +10,7 @@ import "tfstate/v2" as tfstate
 import "tfresources" as tf
 import "report" as report
 import "strings"
+import "types"
 import "collection" as collection
 import "collection/maps" as maps
 
@@ -57,8 +58,19 @@ get_referenced_policy_statements = func(res) {
 	if strings.has_prefix(res.module_address, const.module_prefix) {
 		address = res.module_address + "." + address
 	}
-
 	datasource = tf.state(tfstate.resources).mode("data").address(address).resources
+	if datasource is null or datasource is not defined or datasource is empty {
+		address = "data." + address	
+		datasource = tf.config(tfconfig.resources).mode("data").address(address).resources
+		if datasource is null or datasource is not defined {
+			return []
+		}
+		return filter datasource[0].config.statement as _, statement {
+			statement.actions.constant_value contains "*" or any statement.actions.constant_value as _, action {
+				strings.has_prefix(action, "s3:")
+			}
+		}
+	}
 	return filter datasource[0].values.statement as _, statement {
 		statement.actions contains "*" or any statement.actions as _, action {
 			strings.has_prefix(action, "s3:")
@@ -71,6 +83,12 @@ verify_ssl_status = func(conditions, desired_condition) {
 		return false
 	}
 	return collection.find(conditions, func(condition) {
+		if (types.type_of(condition["test"]) is not "string" and types.type_of(condition["values"]) is not "string" and types.type_of(condition["variable"]) is not "string") {
+			return condition["test"].constant_value is "Bool" and
+				condition[const.values].constant_value contains desired_condition and
+				condition[const.variable].constant_value is "aws:SecureTransport"
+
+		}
 		return condition["test"] is "Bool" and
 			condition[const.values] contains desired_condition and
 			condition[const.variable] is "aws:SecureTransport"
@@ -97,7 +115,7 @@ s3_bucket_resources = config_resources.type(const.resource_aws_s3_bucket).resour
 s3_bucket_policy_resources = config_resources.type(const.resource_aws_s3_bucket_policy).resources
 valid_bucket_policies = filter s3_bucket_policy_resources as _, res {
 	any get_referenced_policy_statements(res) as _, stmt {
-		stmt["effect"] is "Deny" and is_ssl_disabled(stmt["condition"])
+		(stmt["effect"] is "Deny" or (types.type_of(stmt["effect"]) is not "string" and stmt["effect"].constant_value is "Deny")) and (is_ssl_disabled(stmt["condition"]))
 	}
 }
 s3_bucket_addresses = map valid_bucket_policies as _, res {
