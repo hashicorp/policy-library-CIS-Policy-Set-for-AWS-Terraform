@@ -60,7 +60,7 @@ get_referenced_policy_statements = func(res) {
 	}
 	datasource = tf.state(tfstate.resources).mode("data").address(address).resources
 	if datasource is null or datasource is not defined or datasource is empty {
-		address = "data." + address	
+		address = "data." + address
 		datasource = tf.config(tfconfig.resources).mode("data").address(address).resources
 		if datasource is null or datasource is not defined {
 			return []
