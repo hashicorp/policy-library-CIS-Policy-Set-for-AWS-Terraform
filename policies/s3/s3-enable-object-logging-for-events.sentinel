@@ -47,7 +47,7 @@ referenced_s3_bucket_names = []
 references_all_s3_buckets = false
 for cloudtrail_resources as _, res {
 	event_selector_block = res[const.values][const.event_selector_block]
-	if event_selector_block is empty {
+	if event_selector_block is empty or event_selector_block is not defined {
 		continue
 	}
 
@@ -56,7 +56,7 @@ for cloudtrail_resources as _, res {
 			es[const.read_write_type] is event_type {
 
 			for es[const.data_resource] as _, data_res {
-				if data_res[const.type] is not const.aws_s3_object {
+				if data_res[const.type] is not const.aws_s3_object or data_res[const.values] is not defined {
 					continue
 				}
 
