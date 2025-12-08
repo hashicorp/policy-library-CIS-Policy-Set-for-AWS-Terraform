@@ -1,6 +1,6 @@
 # This policy requires the S3 bucket associated with a CloudTrail to be not publicly accessible.
 
-# Copyright (c) HashiCorp, Inc.
+# Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
 
 # Imports
