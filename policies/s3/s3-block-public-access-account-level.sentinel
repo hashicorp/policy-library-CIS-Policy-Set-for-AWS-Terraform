@@ -1,7 +1,7 @@
 # This policy verifies if the attributes of the 'aws_s3_account_public_access_block'
 # resource (if present) are in accordance to AWS CIS standards.
 
-# Copyright (c) HashiCorp, Inc.
+# Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
 
 # Imports
