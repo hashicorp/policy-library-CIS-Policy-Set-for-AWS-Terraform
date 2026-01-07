@@ -2,7 +2,7 @@
 // Other functions were introduced to make code modular are scoped within this
 // function to avoid getting invoked from outside
 
-# Copyright (c) HashiCorp, Inc.
+# Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
 
 // Colors
