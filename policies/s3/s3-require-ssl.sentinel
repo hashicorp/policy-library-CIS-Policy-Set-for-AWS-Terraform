@@ -10,9 +10,9 @@ import "tfstate/v2" as tfstate
 import "tfresources" as tf
 import "report" as report
 import "strings"
-import "types"
 import "collection" as collection
 import "collection/maps" as maps
+import "json"
 
 # Constants
 const = {
@@ -31,72 +31,92 @@ const = {
 
 # Functions
 
-# Removes module address prefix from a resource
-# and returns back the localized address for a module.
-resource_address_without_module_address = func(res) {
-	resource_addr = res[const.address]
+# Extracts the referenced S3 bucket address, handling both root and module contexts
+get_bucket_reference = func(res) {
+	bucket_config = maps.get(maps.get(res, "config", {}), "bucket", {})
 
-	# Check for root module
-	if not strings.has_prefix(resource_addr, const.module_prefix) {
-		return resource_addr
+	# If bucket is a constant value, we cannot match it to a resource address
+	if maps.get(bucket_config, "constant_value") is defined {
+		return ""
 	}
 
-	module_addr_prefix = res[const.module_address] + "."
-	return strings.trim_prefix(resource_addr, module_addr_prefix)
+	references = maps.get(bucket_config, const.references, [])
+	if length(references) < 2 {
+		return ""
+	}
+
+	bucket_reference = references[1]
+	module_addr = maps.get(res, const.module_address, "")
+
+	# Prefix with module address for nested modules
+	if strings.has_prefix(module_addr, const.module_prefix) {
+		return module_addr + "." + bucket_reference
+	}
+	return bucket_reference
+}
+
+has_s3_actions = func(statement) {
+	actions = maps.get(statement, "actions", [])
+	return actions contains "*" or any actions as _, action {
+		strings.has_prefix(action, "s3:")
+	}
 }
 
 get_referenced_policy_statements = func(res) {
-	policy = res.config.policy
-	if policy[const.references] is not defined or policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$" {
+	policy = maps.get(maps.get(res, "config", {}), "policy", {})
+	references = maps.get(policy, const.references, [])
+
+	# Check if references exist and have expected structure
+	if length(references) < 2 {
 		return []
 	}
-	reference = policy[const.references][1]
+
+	reference = references[1]
+	if reference not matches "^data.aws_iam_policy_document.(.*)$" {
+		return []
+	}
 
 	address = strings.trim_prefix(reference, "data.")
 	// Append the module address to the data source's local address
 	// in case of nested modules
-	if strings.has_prefix(res.module_address, const.module_prefix) {
-		address = res.module_address + "." + address
+	module_addr = maps.get(res, const.module_address, "")
+	if strings.has_prefix(module_addr, const.module_prefix) {
+		address = module_addr + "." + address
 	}
+
 	datasource = tf.state(tfstate.resources).mode("data").address(address).resources
-	if datasource is null or datasource is not defined or datasource is empty {
-		address = "data." + address
-		datasource = tf.config(tfconfig.resources).mode("data").address(address).resources
-		if datasource is null or datasource is not defined {
-			return []
-		}
-		return filter datasource[0].config.statement as _, statement {
-			statement.actions.constant_value contains "*" or any statement.actions.constant_value as _, action {
-				strings.has_prefix(action, "s3:")
-			}
-		}
+	if length(datasource) is 0 {
+		return []
 	}
-	return filter datasource[0].values.statement as _, statement {
-		statement.actions contains "*" or any statement.actions as _, action {
-			strings.has_prefix(action, "s3:")
-		}
+
+	statements = maps.get(maps.get(datasource[0], const.values, {}), "statement", [])
+	return filter statements as _, statement {
+		has_s3_actions(statement)
 	}
 }
 
 verify_ssl_status = func(conditions, desired_condition) {
-	if conditions is not defined {
+	if conditions is not defined or conditions is empty {
 		return false
 	}
 	return collection.find(conditions, func(condition) {
-		if (types.type_of(condition["test"]) is not "string" and types.type_of(condition["values"]) is not "string" and types.type_of(condition["variable"]) is not "string") {
-			return condition["test"].constant_value is "Bool" and
-				condition[const.values].constant_value contains desired_condition and
-				condition[const.variable].constant_value is "aws:SecureTransport"
-
-		}
-		return condition["test"] is "Bool" and
-			condition[const.values] contains desired_condition and
-			condition[const.variable] is "aws:SecureTransport"
+		test_val = maps.get(condition, "test", "")
+		values_list = maps.get(condition, const.values, [])
+		variable_val = maps.get(condition, const.variable, "")
+		return test_val is "Bool" and
+			values_list contains desired_condition and
+			variable_val is "aws:SecureTransport"
 	}) is defined
 }
 
 is_ssl_disabled = func(conditions) {
 	return verify_ssl_status(conditions, "false")
+}
+
+has_policy_datasource_reference = func(res) {
+	policy = maps.get(maps.get(res, "config", {}), "policy", {})
+	references = maps.get(policy, const.references, [])
+	return length(references) >= 2 and references[1] matches "^data.aws_iam_policy_document.(.*)$"
 }
 
 build_violation_object = func(resource_addr, module_addr, message) {
@@ -111,39 +131,55 @@ build_violation_object = func(resource_addr, module_addr, message) {
 
 violations = []
 config_resources = tf.config(tfconfig.resources)
+# print(json.marshal(tfconfig.resources))
+
+# Get all S3 bucket resources (including those nested in modules)
 s3_bucket_resources = config_resources.type(const.resource_aws_s3_bucket).resources
+
 s3_bucket_policy_resources = config_resources.type(const.resource_aws_s3_bucket_policy).resources
 valid_bucket_policies = filter s3_bucket_policy_resources as _, res {
 	any get_referenced_policy_statements(res) as _, stmt {
-		(stmt["effect"] is "Deny" or (types.type_of(stmt["effect"]) is not "string" and stmt["effect"].constant_value is "Deny")) and (is_ssl_disabled(stmt["condition"]))
+		maps.get(stmt, "effect", "") is "Deny" and is_ssl_disabled(maps.get(stmt, "condition"))
 	}
 }
-s3_bucket_addresses = map valid_bucket_policies as _, res {
-	res.config.bucket.references[1]
+
+# Build list of bucket addresses with valid SSL policies
+s3_bucket_addresses = []
+for valid_bucket_policies as res {
+	bucket_ref = get_bucket_reference(res)
+	if bucket_ref is not "" {
+		append(s3_bucket_addresses, bucket_ref)
+	}
 }
 
 buckets_without_valid_policy = filter s3_bucket_resources as _, res {
-	resource_address_without_module_address(res) not in s3_bucket_addresses
+	res[const.address] not in s3_bucket_addresses
 }
 
+# Find bucket policies that don't reference a proper data source
 bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, res {
-	res.config.policy[const.references] is not defined or res.config.policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$"
+	not has_policy_datasource_reference(res)
 }
 
-bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {
-	res.config.bucket.references[1]
+# Build list of bucket addresses using inline policies
+bucket_addresses_for_inline_policies = []
+for bucket_policies_without_datasources as res {
+	bucket_ref = get_bucket_reference(res)
+	if bucket_ref is not "" {
+		append(bucket_addresses_for_inline_policies, bucket_ref)
+	}
 }
 
 buckets_with_inline_policy = filter s3_bucket_resources as _, res {
-	resource_address_without_module_address(res) in bucket_addresses_for_inline_policies
+	res[const.address] in bucket_addresses_for_inline_policies
 }
 
 policy_document_violations_list = map buckets_without_valid_policy as _, v {
-	build_violation_object(v.address, v.module_address, const.policy_document_violation_message)
+	build_violation_object(maps.get(v, "address", ""), maps.get(v, "module_address", ""), const.policy_document_violation_message)
 }
 
 inline_policy_violations_list = map buckets_with_inline_policy as _, v {
-	build_violation_object(v.address, v.module_address, const.inline_policy_violation_message)
+	build_violation_object(maps.get(v, "address", ""), maps.get(v, "module_address", ""), const.inline_policy_violation_message)
 }
 
 summary = {
