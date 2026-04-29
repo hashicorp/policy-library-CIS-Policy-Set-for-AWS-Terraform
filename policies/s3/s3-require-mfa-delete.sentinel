@@ -13,6 +13,7 @@ import "tfresources" as tf
 import "strings"
 import "collection" as collection
 import "collection/maps" as maps
+import "json"
 
 # Constants
 const = {
@@ -30,65 +31,90 @@ const = {
 
 # Functions
 
-check_mfa_from_refrence_var = func(config) {
-	return config.mfa_delete["references"] is defined and
-		tfconfig.is_variable_reference(config.mfa_delete.references[0]) and
-		tfplan.get_variable_value(tfconfig.parse_variable_name_from_reference(config.mfa_delete.references[0])) is const.enabled
-}
-
-check_mfa_from_const = func(config) {
-	return config.mfa_delete["constant_value"] is defined and config.mfa_delete.constant_value is const.enabled
+# Safely checks if a value equals "Enabled" from constant_value or references
+check_enabled_value = func(attr) {
+	if attr is not defined {
+		return false
+	}
+	const_val = maps.get(attr, "constant_value")
+	if const_val is defined {
+		return const_val is const.enabled
+	}
+	references = maps.get(attr, "references")
+	if references is defined and length(references) > 0 and tfconfig.is_variable_reference(references[0]) {
+		return tfplan.get_variable_value(tfconfig.parse_variable_name_from_reference(references[0])) is const.enabled
+	}
+	return false
 }
 
 is_mfa_enabled = func(res) {
-	return collection.find(maps.get(res.config, "versioning_configuration", []), func(config) {
-		status = maps.get(config, "status", "")
-		if status is empty {
-			return false
-		}
-
-		return status.constant_value is const.enabled and
-			config[const.mfa_delete] is defined and
-			(check_mfa_from_const(config) or check_mfa_from_refrence_var(config))
+	versioning_config = maps.get(maps.get(res, "config", {}), "versioning_configuration")
+	if versioning_config is not defined or versioning_config is empty {
+		return false
+	}
+	return collection.find(versioning_config, func(config) {
+		status_enabled = check_enabled_value(maps.get(config, "status"))
+		mfa_enabled = check_enabled_value(maps.get(config, const.mfa_delete))
+		return status_enabled and mfa_enabled
 	}) is defined
 }
 
-# Removes module address prefix from a resource
-# and returns back the localized address for a module.
-resource_address_without_module_address = func(res) {
-	resource_addr = res[const.address]
+# Extracts the referenced S3 bucket address, handling both root and module contexts
+get_bucket_reference = func(res) {
+	bucket_config = maps.get(maps.get(res, "config", {}), "bucket", {})
 
-	# Check for root module
-	if not strings.has_prefix(resource_addr, const.module_prefix) {
-		return resource_addr
+	# If bucket is a constant value, we cannot match it to a resource address
+	if maps.get(bucket_config, "constant_value") is defined {
+		return ""
 	}
 
-	module_addr_prefix = res[const.module_address] + "."
-	return strings.trim_prefix(resource_addr, module_addr_prefix)
+	references = maps.get(bucket_config, "references", [])
+	if length(references) < 2 {
+		return ""
+	}
+
+	bucket_reference = references[1]
+	module_addr = maps.get(res, const.module_address, "")
+
+	# Prefix with module address for nested modules
+	if strings.has_prefix(module_addr, const.module_prefix) {
+		return module_addr + "." + bucket_reference
+	}
+	return bucket_reference
 }
 
 # Variables
 
 config_resources = tf.config(config.resources)
+# print(json.marshal(config.resources))
 
+# Get all S3 bucket resources (including those nested in modules)
+s3_bucket_resources = config_resources.type(const.resource_aws_s3_bucket).resources
+
+# Get versioning resources with MFA enabled
 mfa_enabled_resources = filter config_resources.type(const.resource_aws_s3_bucket_versioning).resources as _, res {
 	is_mfa_enabled(res)
 }
 
-s3_bucket_addresses = map mfa_enabled_resources as _, res {
-	res.config.bucket.references[1]
+# Build list of bucket addresses that have valid MFA configuration
+s3_bucket_addresses = []
+for mfa_enabled_resources as res {
+	bucket_ref = get_bucket_reference(res)
+	if bucket_ref is not "" {
+		append(s3_bucket_addresses, bucket_ref)
+	}
 }
 
-violations = filter config_resources.type(const.resource_aws_s3_bucket).resources as _, res {
-	resource_address_without_module_address(res) not in s3_bucket_addresses
+violations = filter s3_bucket_resources as _, res {
+	res[const.address] not in s3_bucket_addresses
 }
 
 summary = {
 	"policy_name": const.policy_name,
 	"violations": map violations as _, v {
 		{
-			"address":        v.address,
-			"module_address": v.module_address,
+			"address":        maps.get(v, "address", ""),
+			"module_address": maps.get(v, "module_address", ""),
 			"message":        const.message,
 		}
 	},
