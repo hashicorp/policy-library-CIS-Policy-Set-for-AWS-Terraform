@@ -1,0 +1,266 @@
+policies:
+  "cloudtrail-bucket-access-logging-enabled":
+    path: "policies/cloudtrail/cloudtrail-bucket-access-logging-enabled.sentinel"
+    governed_resources: ["aws_cloudtrail", "aws_s3_bucket_logging"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["CloudTrail"]
+    description: "This policy requires that resources of type `aws_cloudtrail` have bucket access logging enabled."
+    type: "sentinel"
+  "cloudtrail-cloudwatch-logs-group-arn-present":
+    path: "policies/cloudtrail/cloudtrail-cloudwatch-logs-group-arn-present.sentinel"
+    governed_resources: ["aws_cloudtrail"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["CloudTrail"]
+    description: "This policy requires resources of type `aws_cloudtrail` to have CloudWatch log group ARN set."
+    type: "sentinel"
+  "cloudtrail-log-file-validation-enabled":
+    path: "policies/cloudtrail/cloudtrail-log-file-validation-enabled.sentinel"
+    governed_resources: ["aws_cloudtrail"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["CloudTrail"]
+    description: "This policy requires resources of type `aws_cloudtrail` to have log file validation enabled."
+    type: "sentinel"
+  "cloudtrail-logs-bucket-not-public":
+    path: "policies/cloudtrail/cloudtrail-logs-bucket-not-public.sentinel"
+    governed_resources: ["aws_cloudtrail", "aws_s3_bucket", "aws_s3_bucket_acl", "aws_s3_bucket_public_access_block"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["CloudTrail"]
+    description: "This policy requires the S3 bucket associated with a CloudTrail to be not publicly accessible."
+    type: "sentinel"
+  "cloudtrail-server-side-encryption-enabled":
+    path: "policies/cloudtrail/cloudtrail-server-side-encryption-enabled.sentinel"
+    governed_resources: ["aws_cloudtrail"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["CloudTrail"]
+    description: "This policy requires that resources of type `aws_cloudtrail` have server-side encryption enabled."
+    type: "sentinel"
+  "ec2-ebs-encryption-enabled":
+    path: "policies/ec2/ec2-ebs-encryption-enabled.sentinel"
+    governed_resources: ["aws_ebs_volume"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type `aws_ebs_volume` have the `encrypted` attribute set to `true`."
+    type: "sentinel"
+  "ec2-metadata-imdsv2-required":
+    path: "policies/ec2/ec2-metadata-imdsv2-required.sentinel"
+    governed_resources: ["aws_ec2_instance_metadata_defaults", "aws_instance"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type 'aws_instance' or 'aws_ec2_instance_metadata_defaults' to have 'http_tokens' attribute set to 'required'."
+    type: "sentinel"
+  "ec2-network-acl":
+    path: "policies/ec2/ec2-network-acl.sentinel"
+    governed_resources: ["aws_network_acl", "aws_network_acl_rule"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type `aws_network_acl` and `aws_network_acl_rule` to block ingress traffic from unknown sources to the configured ports"
+    type: "sentinel"
+  "ec2-security-group-ingress-traffic-restriction-port":
+    path: "policies/ec2/ec2-security-group-ingress-traffic-restriction-port.sentinel"
+    governed_resources: ["aws_security_group", "aws_security_group_rule", "aws_vpc_security_group_ingress_rule"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type `aws_security_group`, `aws_security_group_rule` and `aws_vpc_security_group_ingress_rule` to block ingress traffic from unknown sources to the configured port"
+    type: "sentinel"
+  "ec2-security-group-ingress-traffic-restriction-protocol":
+    path: "policies/ec2/ec2-security-group-ingress-traffic-restriction-protocol.sentinel"
+    governed_resources: ["aws_security_group", "aws_security_group_rule", "aws_vpc_security_group_ingress_rule"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type `aws_security_group`, `aws_security_group_rule` and `aws_vpc_security_group_ingress_rule` to block ingress traffic from unknown sources to ports 22 and 3389"
+    type: "sentinel"
+  "ec2-vpc-default-security-group-no-traffic":
+    path: "policies/ec2/ec2-vpc-default-security-group-no-traffic.sentinel"
+    governed_resources: ["aws_default_security_group", "aws_security_group_rule", "aws_vpc_security_group_egress_rule", "aws_vpc_security_group_ingress_rule"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type `aws_vpc` to have no traffic for default security group."
+    type: "sentinel"
+  "ec2-vpc-flow-logging-enabled":
+    path: "policies/ec2/ec2-vpc-flow-logging-enabled.sentinel"
+    governed_resources: ["aws_default_vpc", "aws_flow_log", "aws_vpc"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EC2"]
+    description: "This policy requires resources of type `aws_vpc` and `aws_default_vpc` to have flow logs enabled."
+    type: "sentinel"
+  "efs-encryption-at-rest-enabled":
+    path: "policies/efs/efs-encryption-at-rest-enabled.sentinel"
+    governed_resources: ["aws_efs_file_system"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["EFS"]
+    description: "This policy requires that resources of type `aws_efs_file_system` encryption at rest enabled."
+    type: "sentinel"
+  "iam-no-admin-privileges-allowed-by-policies":
+    path: "policies/iam/iam-no-admin-privileges-allowed-by-policies.sentinel"
+    governed_resources: ["aws_iam_policy", "aws_iam_policy_document"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "IAM policies should not allow administrator privileges to users/roles/groups."
+    type: "sentinel"
+  "iam-no-policies-attached-to-users":
+    path: "policies/iam/iam-no-policies-attached-to-users.sentinel"
+    governed_resources: ["aws_iam_user_policy", "aws_iam_user_policy_attachment"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "IAM users should not be directly attached to IAM policies."
+    type: "sentinel"
+  "iam-password-expiry":
+    path: "policies/iam/iam-password-expiry.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `max_password_age` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards."
+    type: "sentinel"
+  "iam-password-length":
+    path: "policies/iam/iam-password-length.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `minimum_password_length` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards."
+    type: "sentinel"
+  "iam-password-lowercase":
+    path: "policies/iam/iam-password-lowercase.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `require_lowercase_characters` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards."
+    type: "sentinel"
+  "iam-password-numbers":
+    path: "policies/iam/iam-password-numbers.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `require_numbers` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
+    type: "sentinel"
+  "iam-password-reuse":
+    path: "policies/iam/iam-password-reuse.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `password_reuse_prevention` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
+    type: "sentinel"
+  "iam-password-symbols":
+    path: "policies/iam/iam-password-symbols.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `require_symbols` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
+    type: "sentinel"
+  "iam-password-uppercase":
+    path: "policies/iam/iam-password-uppercase.sentinel"
+    governed_resources: ["aws_iam_account_password_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["IAM"]
+    description: "This policy requires that the `require_uppercase_characters` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
+    type: "sentinel"
+  "kms-key-rotation-enabled":
+    path: "policies/kms/kms-key-rotation-enabled.sentinel"
+    governed_resources: ["aws_kms_key"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["KMS"]
+    description: "Key rotation must be enabled for resources of type 'aws_kms_key'"
+    type: "sentinel"
+  "rds-encryption-at-rest-enabled":
+    path: "policies/rds/rds-encryption-at-rest-enabled.sentinel"
+    governed_resources: ["aws_db_instance"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["RDS"]
+    description: "This policy requires resources of type `aws_db_instance` have attribute \"storage_encrypted\" set to true."
+    type: "sentinel"
+  "rds-minor-version-upgrade-enabled":
+    path: "policies/rds/rds-minor-version-upgrade-enabled.sentinel"
+    governed_resources: ["aws_db_instance"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["RDS"]
+    description: "This policy requires resources of type 'aws_db_instance' have attribute 'auto_minor_version_upgrade' set to true."
+    type: "sentinel"
+  "rds-public-access-disabled":
+    path: "policies/rds/rds-public-access-disabled.sentinel"
+    governed_resources: ["aws_db_instance"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["RDS"]
+    description: "This policy requires resources of type 'aws_db_instance' have attribute 'publicly_accessible' set to false."
+    type: "sentinel"
+  "s3-block-public-access-account-level":
+    path: "policies/s3/s3-block-public-access-account-level.sentinel"
+    governed_resources: ["aws_s3_account_public_access_block"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["S3"]
+    description: "This policy verifies if the attributes of the 'aws_s3_account_public_access_block' resource (if present) are in accordance to AWS CIS standards."
+    type: "sentinel"
+  "s3-block-public-access-bucket-level":
+    path: "policies/s3/s3-block-public-access-bucket-level.sentinel"
+    governed_resources: ["aws_s3_bucket", "aws_s3_bucket_acl", "aws_s3_bucket_public_access_block"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["S3"]
+    description: "This policy verifies if the attributes of the 'aws_s3_bucket_public_access_block' resource (if present) block public access of an S3 general purpose bucket."
+    type: "sentinel"
+  "s3-enable-object-logging-for-events":
+    path: "policies/s3/s3-enable-object-logging-for-events.sentinel"
+    governed_resources: ["aws_cloudtrail", "aws_s3_bucket"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["S3"]
+    description: "This policy requires resources of type 'aws_s3_bucket' have object logging enabled for read/write events."
+    type: "sentinel"
+  "s3-require-mfa-delete":
+    path: "policies/s3/s3-require-mfa-delete.sentinel"
+    governed_resources: ["aws_s3_bucket", "aws_s3_bucket_versioning"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["S3"]
+    description: "This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration"
+    type: "sentinel"
+  "s3-require-ssl":
+    path: "policies/s3/s3-require-ssl.sentinel"
+    governed_resources: ["aws_s3_bucket", "aws_s3_bucket_policy"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["S3"]
+    description: "This policy mandates all requests to 'aws_s3_bucket' resources to use SSL using 'aws_s3_bucket_policy' resource."
+    type: "sentinel"
+  "vpc-flow-logging-enabled":
+    path: "policies/vpc/vpc-flow-logging-enabled.sentinel"
+    governed_resources: ["aws_default_vpc", "aws_flow_log", "aws_vpc"]
+    provider: "AWS"
+    regulations: ["CIS AWS Benchmark"]
+    services: ["VPC"]
+    description: "This policy requires resources of type `aws_vpc` and `aws_default_vpc` to have flow logs enabled."
+    type: "sentinel"
+modules:
+  "report":
+    path: "modules/report/report.sentinel"
+  "tfconfig-functions":
+    path: "modules/tfconfig-functions/tfconfig-functions.sentinel"
+  "tfplan-functions":
+    path: "modules/tfplan-functions/tfplan-functions.sentinel"
+  "tfresources":
+    path: "modules/tfresources/tfresources.sentinel"
