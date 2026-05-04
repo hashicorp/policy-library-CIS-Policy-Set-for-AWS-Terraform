@@ -57,7 +57,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: CloudTrail
-    description: This policy requires the S3 bucket associated with a CloudTrail to be not publicly accessible.
+    description: "This policy requires the S3 bucket associated with a CloudTrail to be not publicly accessible."
     type: sentinel
   cloudtrail-server-side-encryption-enabled:
     path: policies/cloudtrail/cloudtrail-server-side-encryption-enabled.sentinel
@@ -207,7 +207,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: IAM
-    description: IAM policies should not allow administrator privileges to users/roles/groups.
+    description: "IAM policies should not allow administrator privileges to users/roles/groups."
     type: sentinel
   iam-no-policies-attached-to-users:
     path: policies/iam/iam-no-policies-attached-to-users.sentinel
@@ -222,7 +222,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: IAM
-    description: IAM users should not be directly attached to IAM policies.
+    description: "IAM users should not be directly attached to IAM policies."
     type: sentinel
   iam-password-expiry:
     path: policies/iam/iam-password-expiry.sentinel
@@ -447,7 +447,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: S3
-    description: This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration
+    description: "This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration"
     type: sentinel
   s3-require-ssl:
     path: policies/s3/s3-require-ssl.sentinel
