@@ -1,458 +1,494 @@
 policies:
   cloudtrail-bucket-access-logging-enabled:
-    path: "policies/cloudtrail/cloudtrail-bucket-access-logging-enabled.sentinel"
-    governed_resources: ["aws_cloudtrail", "aws_s3_bucket_logging"]
-    provider: "AWS"
+    path: policies/cloudtrail/cloudtrail-bucket-access-logging-enabled.sentinel
+    sha: 7b3b32cf52959eb15e2dc0e4484e0d1b998bc93d480938c73ebac8da7ec22cc9
+    governed_resources: [aws_cloudtrail, aws_s3_bucket_logging]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "CloudTrail"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: CloudTrail
     description: "This policy requires that resources of type `aws_cloudtrail` have bucket access logging enabled."
-    type: "sentinel"
+    type: sentinel
   cloudtrail-cloudwatch-logs-group-arn-present:
-    path: "policies/cloudtrail/cloudtrail-cloudwatch-logs-group-arn-present.sentinel"
-    governed_resources: ["aws_cloudtrail"]
-    provider: "AWS"
+    path: policies/cloudtrail/cloudtrail-cloudwatch-logs-group-arn-present.sentinel
+    sha: 76d752e56e5fcec59821a8bf69f4acffb0253085724f85a56c47cf42f37f3f83
+    governed_resources: [aws_cloudtrail]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "CloudTrail"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: CloudTrail
     description: "This policy requires resources of type `aws_cloudtrail` to have CloudWatch log group ARN set."
-    type: "sentinel"
+    type: sentinel
   cloudtrail-log-file-validation-enabled:
-    path: "policies/cloudtrail/cloudtrail-log-file-validation-enabled.sentinel"
-    governed_resources: ["aws_cloudtrail"]
-    provider: "AWS"
+    path: policies/cloudtrail/cloudtrail-log-file-validation-enabled.sentinel
+    sha: 8b2129fbe8c0d4201cd1cb01d2bc87a263e56e4d1f960e7585d874be99049cb6
+    governed_resources: [aws_cloudtrail]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "CloudTrail"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: CloudTrail
     description: "This policy requires resources of type `aws_cloudtrail` to have log file validation enabled."
-    type: "sentinel"
+    type: sentinel
   cloudtrail-logs-bucket-not-public:
-    path: "policies/cloudtrail/cloudtrail-logs-bucket-not-public.sentinel"
-    governed_resources: ["aws_cloudtrail", "aws_s3_bucket", "aws_s3_bucket_acl", "aws_s3_bucket_public_access_block"]
-    provider: "AWS"
+    path: policies/cloudtrail/cloudtrail-logs-bucket-not-public.sentinel
+    sha: 385a43b8fd68d481d09756e0d8d9066875f09d4594631c0cf1f3d4f1cfaef13e
+    governed_resources: [aws_cloudtrail, aws_s3_bucket, aws_s3_bucket_acl, aws_s3_bucket_public_access_block]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "CloudTrail"
-    description: "This policy requires the S3 bucket associated with a CloudTrail to be not publicly accessible."
-    type: "sentinel"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: CloudTrail
+    description: This policy requires the S3 bucket associated with a CloudTrail to be not publicly accessible.
+    type: sentinel
   cloudtrail-server-side-encryption-enabled:
-    path: "policies/cloudtrail/cloudtrail-server-side-encryption-enabled.sentinel"
-    governed_resources: ["aws_cloudtrail"]
-    provider: "AWS"
+    path: policies/cloudtrail/cloudtrail-server-side-encryption-enabled.sentinel
+    sha: 0dd8f97b3eb507935cdbc87c5c598dd459415369f14533a1a6557fb298026ebc
+    governed_resources: [aws_cloudtrail]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "CloudTrail"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: CloudTrail
     description: "This policy requires that resources of type `aws_cloudtrail` have server-side encryption enabled."
-    type: "sentinel"
+    type: sentinel
   ec2-ebs-encryption-enabled:
-    path: "policies/ec2/ec2-ebs-encryption-enabled.sentinel"
-    governed_resources: ["aws_ebs_volume"]
-    provider: "AWS"
+    path: policies/ec2/ec2-ebs-encryption-enabled.sentinel
+    sha: 0aaade8a7061ef57f59e6ad5efdc8e1014f70d229c052b85fae6bf0b97225709
+    governed_resources: [aws_ebs_volume]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type `aws_ebs_volume` have the `encrypted` attribute set to `true`."
-    type: "sentinel"
+    type: sentinel
   ec2-metadata-imdsv2-required:
-    path: "policies/ec2/ec2-metadata-imdsv2-required.sentinel"
-    governed_resources: ["aws_ec2_instance_metadata_defaults", "aws_instance"]
-    provider: "AWS"
+    path: policies/ec2/ec2-metadata-imdsv2-required.sentinel
+    sha: 3a0a6ed4b3b52cd870e147dd9b65abe8745630155461a61b63f2c47771eba775
+    governed_resources: [aws_ec2_instance_metadata_defaults, aws_instance]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type 'aws_instance' or 'aws_ec2_instance_metadata_defaults' to have 'http_tokens' attribute set to 'required'."
-    type: "sentinel"
+    type: sentinel
   ec2-network-acl:
-    path: "policies/ec2/ec2-network-acl.sentinel"
-    governed_resources: ["aws_network_acl", "aws_network_acl_rule"]
-    provider: "AWS"
+    path: policies/ec2/ec2-network-acl.sentinel
+    sha: 3f9f817b1baa40823e5ab22c52ecdf1913b8e86da15fb48657eee397f68435f2
+    governed_resources: [aws_network_acl, aws_network_acl_rule]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type `aws_network_acl` and `aws_network_acl_rule` to block ingress traffic from unknown sources to the configured ports"
-    type: "sentinel"
+    type: sentinel
   ec2-security-group-ingress-traffic-restriction-port:
-    path: "policies/ec2/ec2-security-group-ingress-traffic-restriction-port.sentinel"
-    governed_resources: ["aws_security_group", "aws_security_group_rule", "aws_vpc_security_group_ingress_rule"]
-    provider: "AWS"
+    path: policies/ec2/ec2-security-group-ingress-traffic-restriction-port.sentinel
+    sha: 9e8ac7b729bc612fab8fb108ba294b01b413632dc4a47e3697980c3175853a1f
+    governed_resources: [aws_security_group, aws_security_group_rule, aws_vpc_security_group_ingress_rule]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type `aws_security_group`, `aws_security_group_rule` and `aws_vpc_security_group_ingress_rule` to block ingress traffic from unknown sources to the configured port"
-    type: "sentinel"
+    type: sentinel
   ec2-security-group-ingress-traffic-restriction-protocol:
-    path: "policies/ec2/ec2-security-group-ingress-traffic-restriction-protocol.sentinel"
-    governed_resources: ["aws_security_group", "aws_security_group_rule", "aws_vpc_security_group_ingress_rule"]
-    provider: "AWS"
+    path: policies/ec2/ec2-security-group-ingress-traffic-restriction-protocol.sentinel
+    sha: 87fc60567a0121ce86e637a19037f919b8b0f53b646bbde2128b79d143f9b131
+    governed_resources: [aws_security_group, aws_security_group_rule, aws_vpc_security_group_ingress_rule]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type `aws_security_group`, `aws_security_group_rule` and `aws_vpc_security_group_ingress_rule` to block ingress traffic from unknown sources to ports 22 and 3389"
-    type: "sentinel"
+    type: sentinel
   ec2-vpc-default-security-group-no-traffic:
-    path: "policies/ec2/ec2-vpc-default-security-group-no-traffic.sentinel"
-    governed_resources: ["aws_default_security_group", "aws_security_group_rule", "aws_vpc_security_group_egress_rule", "aws_vpc_security_group_ingress_rule"]
-    provider: "AWS"
+    path: policies/ec2/ec2-vpc-default-security-group-no-traffic.sentinel
+    sha: 7e4d2dab7bbe5bd613dd1dfbc9394bdceb95aef4b8abdefd6f762f6dc012f01b
+    governed_resources: [aws_default_security_group, aws_security_group_rule, aws_vpc_security_group_egress_rule, aws_vpc_security_group_ingress_rule]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type `aws_vpc` to have no traffic for default security group."
-    type: "sentinel"
+    type: sentinel
   ec2-vpc-flow-logging-enabled:
-    path: "policies/ec2/ec2-vpc-flow-logging-enabled.sentinel"
-    governed_resources: ["aws_default_vpc", "aws_flow_log", "aws_vpc"]
-    provider: "AWS"
+    path: policies/ec2/ec2-vpc-flow-logging-enabled.sentinel
+    sha: ed87bbee3e42fa0d3fe885c411e338f669c5763146ae9d6aa81dc9a4bfa2b22f
+    governed_resources: [aws_default_vpc, aws_flow_log, aws_vpc]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EC2"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EC2
     description: "This policy requires resources of type `aws_vpc` and `aws_default_vpc` to have flow logs enabled."
-    type: "sentinel"
+    type: sentinel
   efs-encryption-at-rest-enabled:
-    path: "policies/efs/efs-encryption-at-rest-enabled.sentinel"
-    governed_resources: ["aws_efs_file_system"]
-    provider: "AWS"
+    path: policies/efs/efs-encryption-at-rest-enabled.sentinel
+    sha: 8eea59dff83f91dd22f6dbaf74329438194778c7bbc773cbd78be218ca9a9470
+    governed_resources: [aws_efs_file_system]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "EFS"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: EFS
     description: "This policy requires that resources of type `aws_efs_file_system` encryption at rest enabled."
-    type: "sentinel"
+    type: sentinel
   iam-no-admin-privileges-allowed-by-policies:
-    path: "policies/iam/iam-no-admin-privileges-allowed-by-policies.sentinel"
-    governed_resources: ["aws_iam_policy", "aws_iam_policy_document"]
-    provider: "AWS"
+    path: policies/iam/iam-no-admin-privileges-allowed-by-policies.sentinel
+    sha: 82367793158e1d07b5a060ca379d6b38740dad705e0e76300765a69098d4454c
+    governed_resources: [aws_iam_policy, aws_iam_policy_document]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
-    description: "IAM policies should not allow administrator privileges to users/roles/groups."
-    type: "sentinel"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
+    description: IAM policies should not allow administrator privileges to users/roles/groups.
+    type: sentinel
   iam-no-policies-attached-to-users:
-    path: "policies/iam/iam-no-policies-attached-to-users.sentinel"
-    governed_resources: ["aws_iam_user_policy", "aws_iam_user_policy_attachment"]
-    provider: "AWS"
+    path: policies/iam/iam-no-policies-attached-to-users.sentinel
+    sha: 40bebff24c83286594dc9e5753fb1c75c5fc2b897bbfdc570b10034826f6b2e7
+    governed_resources: [aws_iam_user_policy, aws_iam_user_policy_attachment]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
-    description: "IAM users should not be directly attached to IAM policies."
-    type: "sentinel"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
+    description: IAM users should not be directly attached to IAM policies.
+    type: sentinel
   iam-password-expiry:
-    path: "policies/iam/iam-password-expiry.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-expiry.sentinel
+    sha: 3cf6527c90ce10c4a327d90644076c9827d7b4a8f00d0b356b3ace3bf485e48f
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `max_password_age` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards."
-    type: "sentinel"
+    type: sentinel
   iam-password-length:
-    path: "policies/iam/iam-password-length.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-length.sentinel
+    sha: 13ab4b1a3297e6a4190820c871591cc8d60edcfe111bfa547299a3bb1c858075
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `minimum_password_length` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards."
-    type: "sentinel"
+    type: sentinel
   iam-password-lowercase:
-    path: "policies/iam/iam-password-lowercase.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-lowercase.sentinel
+    sha: 060f485d4f78ce212eb1e0376e481fcd8d44d4442faa0c06165bafb340ccbc5d
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `require_lowercase_characters` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards."
-    type: "sentinel"
+    type: sentinel
   iam-password-numbers:
-    path: "policies/iam/iam-password-numbers.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-numbers.sentinel
+    sha: fcb6a7657c521c3e522b4ed24b942d6f2be5befaeb8331e70f936854df0b45fc
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `require_numbers` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
-    type: "sentinel"
+    type: sentinel
   iam-password-reuse:
-    path: "policies/iam/iam-password-reuse.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-reuse.sentinel
+    sha: 066481a3907eabced4d7726ea2944c1cde806211521e6e1a641863d4fbb0b52b
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `password_reuse_prevention` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
-    type: "sentinel"
+    type: sentinel
   iam-password-symbols:
-    path: "policies/iam/iam-password-symbols.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-symbols.sentinel
+    sha: 4272906ca5c97dc999c0746aea5962ddca2422e29f4053592a7554ebaf0090a8
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `require_symbols` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
-    type: "sentinel"
+    type: sentinel
   iam-password-uppercase:
-    path: "policies/iam/iam-password-uppercase.sentinel"
-    governed_resources: ["aws_iam_account_password_policy"]
-    provider: "AWS"
+    path: policies/iam/iam-password-uppercase.sentinel
+    sha: 333ceeff9bafba30a19c1e598332853c05002b468d46d7576ab3dbb9e8fc4d3d
+    governed_resources: [aws_iam_account_password_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "IAM"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: IAM
     description: "This policy requires that the `require_uppercase_characters` attribute of the `aws_iam_account_password_policy` resource is according to CIS standards"
-    type: "sentinel"
+    type: sentinel
   kms-key-rotation-enabled:
-    path: "policies/kms/kms-key-rotation-enabled.sentinel"
-    governed_resources: ["aws_kms_key"]
-    provider: "AWS"
+    path: policies/kms/kms-key-rotation-enabled.sentinel
+    sha: 7623fd7b1d7b643e35cadd0b77de6d7ac849ac7a09150a735e259fe6fc72472d
+    governed_resources: [aws_kms_key]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "KMS"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: KMS
     description: "Key rotation must be enabled for resources of type 'aws_kms_key'"
-    type: "sentinel"
+    type: sentinel
   rds-encryption-at-rest-enabled:
-    path: "policies/rds/rds-encryption-at-rest-enabled.sentinel"
-    governed_resources: ["aws_db_instance"]
-    provider: "AWS"
+    path: policies/rds/rds-encryption-at-rest-enabled.sentinel
+    sha: b19eaddf0d29d86482fefe208a430cd740416fdfdb96eded43be8715d3228aea
+    governed_resources: [aws_db_instance]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "RDS"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: RDS
     description: "This policy requires resources of type `aws_db_instance` have attribute \"storage_encrypted\" set to true."
-    type: "sentinel"
+    type: sentinel
   rds-minor-version-upgrade-enabled:
-    path: "policies/rds/rds-minor-version-upgrade-enabled.sentinel"
-    governed_resources: ["aws_db_instance"]
-    provider: "AWS"
+    path: policies/rds/rds-minor-version-upgrade-enabled.sentinel
+    sha: 1cd02237485b84d62c603dbe33d92145b05b9621831facf6fa6d018282c7f138
+    governed_resources: [aws_db_instance]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "RDS"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: RDS
     description: "This policy requires resources of type 'aws_db_instance' have attribute 'auto_minor_version_upgrade' set to true."
-    type: "sentinel"
+    type: sentinel
   rds-public-access-disabled:
-    path: "policies/rds/rds-public-access-disabled.sentinel"
-    governed_resources: ["aws_db_instance"]
-    provider: "AWS"
+    path: policies/rds/rds-public-access-disabled.sentinel
+    sha: 98e41e3403414e236ae74d25fb9331655eda029a4a4f326b9d7b17d59c7ab247
+    governed_resources: [aws_db_instance]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "RDS"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: RDS
     description: "This policy requires resources of type 'aws_db_instance' have attribute 'publicly_accessible' set to false."
-    type: "sentinel"
+    type: sentinel
   s3-block-public-access-account-level:
-    path: "policies/s3/s3-block-public-access-account-level.sentinel"
-    governed_resources: ["aws_s3_account_public_access_block"]
-    provider: "AWS"
+    path: policies/s3/s3-block-public-access-account-level.sentinel
+    sha: a48228ef3a12c607ed8ca37a305a3ed0f420a138d903afba6fc83602ce311af5
+    governed_resources: [aws_s3_account_public_access_block]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "S3"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: S3
     description: "This policy verifies if the attributes of the 'aws_s3_account_public_access_block' resource (if present) are in accordance to AWS CIS standards."
-    type: "sentinel"
+    type: sentinel
   s3-block-public-access-bucket-level:
-    path: "policies/s3/s3-block-public-access-bucket-level.sentinel"
-    governed_resources: ["aws_s3_bucket", "aws_s3_bucket_acl", "aws_s3_bucket_public_access_block"]
-    provider: "AWS"
+    path: policies/s3/s3-block-public-access-bucket-level.sentinel
+    sha: 263d519f9a82bae928079f4116b0c926c7dc0cc422b906b61df637088e2b7955
+    governed_resources: [aws_s3_bucket, aws_s3_bucket_acl, aws_s3_bucket_public_access_block]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "S3"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: S3
     description: "This policy verifies if the attributes of the 'aws_s3_bucket_public_access_block' resource (if present) block public access of an S3 general purpose bucket."
-    type: "sentinel"
+    type: sentinel
   s3-enable-object-logging-for-events:
-    path: "policies/s3/s3-enable-object-logging-for-events.sentinel"
-    governed_resources: ["aws_cloudtrail", "aws_s3_bucket"]
-    provider: "AWS"
+    path: policies/s3/s3-enable-object-logging-for-events.sentinel
+    sha: 04a3f98bb545750837c0f524bd6cadbe63ae4248dac56d22efd9fd67fd17dd7c
+    governed_resources: [aws_cloudtrail, aws_s3_bucket]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "S3"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: S3
     description: "This policy requires resources of type 'aws_s3_bucket' have object logging enabled for read/write events."
-    type: "sentinel"
+    type: sentinel
   s3-require-mfa-delete:
-    path: "policies/s3/s3-require-mfa-delete.sentinel"
-    governed_resources: ["aws_s3_bucket", "aws_s3_bucket_versioning"]
-    provider: "AWS"
+    path: policies/s3/s3-require-mfa-delete.sentinel
+    sha: 18fe1c28e3038b63c87e07a7f6123e0a4f3cabe2a666ba004859d5a209ec1a23
+    governed_resources: [aws_s3_bucket, aws_s3_bucket_versioning]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "S3"
-    description: "This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration"
-    type: "sentinel"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: S3
+    description: This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration
+    type: sentinel
   s3-require-ssl:
-    path: "policies/s3/s3-require-ssl.sentinel"
-    governed_resources: ["aws_s3_bucket", "aws_s3_bucket_policy"]
-    provider: "AWS"
+    path: policies/s3/s3-require-ssl.sentinel
+    sha: 709c5f6857c6f2bcdc551689a788322aa56cc37431f11428bb0c3572fbf25164
+    governed_resources: [aws_s3_bucket, aws_s3_bucket_policy]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "S3"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: S3
     description: "This policy mandates all requests to 'aws_s3_bucket' resources to use SSL using 'aws_s3_bucket_policy' resource."
-    type: "sentinel"
+    type: sentinel
   vpc-flow-logging-enabled:
-    path: "policies/vpc/vpc-flow-logging-enabled.sentinel"
-    governed_resources: ["aws_default_vpc", "aws_flow_log", "aws_vpc"]
-    provider: "AWS"
+    path: policies/vpc/vpc-flow-logging-enabled.sentinel
+    sha: 4d0e03df6999c82c54925ce15fd031cf36095eb9f0849f712589b273e74f09a8
+    governed_resources: [aws_default_vpc, aws_flow_log, aws_vpc]
+    provider: AWS
     regulations:
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.2"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v1.4"
-      - name: "CIS AWS Foundations Benchmarking"
-        version: "v3.0"
-    service: "VPC"
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.2
+      - name: CIS AWS Foundations Benchmarking
+        version: v1.4
+      - name: CIS AWS Foundations Benchmarking
+        version: v3.0
+    service: VPC
     description: "This policy requires resources of type `aws_vpc` and `aws_default_vpc` to have flow logs enabled."
-    type: "sentinel"
+    type: sentinel
 modules:
   report:
-    path: "modules/report/report.sentinel"
+    path: modules/report/report.sentinel
+    sha: 47fa386c0042bfd4b203f187b476d93cf86ec996c06c7caddf4cdb651d7926c9
   tfconfig-functions:
-    path: "modules/tfconfig-functions/tfconfig-functions.sentinel"
+    path: modules/tfconfig-functions/tfconfig-functions.sentinel
+    sha: fc927d5337964dcc812eeebcd0d0cbfd3242eb4a748521eefe7d1b2cf87280b3
   tfplan-functions:
-    path: "modules/tfplan-functions/tfplan-functions.sentinel"
+    path: modules/tfplan-functions/tfplan-functions.sentinel
+    sha: 048cc052e943935d797c6b0e774fe0ab2181af2148d31874c2d543f173e27e08
   tfresources:
-    path: "modules/tfresources/tfresources.sentinel"
+    path: modules/tfresources/tfresources.sentinel
+    sha: e431d3bb657d2418f8e8d4c574149be7fc7bb180ea914c9f3db753199ad0b8ca
