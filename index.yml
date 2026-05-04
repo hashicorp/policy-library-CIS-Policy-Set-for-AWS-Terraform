@@ -102,7 +102,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: EC2
-    description: "This policy requires resources of type 'aws_instance' or 'aws_ec2_instance_metadata_defaults' to have 'http_tokens' attribute set to 'required'."
+    description: "This policy requires resources of type `aws_instance` or `aws_ec2_instance_metadata_defaults` to have `http_tokens` attribute set to `required`."
     type: sentinel
   ec2-network-acl:
     path: policies/ec2/ec2-network-acl.sentinel
@@ -342,7 +342,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: KMS
-    description: "Key rotation must be enabled for resources of type 'aws_kms_key'"
+    description: "Key rotation must be enabled for resources of type `aws_kms_key`"
     type: sentinel
   rds-encryption-at-rest-enabled:
     path: policies/rds/rds-encryption-at-rest-enabled.sentinel
@@ -372,7 +372,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: RDS
-    description: "This policy requires resources of type 'aws_db_instance' have attribute 'auto_minor_version_upgrade' set to true."
+    description: "This policy requires resources of type `aws_db_instance` have attribute `auto_minor_version_upgrade` set to true."
     type: sentinel
   rds-public-access-disabled:
     path: policies/rds/rds-public-access-disabled.sentinel
@@ -387,7 +387,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: RDS
-    description: "This policy requires resources of type 'aws_db_instance' have attribute 'publicly_accessible' set to false."
+    description: "This policy requires resources of type `aws_db_instance` have attribute `publicly_accessible` set to false."
     type: sentinel
   s3-block-public-access-account-level:
     path: policies/s3/s3-block-public-access-account-level.sentinel
@@ -402,7 +402,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: S3
-    description: "This policy verifies if the attributes of the 'aws_s3_account_public_access_block' resource (if present) are in accordance to AWS CIS standards."
+    description: "This policy verifies if the attributes of the `aws_s3_account_public_access_block` resource (if present) are in accordance to AWS CIS standards."
     type: sentinel
   s3-block-public-access-bucket-level:
     path: policies/s3/s3-block-public-access-bucket-level.sentinel
@@ -417,7 +417,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: S3
-    description: "This policy verifies if the attributes of the 'aws_s3_bucket_public_access_block' resource (if present) block public access of an S3 general purpose bucket."
+    description: "This policy verifies if the attributes of the `aws_s3_bucket_public_access_block` resource (if present) block public access of an S3 general purpose bucket."
     type: sentinel
   s3-enable-object-logging-for-events:
     path: policies/s3/s3-enable-object-logging-for-events.sentinel
@@ -432,7 +432,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: S3
-    description: "This policy requires resources of type 'aws_s3_bucket' have object logging enabled for read/write events."
+    description: "This policy requires resources of type `aws_s3_bucket` have object logging enabled for read/write events."
     type: sentinel
   s3-require-mfa-delete:
     path: policies/s3/s3-require-mfa-delete.sentinel
@@ -462,7 +462,7 @@ policies:
       - name: CIS AWS Foundations Benchmarking
         version: v3.0
     service: S3
-    description: "This policy mandates all requests to 'aws_s3_bucket' resources to use SSL using 'aws_s3_bucket_policy' resource."
+    description: "This policy mandates all requests to `aws_s3_bucket` resources to use SSL using `aws_s3_bucket_policy` resource."
     type: sentinel
   vpc-flow-logging-enabled:
     path: policies/vpc/vpc-flow-logging-enabled.sentinel
