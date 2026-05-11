@@ -1,6 +1,6 @@
 # This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration
 
-# Copyright IBM Corp. 2025
+# Copyright IBM Corp. 2025, 2026
 # SPDX-License-Identifier: BUSL-1.1
 
 # Imports
