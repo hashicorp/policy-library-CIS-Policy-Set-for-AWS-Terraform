@@ -16,6 +16,12 @@ func by_type(resources, type) {
 				"resources": filter_by_property(filtered_resources, "mode", mode),
 			}
 		},
+		"address": func(addr) {
+			filtered_resources = filter_by_property(resources, "type", type)
+			return {
+				"resources": filter_by_property(filtered_resources, "address", addr),
+			}
+		},
 	}
 }
 
