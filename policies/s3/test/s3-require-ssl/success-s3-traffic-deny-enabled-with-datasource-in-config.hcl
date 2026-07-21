@@ -1,3 +1,5 @@
+# Copyright IBM Corp. 2025, 2026
+
 mock "tfconfig/v2" {
 	module {
 		source = "./mocks/policy-success-s3-traffic-deny-enabled-with-datasource-in-config/mock-tfconfig-v2.sentinel"
