@@ -1,5 +1,7 @@
 # This policy requires resources of type `aws_security_group`, `aws_security_group_rule` and `aws_vpc_security_group_ingress_rule`
 # to block ingress traffic from unknown sources to ports 22 and 3389
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-53 for more details.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-54 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -104,9 +106,9 @@ message = const.message
 if prevent_unknown_ipv4_ingress and prevent_unknown_ipv6_ingress {
 	message += " from '0.0.0.0/0' or '::/0'"
 } else if prevent_unknown_ipv4_ingress {
-	message += " from '0.0.0.0/0'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-53 for more details."
+	message += " from '0.0.0.0/0'"
 } else {
-	message += " from '::/0'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-54 for more details."
+	message += " from '::/0'"
 }
 summary = {
 	"policy_name": const.policy_name,

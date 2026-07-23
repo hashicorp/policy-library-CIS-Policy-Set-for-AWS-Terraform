@@ -1,4 +1,5 @@
 # This policy requires resources of type `aws_vpc` to have no traffic for default security group.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-2 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -14,7 +15,7 @@ import "collection/maps" as maps
 # Constants
 
 const = {
-	"message":                             "VPC default security group should not allow inbound and outbound traffic. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-2 for more details.",
+	"message":                             "VPC default security group should not allow inbound and outbound traffic",
 	"policy_name":                         "ec2-vpc-default-security-group-no-traffic",
 	"config":                              "config",
 	"security_group_id":                   "security_group_id",

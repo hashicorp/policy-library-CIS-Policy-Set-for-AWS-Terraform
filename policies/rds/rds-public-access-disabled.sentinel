@@ -1,4 +1,5 @@
 # This policy requires resources of type 'aws_db_instance' have attribute 'publicly_accessible' set to false.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/rds-controls.html#rds-2 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -15,7 +16,7 @@ import "collection/maps" as maps
 
 const = {
 	"policy_name":              "rds-public-access-disabled",
-	"message":                  "Attribute 'publicly_accessible' must be set to false for 'aws_db_instance' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/rds-controls.html#rds-2 for more details.",
+	"message":                  "Attribute 'publicly_accessible' must be set to false for 'aws_db_instance' resources",
 	"resource_aws_db_instance": "aws_db_instance",
 	"publicly_accessible":      "publicly_accessible",
 }

@@ -1,4 +1,5 @@
 # IAM policies should not allow administrator privileges to users/roles/groups.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-1 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -90,7 +91,7 @@ build_violation_object = func(resource_addr, module_addr, message) {
 
 policy_document_violations = fetch_policies_allowing_admin_privileges()
 policy_document_violations_list = map policy_document_violations as _, v {
-	build_violation_object(v.address, v.module_address, "IAM policies should not be allow full '*' administrative privileges. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-1 for more details.")
+	build_violation_object(v.address, v.module_address, "IAM policies should not be allow full '*' administrative privileges")
 }
 
 inline_policy_violations = verify_iam_policy_resources_with_inline_policies()
