@@ -1,4 +1,5 @@
 # This policy requires resources of type 'aws_instance' or 'aws_ec2_instance_metadata_defaults' to have 'http_tokens' attribute set to 'required'.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-8 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -15,7 +16,7 @@ import "collection/maps" as maps
 
 const = {
 	"policy_name": "ec2-metadata-imdsv2-required",
-	"message":     "Attribute 'http_tokens' must be set to 'required' for all 'aws_instance' resources if 'metadata_options' is used.Else 'aws_ec2_instance_metadata_defaults' resource should have 'http_tokens' set to 'required'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-8 for more details.",
+	"message":     "Attribute 'http_tokens' must be set to 'required' for all 'aws_instance' resources if 'metadata_options' is used.Else 'aws_ec2_instance_metadata_defaults' resource should have 'http_tokens' set to 'required'",
 	"aws_ec2_instance_metadata_defaults": "aws_ec2_instance_metadata_defaults",
 	"aws_instance":                       "aws_instance",
 	"metadata_options":                   "metadata_options",

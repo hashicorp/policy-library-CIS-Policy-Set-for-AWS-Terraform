@@ -1,4 +1,5 @@
 # Key rotation must be enabled for resources of type 'aws_kms_key'
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/kms-controls.html#kms-4 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -18,7 +19,7 @@ const = {
 	"resource_aws_kms_key": "aws_kms_key",
 	"enable_key_rotation":  "enable_key_rotation",
 	"is_enabled":           "is_enabled",
-	"message":              "Attribute 'enable_key_rotation' must be enabled for 'aws_kms_key' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/kms-controls.html#kms-4 for more details.",
+	"message":              "Attribute 'enable_key_rotation' must be enabled for 'aws_kms_key' resources",
 }
 
 # Variables

@@ -1,4 +1,5 @@
 # This policy requires that resources of type `aws_cloudtrail` have server-side encryption enabled.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-2 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -16,7 +17,7 @@ import "collection/maps" as maps
 const = {
 	"resource_aws_cloudtrail":         "aws_cloudtrail",
 	"policy_name":                     "cloudtrail-server-side-encryption-enabled",
-	"message":                         "Attribute 'kms_key_id' must be present for 'aws_cloudtrail' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-2 for more details.",
+	"message":                         "Attribute 'kms_key_id' must be present for 'aws_cloudtrail' resources",
 	"cloudtrail_attribute_kms_key_id": "kms_key_id",
 	"constant_value":                  "constant_value",
 }

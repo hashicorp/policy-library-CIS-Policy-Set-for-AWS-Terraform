@@ -1,4 +1,5 @@
 # This policy requires that resources of type `aws_cloudtrail` have bucket access logging enabled.
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-7 for more details.
 
 # Copyright IBM Corp. 2025
 # SPDX-License-Identifier: BUSL-1.1
@@ -15,7 +16,7 @@ import "collection/maps" as maps
 
 const = {
 	"policy_name":                "cloudtrail-bucket-access-logging-enabled",
-	"message":                    "Cloudtrail S3 buckets must have access logging enabled. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-7 for more details.",
+	"message":                    "Cloudtrail S3 buckets must have access logging enabled",
 	"resource_aws_cloudtrail":    "aws_cloudtrail",
 	"resource_s3_bucket_logging": "aws_s3_bucket_logging",
 	"constant_value":             "constant_value",

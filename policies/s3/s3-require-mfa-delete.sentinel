@@ -1,4 +1,5 @@
 # This policy verifies that all general purpose S3 buckets should have MFA delete enabled in their versioning configuration
+# Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-20 for more details.
 
 # Copyright IBM Corp. 2025, 2026
 # SPDX-License-Identifier: BUSL-1.1
@@ -25,7 +26,7 @@ const = {
 	"status":     "status",
 	"mfa_delete": "mfa_delete",
 	"enabled":    "Enabled",
-	"message":    "All 'aws_s3_bucket' resources should be linked to 'aws_s3_bucket_versioning' resources with 'mfa_delete' set to 'Enabled'. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-20 for more details.",
+	"message":    "All 'aws_s3_bucket' resources should be linked to 'aws_s3_bucket_versioning' resources with 'mfa_delete' set to 'Enabled'",
 }
 
 # Functions
