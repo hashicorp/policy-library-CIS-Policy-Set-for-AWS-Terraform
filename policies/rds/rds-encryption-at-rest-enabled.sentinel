@@ -25,7 +25,8 @@ const = {
 
 resources = tf.plan(tfplan.planned_values.resources).type(const.resource_aws_db_instance).resources
 violations = collection.reject(resources, func(res) {
-	return maps.get(res, "values.storage_encrypted", false) is true
+	encrypted_key = "values.storage_encrypted"
+	return maps.get(res, encrypted_key, false) is true
 })
 
 summary = {
