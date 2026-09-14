@@ -1,7 +1,7 @@
 # IAM policies should not allow administrator privileges to users/roles/groups.
 # Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-1 for more details.
 
-# Copyright IBM Corp. 2025
+# Copyright IBM Corp. 2025, 2026
 # SPDX-License-Identifier: BUSL-1.1
 
 # Imports
