@@ -1,0 +1,6 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+# The policy document is not readable at plan time (for example it
+# references an unknown bucket ARN), so it is only present in tfconfig/v2.
+resources = {}

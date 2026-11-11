@@ -1,0 +1,124 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_s3_bucket.counted": {
+		"address": "aws_s3_bucket.counted",
+		"config": {
+			"bucket": {
+				"references": [
+					"local.count_names",
+					"count.index",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.count_names",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "counted",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_policy.counted": {
+		"address": "aws_s3_bucket_policy.counted",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.counted",
+					"count.index",
+				],
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.counted",
+					"count.index",
+				],
+			},
+		},
+		"count": {
+			"references": [
+				"local.count_names",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "counted",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_policy",
+	},
+	"data.aws_iam_policy_document.counted": {
+		"address": "data.aws_iam_policy_document.counted",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"s3:*",
+						],
+					},
+					"condition": [
+						{
+							"test": {
+								"constant_value": "Bool",
+							},
+							"values": {
+								"constant_value": [
+									"false",
+								],
+							},
+							"variable": {
+								"constant_value": "aws:SecureTransport",
+							},
+						},
+					],
+					"effect": {
+						"constant_value": "Deny",
+					},
+					"principals": [
+						{
+							"identifiers": {
+								"constant_value": [
+									"*",
+								],
+							},
+							"type": {
+								"constant_value": "*",
+							},
+						},
+					],
+					"resources": {
+						"references": [
+							"local.count_names",
+							"count.index",
+							"local.count_names",
+							"count.index",
+						],
+					},
+				},
+			],
+		},
+		"count": {
+			"references": [
+				"local.count_names",
+			],
+		},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "counted",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}

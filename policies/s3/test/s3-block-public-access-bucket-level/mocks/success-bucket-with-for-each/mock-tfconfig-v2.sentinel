@@ -1,0 +1,64 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_s3_bucket.each": {
+		"address": "aws_s3_bucket.each",
+		"config": {
+			"bucket": {
+				"references": [
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.for_each_names",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "each",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_public_access_block.each": {
+		"address": "aws_s3_bucket_public_access_block.each",
+		"config": {
+			"block_public_acls": {
+				"constant_value": true,
+			},
+			"block_public_policy": {
+				"constant_value": true,
+			},
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.each",
+					"each.key",
+				],
+			},
+			"ignore_public_acls": {
+				"constant_value": true,
+			},
+			"restrict_public_buckets": {
+				"constant_value": true,
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.for_each_names",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "each",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_public_access_block",
+	},
+}
