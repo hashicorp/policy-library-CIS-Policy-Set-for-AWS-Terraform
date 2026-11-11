@@ -3,13 +3,13 @@
 
 mock "tfconfig/v2" {
   module {
-    source = "./mocks/success-traffic-deny-ssl-disabled/mock-tfconfig-v2.sentinel"
+    source = "./mocks/failure-traffic-deny-secure-transport-true/mock-tfconfig-v2.sentinel"
   }
 }
 
 mock "tfstate/v2" {
   module {
-    source = "./mocks/success-traffic-deny-ssl-disabled/mock-tfstate-v2.sentinel"
+    source = "./mocks/failure-traffic-deny-secure-transport-true/mock-tfstate-v2.sentinel"
   }
 }
 
@@ -27,6 +27,6 @@ mock "report" {
 
 test {
   rules = {
-    main = true
+    main = false
   }
 }
