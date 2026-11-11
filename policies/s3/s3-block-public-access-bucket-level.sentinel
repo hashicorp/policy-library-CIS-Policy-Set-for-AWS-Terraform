@@ -53,9 +53,6 @@ is_block_public_access_settings_compliant = func(config) {
 # addresses comprise of module addresses
 sanitize_referenced_s3_bucket_address = func(res) {
 	module_addr = res[const.module_address]
-	if res.config.bucket.constant_value is defined {
-		return ""
-	}
 
 	bucket_reference = res.config.bucket.references[1]
 	# Check for root module
@@ -74,12 +71,23 @@ compliant_public_access_block_resources = filter config_resources.type(const.res
 	is_block_public_access_settings_compliant(res.config)
 }
 
-s3_bucket_addresses = map compliant_public_access_block_resources as _, res {
-	sanitize_referenced_s3_bucket_address(res)
+s3_bucket_addresses = []
+s3_bucket_names = []
+
+# A public access block can name its bucket either through a reference
+# (aws_s3_bucket.this.id) or as a literal bucket name ("my-bucket").
+for compliant_public_access_block_resources as _, res {
+	bucket_name = maps.get(res, "config.bucket.constant_value", "")
+	if bucket_name is not "" {
+		append(s3_bucket_names, bucket_name)
+	} else {
+		append(s3_bucket_addresses, sanitize_referenced_s3_bucket_address(res))
+	}
 }
 
 violations = filter config_resources.type(const.resource_aws_s3_bucket).resources as _, res {
-	res.address not in s3_bucket_addresses
+	res.address not in s3_bucket_addresses and
+		maps.get(res, "config.bucket.constant_value", "") not in s3_bucket_names
 }
 
 summary = {

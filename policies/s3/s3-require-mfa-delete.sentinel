@@ -54,18 +54,20 @@ is_mfa_enabled = func(res) {
 	}) is defined
 }
 
-# Removes module address prefix from a resource
-# and returns back the localized address for a module.
-resource_address_without_module_address = func(res) {
-	resource_addr = res[const.address]
+# Returns the absolute address of the bucket referenced by a resource.
+# References in configuration are local to the module that declares them,
+# so the referencing resource's module address is prefixed. This keeps a
+# companion resource in one module from matching a same-named bucket in
+# another module or in the root module.
+referenced_bucket_address = func(res) {
+	bucket_reference = res.config.bucket.references[1]
 
 	# Check for root module
-	if not strings.has_prefix(resource_addr, const.module_prefix) {
-		return resource_addr
+	if not strings.has_prefix(res[const.address], const.module_prefix) {
+		return bucket_reference
 	}
 
-	module_addr_prefix = res[const.module_address] + "."
-	return strings.trim_prefix(resource_addr, module_addr_prefix)
+	return res[const.module_address] + "." + bucket_reference
 }
 
 # Variables
@@ -77,11 +79,11 @@ mfa_enabled_resources = filter config_resources.type(const.resource_aws_s3_bucke
 }
 
 s3_bucket_addresses = map mfa_enabled_resources as _, res {
-	res.config.bucket.references[1]
+	referenced_bucket_address(res)
 }
 
 violations = filter config_resources.type(const.resource_aws_s3_bucket).resources as _, res {
-	resource_address_without_module_address(res) not in s3_bucket_addresses
+	res[const.address] not in s3_bucket_addresses
 }
 
 summary = {

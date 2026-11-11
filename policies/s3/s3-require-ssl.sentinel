@@ -32,18 +32,20 @@ const = {
 
 # Functions
 
-# Removes module address prefix from a resource
-# and returns back the localized address for a module.
-resource_address_without_module_address = func(res) {
-	resource_addr = res[const.address]
+# Returns the absolute address of the bucket referenced by a resource.
+# References in configuration are local to the module that declares them,
+# so the referencing resource's module address is prefixed. This keeps a
+# bucket policy in one module from matching a same-named bucket in
+# another module or in the root module.
+referenced_bucket_address = func(res) {
+	bucket_reference = res.config.bucket.references[1]
 
 	# Check for root module
-	if not strings.has_prefix(resource_addr, const.module_prefix) {
-		return resource_addr
+	if not strings.has_prefix(res[const.address], const.module_prefix) {
+		return bucket_reference
 	}
 
-	module_addr_prefix = res[const.module_address] + "."
-	return strings.trim_prefix(resource_addr, module_addr_prefix)
+	return res[const.module_address] + "." + bucket_reference
 }
 
 get_referenced_policy_statements = func(res) {
@@ -53,17 +55,17 @@ get_referenced_policy_statements = func(res) {
 	}
 	reference = policy[const.references][1]
 
-	address = strings.trim_prefix(reference, "data.")
-	// Append the module address to the data source's local address
-	// in case of nested modules
+	# tfstate/v2 and tfconfig/v2 both key data sources by their absolute
+	# address, which keeps the "data." segment after the module address,
+	# e.g. "module.s3.data.aws_iam_policy_document.this".
+	address = reference
 	if strings.has_prefix(res.module_address, const.module_prefix) {
-		address = res.module_address + "." + address
+		address = res.module_address + "." + reference
 	}
 	datasource = tf.state(tfstate.resources).mode("data").address(address).resources
 	if datasource is null or datasource is not defined or datasource is empty {
-		address = "data." + address
 		datasource = tf.config(tfconfig.resources).mode("data").address(address).resources
-		if datasource is null or datasource is not defined {
+		if datasource is null or datasource is not defined or datasource is empty {
 			return []
 		}
 		return filter datasource[0].config.statement as _, statement {
@@ -120,11 +122,11 @@ valid_bucket_policies = filter s3_bucket_policy_resources as _, res {
 	}
 }
 s3_bucket_addresses = map valid_bucket_policies as _, res {
-	res.config.bucket.references[1]
+	referenced_bucket_address(res)
 }
 
 buckets_without_valid_policy = filter s3_bucket_resources as _, res {
-	resource_address_without_module_address(res) not in s3_bucket_addresses
+	res[const.address] not in s3_bucket_addresses
 }
 
 bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, res {
@@ -132,11 +134,11 @@ bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, re
 }
 
 bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {
-	res.config.bucket.references[1]
+	referenced_bucket_address(res)
 }
 
 buckets_with_inline_policy = filter s3_bucket_resources as _, res {
-	resource_address_without_module_address(res) in bucket_addresses_for_inline_policies
+	res[const.address] in bucket_addresses_for_inline_policies
 }
 
 policy_document_violations_list = map buckets_without_valid_policy as _, v {
