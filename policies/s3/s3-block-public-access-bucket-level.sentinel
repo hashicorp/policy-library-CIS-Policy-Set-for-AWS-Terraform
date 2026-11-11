@@ -30,6 +30,19 @@ const = {
 
 # Functions
 
+# Returns the first reference in an expression that names a whole resource of
+# the given type. Terraform lists references most-specific first, but an index
+# such as aws_s3_bucket.this[count.index].id is reported as
+# ["aws_s3_bucket.this", "count.index"], so a fixed position is not reliable.
+find_resource_reference = func(expr, prefix) {
+	for maps.get(expr, "references", []) as r {
+		if strings.has_prefix(r, prefix) and length(strings.split(strings.trim_prefix(r, prefix), ".")) is 1 {
+			return r
+		}
+	}
+	return ""
+}
+
 is_public_access_setting_enabled = func(config, setting) {
 	const_val = maps.get(maps.get(config, setting, {}), "constant_value")
 	if const_val is defined {
@@ -54,7 +67,12 @@ is_block_public_access_settings_compliant = func(config) {
 sanitize_referenced_s3_bucket_address = func(res) {
 	module_addr = res[const.module_address]
 
-	bucket_reference = res.config.bucket.references[1]
+	bucket_reference = find_resource_reference(res.config.bucket, "aws_s3_bucket.")
+	# for_each = aws_s3_bucket.x with bucket = each.value.id only references
+	# each.value, so take the bucket from the for_each expression instead.
+	if bucket_reference is "" {
+		bucket_reference = find_resource_reference(maps.get(res, "for_each", {}), "aws_s3_bucket.")
+	}
 	# Check for root module
 	if not strings.has_prefix(res[const.address], const.module_prefix) {
 		return bucket_reference

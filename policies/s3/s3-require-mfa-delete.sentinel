@@ -31,6 +31,19 @@ const = {
 
 # Functions
 
+# Returns the first reference in an expression that names a whole resource of
+# the given type. Terraform lists references most-specific first, but an index
+# such as aws_s3_bucket.this[count.index].id is reported as
+# ["aws_s3_bucket.this", "count.index"], so a fixed position is not reliable.
+find_resource_reference = func(expr, prefix) {
+	for maps.get(expr, "references", []) as r {
+		if strings.has_prefix(r, prefix) and length(strings.split(strings.trim_prefix(r, prefix), ".")) is 1 {
+			return r
+		}
+	}
+	return ""
+}
+
 check_mfa_from_refrence_var = func(config) {
 	return config.mfa_delete["references"] is defined and
 		tfconfig.is_variable_reference(config.mfa_delete.references[0]) and
@@ -60,7 +73,12 @@ is_mfa_enabled = func(res) {
 # companion resource in one module from matching a same-named bucket in
 # another module or in the root module.
 referenced_bucket_address = func(res) {
-	bucket_reference = res.config.bucket.references[1]
+	bucket_reference = find_resource_reference(res.config.bucket, "aws_s3_bucket.")
+	# for_each = aws_s3_bucket.x with bucket = each.value.id only references
+	# each.value, so take the bucket from the for_each expression instead.
+	if bucket_reference is "" {
+		bucket_reference = find_resource_reference(maps.get(res, "for_each", {}), "aws_s3_bucket.")
+	}
 
 	# Check for root module
 	if not strings.has_prefix(res[const.address], const.module_prefix) {

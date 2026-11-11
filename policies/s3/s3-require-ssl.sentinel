@@ -32,13 +32,31 @@ const = {
 
 # Functions
 
+# Returns the first reference in an expression that names a whole resource of
+# the given type. Terraform lists references most-specific first, but an index
+# such as aws_s3_bucket.this[count.index].id is reported as
+# ["aws_s3_bucket.this", "count.index"], so a fixed position is not reliable.
+find_resource_reference = func(expr, prefix) {
+	for maps.get(expr, "references", []) as r {
+		if strings.has_prefix(r, prefix) and length(strings.split(strings.trim_prefix(r, prefix), ".")) is 1 {
+			return r
+		}
+	}
+	return ""
+}
+
 # Returns the absolute address of the bucket referenced by a resource.
 # References in configuration are local to the module that declares them,
 # so the referencing resource's module address is prefixed. This keeps a
 # bucket policy in one module from matching a same-named bucket in
 # another module or in the root module.
 referenced_bucket_address = func(res) {
-	bucket_reference = res.config.bucket.references[1]
+	bucket_reference = find_resource_reference(res.config.bucket, "aws_s3_bucket.")
+	# for_each = aws_s3_bucket.x with bucket = each.value.id only references
+	# each.value, so take the bucket from the for_each expression instead.
+	if bucket_reference is "" {
+		bucket_reference = find_resource_reference(maps.get(res, "for_each", {}), "aws_s3_bucket.")
+	}
 
 	# Check for root module
 	if not strings.has_prefix(res[const.address], const.module_prefix) {
@@ -50,10 +68,10 @@ referenced_bucket_address = func(res) {
 
 get_referenced_policy_statements = func(res) {
 	policy = res.config.policy
-	if policy[const.references] is not defined or policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$" {
+	reference = find_resource_reference(policy, "data.aws_iam_policy_document.")
+	if reference is "" {
 		return []
 	}
-	reference = policy[const.references][1]
 
 	# tfstate/v2 and tfconfig/v2 both key data sources by their absolute
 	# address, which keeps the "data." segment after the module address,
@@ -130,7 +148,7 @@ buckets_without_valid_policy = filter s3_bucket_resources as _, res {
 }
 
 bucket_policies_without_datasources = filter s3_bucket_policy_resources as _, res {
-	res.config.policy[const.references] is not defined or res.config.policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$"
+	find_resource_reference(res.config.policy, "data.aws_iam_policy_document.") is ""
 }
 
 bucket_addresses_for_inline_policies = map bucket_policies_without_datasources as _, res {

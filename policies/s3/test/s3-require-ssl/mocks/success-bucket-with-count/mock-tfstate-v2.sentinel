@@ -1,0 +1,117 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"data.aws_iam_policy_document.counted[0]": {
+		"address":        "data.aws_iam_policy_document.counted[0]",
+		"depends_on":     [],
+		"deposed_key":    "",
+		"index":          0,
+		"mode":           "data",
+		"module_address": "",
+		"name":           "counted",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"tainted":        false,
+		"type":           "aws_iam_policy_document",
+		"values": {
+			"id":                        "1823687810",
+			"json":                      "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Deny\",\n      \"Action\": \"s3:*\",\n      \"Resource\": [\n        \"arn:aws:s3:::repro-count-0/*\",\n        \"arn:aws:s3:::repro-count-0\"\n      ],\n      \"Principal\": \"*\",\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"false\"\n        }\n      }\n    }\n  ]\n}",
+			"minified_json":             "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Deny\",\"Action\":\"s3:*\",\"Resource\":[\"arn:aws:s3:::repro-count-0/*\",\"arn:aws:s3:::repro-count-0\"],\"Principal\":\"*\",\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}}}]}",
+			"override_json":             null,
+			"override_policy_documents": null,
+			"policy_id":                 null,
+			"source_json":               null,
+			"source_policy_documents":   null,
+			"statement": [
+				{
+					"actions": [
+						"s3:*",
+					],
+					"condition": [
+						{
+							"test": "Bool",
+							"values": [
+								"false",
+							],
+							"variable": "aws:SecureTransport",
+						},
+					],
+					"effect":         "Deny",
+					"not_actions":    [],
+					"not_principals": [],
+					"not_resources":  [],
+					"principals": [
+						{
+							"identifiers": [
+								"*",
+							],
+							"type": "*",
+						},
+					],
+					"resources": [
+						"arn:aws:s3:::repro-count-0",
+						"arn:aws:s3:::repro-count-0/*",
+					],
+					"sid": "",
+				},
+			],
+			"version": "2012-10-17",
+		},
+	},
+	"data.aws_iam_policy_document.counted[1]": {
+		"address":        "data.aws_iam_policy_document.counted[1]",
+		"depends_on":     [],
+		"deposed_key":    "",
+		"index":          1,
+		"mode":           "data",
+		"module_address": "",
+		"name":           "counted",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"tainted":        false,
+		"type":           "aws_iam_policy_document",
+		"values": {
+			"id":                        "2849647804",
+			"json":                      "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Deny\",\n      \"Action\": \"s3:*\",\n      \"Resource\": [\n        \"arn:aws:s3:::repro-count-1/*\",\n        \"arn:aws:s3:::repro-count-1\"\n      ],\n      \"Principal\": \"*\",\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"false\"\n        }\n      }\n    }\n  ]\n}",
+			"minified_json":             "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Deny\",\"Action\":\"s3:*\",\"Resource\":[\"arn:aws:s3:::repro-count-1/*\",\"arn:aws:s3:::repro-count-1\"],\"Principal\":\"*\",\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}}}]}",
+			"override_json":             null,
+			"override_policy_documents": null,
+			"policy_id":                 null,
+			"source_json":               null,
+			"source_policy_documents":   null,
+			"statement": [
+				{
+					"actions": [
+						"s3:*",
+					],
+					"condition": [
+						{
+							"test": "Bool",
+							"values": [
+								"false",
+							],
+							"variable": "aws:SecureTransport",
+						},
+					],
+					"effect":         "Deny",
+					"not_actions":    [],
+					"not_principals": [],
+					"not_resources":  [],
+					"principals": [
+						{
+							"identifiers": [
+								"*",
+							],
+							"type": "*",
+						},
+					],
+					"resources": [
+						"arn:aws:s3:::repro-count-1",
+						"arn:aws:s3:::repro-count-1/*",
+					],
+					"sid": "",
+				},
+			],
+			"version": "2012-10-17",
+		},
+	},
+}
