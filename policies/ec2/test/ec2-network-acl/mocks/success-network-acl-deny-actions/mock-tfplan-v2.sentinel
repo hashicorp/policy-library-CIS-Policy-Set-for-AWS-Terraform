@@ -1,0 +1,16 @@
+# Copyright IBM Corp. 2025
+# SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_network_acl.main": {
+			"address": "aws_network_acl.main", "mode": "managed", "module_address": "", "name": "main", "type": "aws_network_acl",
+			"values": {"ingress": [{"action": "DeNy", "cidr_block": "0.0.0.0/0", "from_port": 22, "ipv6_cidr_block": "", "protocol": "tcp", "rule_no": 100, "to_port": 22}]},
+		},
+		"aws_network_acl_rule.main": {
+			"address": "aws_network_acl_rule.main", "mode": "managed", "module_address": "", "name": "main", "type": "aws_network_acl_rule",
+			"values": {"cidr_block": "0.0.0.0/0", "egress": false, "from_port": 22, "ipv6_cidr_block": null, "protocol": "tcp", "rule_action": "deny", "to_port": 22},
+		},
+	},
+}
