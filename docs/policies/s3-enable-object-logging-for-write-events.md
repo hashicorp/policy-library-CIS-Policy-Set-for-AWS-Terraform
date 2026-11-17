@@ -18,6 +18,10 @@ S3 object-level API operations such as GetObject, DeleteObject, and PutObject ar
 
 This rule is covered by the [s3-enable-object-logging-for-events](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform/blob/main/policies/s3/s3-enable-object-logging-for-events.sentinel) policy with the `event_type` parameter passed as `WriteOnly`.
 
+## Limitations
+
+With the current Sentinel imports used by this policy, write-event coverage cannot be established when CloudTrail uses `advanced_event_selector` instead of `event_selector`. The policy currently reports the bucket as a violation in this case. This result does not verify whether advanced selectors provide compliant object-level write logging.
+
 ## Policy Results (Pass)
 ```bash
 trace:
