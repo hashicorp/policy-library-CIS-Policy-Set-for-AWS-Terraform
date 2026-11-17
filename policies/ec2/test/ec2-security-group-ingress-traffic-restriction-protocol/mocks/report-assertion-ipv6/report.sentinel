@@ -1,0 +1,18 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+# Fails the test if the policy reports the wrong name or message.
+generate_policy_report = func(summary) {
+	if summary.policy_name is not "ec2-security-group-ipv6-ingress-traffic-restriction" {
+		error("unexpected policy_name: " + summary.policy_name)
+	}
+	if length(summary.violations) is 0 {
+		error("expected at least one violation")
+	}
+	for summary.violations as v {
+		if v.message is not "Security group rules should not allow ingress to port 22 and 3389 from '::/0'" {
+			error("unexpected message: " + v.message)
+		}
+	}
+	return ""
+}
