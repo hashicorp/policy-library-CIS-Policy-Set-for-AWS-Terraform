@@ -1,0 +1,50 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_kms_key.asymmetric": {
+			"address":        "aws_kms_key.asymmetric",
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "asymmetric",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_kms_key",
+			"values": {
+				"customer_master_key_spec": "RSA_3072",
+				"enable_key_rotation":      false,
+				"is_enabled":               true,
+				"key_usage":                "SIGN_VERIFY",
+			},
+		},
+		"aws_kms_key.hmac": {
+			"address":        "aws_kms_key.hmac",
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "hmac",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_kms_key",
+			"values": {
+				"customer_master_key_spec": "HMAC_384",
+				"enable_key_rotation":      false,
+				"is_enabled":               true,
+				"key_usage":                "GENERATE_VERIFY_MAC",
+			},
+		},
+		"aws_kms_key.symmetric": {
+			"address":        "aws_kms_key.symmetric",
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "symmetric",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_kms_key",
+			"values": {
+				"customer_master_key_spec": "SYMMETRIC_DEFAULT",
+				"enable_key_rotation":      true,
+				"is_enabled":               true,
+				"key_usage":                "ENCRYPT_DECRYPT",
+			},
+		},
+	},
+}

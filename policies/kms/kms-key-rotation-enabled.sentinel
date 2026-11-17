@@ -18,6 +18,8 @@ const = {
 	"policy_name":          "kms-key-rotation-enabled",
 	"resource_aws_kms_key": "aws_kms_key",
 	"enable_key_rotation":  "enable_key_rotation",
+	"key_spec":             "customer_master_key_spec",
+	"symmetric_default":    "SYMMETRIC_DEFAULT",
 	"is_enabled":           "is_enabled",
 	"message":              "Attribute 'enable_key_rotation' must be enabled for 'aws_kms_key' resources",
 }
@@ -32,7 +34,10 @@ all_kms_keys = tf.plan(tfplan.planned_values.resources).type(const.resource_aws_
 violations = collection.reject(all_kms_keys, func(res) {
 	is_enabled_key = "values.is_enabled"
 	enable_rotation_key = "values.enable_key_rotation"
+	key_spec_key = "values.customer_master_key_spec"
+	key_spec = maps.get(res, key_spec_key, const.symmetric_default)
 	return (maps.get(res, is_enabled_key, false) is false or
+		(key_spec is not null and key_spec is not const.symmetric_default) or
 		(maps.get(res, enable_rotation_key, false) is true))
 })
 
