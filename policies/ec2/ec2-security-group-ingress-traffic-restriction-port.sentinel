@@ -103,7 +103,7 @@ if port == 22 {
 } else if port == 3389 {
 }
 summary = {
-	"policy_name": const.policy_name,
+	"policy_name": const.policy_name + "-port-" + string(port),
 	"violations": map violations as _, v {
 		{
 			"address":        v.address,
