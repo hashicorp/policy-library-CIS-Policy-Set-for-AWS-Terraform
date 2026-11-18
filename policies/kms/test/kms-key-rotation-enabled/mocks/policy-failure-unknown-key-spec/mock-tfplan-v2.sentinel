@@ -1,0 +1,21 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"aws_kms_key.unknown_spec": {
+			"address":        "aws_kms_key.unknown_spec",
+			"mode":           "managed",
+			"module_address": "",
+			"name":           "unknown_spec",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_kms_key",
+			"values": {
+				"customer_master_key_spec": null,
+				"enable_key_rotation":      false,
+				"is_enabled":               true,
+			},
+		},
+	},
+}
