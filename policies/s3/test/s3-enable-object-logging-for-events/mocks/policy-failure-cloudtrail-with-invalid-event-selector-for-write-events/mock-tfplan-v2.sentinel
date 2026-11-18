@@ -33,7 +33,7 @@ planned_values = {
 						],
 						"exclude_management_event_sources": null,
 						"include_management_events":        false,
-						"read_write_type":                  "WriteOnly",
+						"read_write_type":                  "ReadOnly",
 					},
 				],
 				"include_global_service_events": true,

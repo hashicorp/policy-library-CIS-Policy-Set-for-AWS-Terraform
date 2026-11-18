@@ -53,8 +53,7 @@ for cloudtrail_resources as _, res {
 	}
 
 	for event_selector_block as _, es {
-		if es[const.include_management_events] is true and
-			es[const.read_write_type] is event_type {
+		if es[const.read_write_type] in [event_type, "All"] {
 
 			for es[const.data_resource] as _, data_res {
 				if data_res[const.type] is not const.aws_s3_object or data_res[const.values] is not defined {
@@ -67,7 +66,8 @@ for cloudtrail_resources as _, res {
 						break
 					}
 
-					append(referenced_s3_bucket_names, strings.trim_prefix(val, const.aws_s3_arn_prefix))
+					bucket_name = strings.trim_prefix(val, const.aws_s3_arn_prefix)
+					append(referenced_s3_bucket_names, strings.trim_suffix(bucket_name, "/"))
 				}
 			}
 		}
