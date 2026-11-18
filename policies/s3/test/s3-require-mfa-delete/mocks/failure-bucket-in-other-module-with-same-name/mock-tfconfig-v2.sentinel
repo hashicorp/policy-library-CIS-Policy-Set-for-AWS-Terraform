@@ -1,0 +1,73 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"module.a.aws_s3_bucket.this": {
+		"address": "module.a.aws_s3_bucket.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"var.bucket_name",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.a",
+		"name":                "this",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"module.b.aws_s3_bucket.this": {
+		"address": "module.b.aws_s3_bucket.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"var.bucket_name",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.b",
+		"name":                "this",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"module.b.aws_s3_bucket_versioning.this": {
+		"address": "module.b.aws_s3_bucket_versioning.this",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.this.id",
+					"aws_s3_bucket.this",
+				],
+			},
+			"versioning_configuration": [
+				{
+					"mfa_delete": {
+						"constant_value": "Enabled",
+					},
+					"status": {
+						"constant_value": "Enabled",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "module.b",
+		"name":                "this",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_versioning",
+	},
+}

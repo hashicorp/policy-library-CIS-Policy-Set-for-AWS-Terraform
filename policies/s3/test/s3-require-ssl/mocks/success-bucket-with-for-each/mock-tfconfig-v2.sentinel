@@ -1,0 +1,121 @@
+# Copyright IBM Corp. 2025, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
+resources = {
+	"aws_s3_bucket.each": {
+		"address": "aws_s3_bucket.each",
+		"config": {
+			"bucket": {
+				"references": [
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.for_each_names",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "each",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket",
+	},
+	"aws_s3_bucket_policy.each": {
+		"address": "aws_s3_bucket_policy.each",
+		"config": {
+			"bucket": {
+				"references": [
+					"aws_s3_bucket.each",
+					"each.key",
+				],
+			},
+			"policy": {
+				"references": [
+					"data.aws_iam_policy_document.each",
+					"each.key",
+				],
+			},
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.for_each_names",
+			],
+		},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "each",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_s3_bucket_policy",
+	},
+	"data.aws_iam_policy_document.each": {
+		"address": "data.aws_iam_policy_document.each",
+		"config": {
+			"statement": [
+				{
+					"actions": {
+						"constant_value": [
+							"s3:*",
+						],
+					},
+					"condition": [
+						{
+							"test": {
+								"constant_value": "Bool",
+							},
+							"values": {
+								"constant_value": [
+									"false",
+								],
+							},
+							"variable": {
+								"constant_value": "aws:SecureTransport",
+							},
+						},
+					],
+					"effect": {
+						"constant_value": "Deny",
+					},
+					"principals": [
+						{
+							"identifiers": {
+								"constant_value": [
+									"*",
+								],
+							},
+							"type": {
+								"constant_value": "*",
+							},
+						},
+					],
+					"resources": {
+						"references": [
+							"each.key",
+							"each.key",
+						],
+					},
+				},
+			],
+		},
+		"count":      {},
+		"depends_on": [],
+		"for_each": {
+			"references": [
+				"local.for_each_names",
+			],
+		},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "each",
+		"provider_config_key": "aws",
+		"provisioners":        [],
+		"type":                "aws_iam_policy_document",
+	},
+}

@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: BUSL-1.1
 
 resources = {
-	"aws_iam_policy_document.policy": {
-		"address":        "aws_iam_policy_document.policy",
+	"data.aws_iam_policy_document.policy": {
+		"address":        "data.aws_iam_policy_document.policy",
 		"depends_on":     [],
 		"deposed_key":    "",
 		"index":          null,
