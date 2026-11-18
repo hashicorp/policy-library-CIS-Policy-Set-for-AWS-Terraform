@@ -26,7 +26,7 @@ param prevent_unknown_ipv6_ingress default false
 
 const = {
 	"policy_name":                              "ec2-security-group-ingress-traffic-restriction",
-	"message":                                  "Security group rules should not allow ingress to port 22 and 3389 from",
+	"message":                                  "Security group rules should not allow ingress to port 22 and 3389",
 	"resource_security_group_rule":             "aws_security_group_rule",
 	"resource_security_group":                  "aws_security_group",
 	"resource_vpc_security_group_ingress_rule": "aws_vpc_security_group_ingress_rule",
@@ -110,8 +110,15 @@ if prevent_unknown_ipv4_ingress and prevent_unknown_ipv6_ingress {
 } else {
 	message += " from '::/0'"
 }
+policy_name = const.policy_name
+if prevent_unknown_ipv4_ingress and not prevent_unknown_ipv6_ingress {
+	policy_name = "ec2-security-group-ipv4-ingress-traffic-restriction"
+} else if prevent_unknown_ipv6_ingress and not prevent_unknown_ipv4_ingress {
+	policy_name = "ec2-security-group-ipv6-ingress-traffic-restriction"
+}
+
 summary = {
-	"policy_name": const.policy_name,
+	"policy_name": policy_name,
 	"violations": map violations as _, v {
 		{
 			"address":        v.address,
