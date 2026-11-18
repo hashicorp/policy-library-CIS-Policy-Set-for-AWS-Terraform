@@ -30,6 +30,8 @@ const = {
 	"to_port":                       "to_port",
 	"ingress":                       "ingress",
 	"egress":                        "egress",
+	"action":                        "action",
+	"rule_action":                   "rule_action",
 	"resource_aws_network_acl_rule": "aws_network_acl_rule",
 	"resource_aws_network_acl":      "aws_network_acl",
 	"message":                       "Network Acl rules should not allow ingress from 0.0.0.0/0 or ::/0 to ports " + strings.join(blocked_ports, ",") + ".",
@@ -62,8 +64,9 @@ does_rule_reference_port = func(from_port, to_port) {
 	}) is defined
 }
 
-is_ingress_rule_violation = func(ingress) {
+is_ingress_rule_violation = func(ingress, action_attribute) {
 	return contains_catchall_ip(maps.get(ingress, const.cidr_block, ""), maps.get(ingress, const.ipv6_cidr_block, "")) and
+		strings.to_lower(maps.get(ingress, action_attribute, "")) is "allow" and
 		(is_catch_all_protocol(maps.get(ingress, const.protocol, "")) or
 			does_rule_reference_port(maps.get(ingress, const.from_port, null), maps.get(ingress, const.to_port, null)))
 }
@@ -75,14 +78,14 @@ planned_resources = tf.plan(tfplan.planned_values.resources)
 resources = planned_resources.type(const.resource_aws_network_acl_rule).resources
 aws_network_acl_rule_violations = filter resources as _, res {
 	maps.get(res.values, const.egress, []) is false and
-		is_ingress_rule_violation(res.values)
+		is_ingress_rule_violation(res.values, const.rule_action)
 }
 
 resources = planned_resources.type(const.resource_aws_network_acl).resources
 aws_network_acl_violations = collection.reject(resources, func(res) {
 	ingress_value = maps.get(res, "values.ingress", [])
 	return collection.find(ingress_value, func(ingress) {
-		return is_ingress_rule_violation(ingress)
+		return is_ingress_rule_violation(ingress, const.action)
 	}) is not defined
 })
 
